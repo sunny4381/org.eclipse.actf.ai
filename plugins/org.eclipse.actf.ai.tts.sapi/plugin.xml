@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <extension
+         point="org.eclipse.actf.ai.voice.TTSEngine">
+         <engine
+               class="org.eclipse.actf.ai.tts.sapi.engine.SapiVoice"
+               default="true"
+               description="TTS Engine for MS SAPI 5.x"
+               id="org.eclipse.actf.ai.tts.sapi.engine.SapiVoice"
+               name="SAPI 5 TTS"
+               priority="100"/>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.actf.ai.voice.preferences.VoicePreferencePage"
+            class="org.eclipse.actf.ai.tts.sapi.preferences.SapiPreferencePage"
+            id="org.eclipse.actf.ai.tts.sapi.preferences.SapiPreferencePage"
+            name="%SapiPreferencePage.name"/>
+   </extension>
+   
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer class="org.eclipse.actf.ai.tts.sapi.preferences.SapiPreferenceInitializer"/>
+   </extension>
+   
+</plugin>

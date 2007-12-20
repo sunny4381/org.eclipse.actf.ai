@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Eclipse ACTF Key UI Plug-in (Incubation)
+Bundle-SymbolicName: org.eclipse.actf.ai.key.keyui;singleton:=true
+Bundle-Version: 0.0.1
+Bundle-Activator: org.eclipse.actf.ai.key.keyui.KeyUIPlugin
+Bundle-Vendor: Eclipse.org
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.actf.ai.key.keyhook.win32,
+ org.eclipse.actf.ai.xmlstore,
+ org.eclipse.ui,
+ org.eclipse.actf.ai.navigator
+Eclipse-LazyStart: true

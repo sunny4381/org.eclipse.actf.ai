@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Eclipse ACTF Voice Toolkit (Incubation)
+Bundle-SymbolicName: org.eclipse.actf.ai.voice;singleton:=true
+Bundle-Version: 0.0.1
+Bundle-Activator: org.eclipse.actf.ai.voice.VoicePlugin
+Bundle-Vendor: Eclipse.org
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime
+Eclipse-LazyStart: true
+Export-Package: org.eclipse.actf.ai.tts,
+ org.eclipse.actf.ai.voice,
+ org.eclipse.actf.ai.voice.internal,
+ org.eclipse.actf.ai.voice.preferences

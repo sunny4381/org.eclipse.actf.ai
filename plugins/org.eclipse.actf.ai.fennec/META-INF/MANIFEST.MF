@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Eclipse ACTF Fennec Plug-in (Incubation)
+Bundle-SymbolicName: org.eclipse.actf.ai.fennec
+Bundle-Version: 0.0.1
+Bundle-Activator: org.eclipse.actf.ai.fennec.NVM3Plugin
+Bundle-Vendor: Eclipse.org
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.actf.util.vocab,
+ org.eclipse.actf.common,
+ org.eclipse.actf.model.dom.dombycom,
+ org.eclipse.actf.ai.query,
+ org.eclipse.actf.ai.xmlstore,
+ org.eclipse.swt
+Eclipse-LazyStart: true
+Export-Package: org.eclipse.actf.ai.fennec,
+ org.eclipse.actf.ai.fennec.treemanager
