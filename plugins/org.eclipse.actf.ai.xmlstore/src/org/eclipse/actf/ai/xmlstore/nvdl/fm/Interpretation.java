@@ -88,6 +88,15 @@ public abstract class Interpretation {
         return id;
     }
 
+    public String getPrevID() {
+        for (Interpretation ip = getParent(); ip != null; ip = ip.getParent()) {
+            if (ip.isSectionHead()) {
+            	return ip.getID();
+            }
+        }
+        return "";
+    }
+
     private String generateID() {
         StringBuffer buf = new StringBuffer();
 

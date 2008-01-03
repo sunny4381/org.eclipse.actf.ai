@@ -139,6 +139,9 @@ public class MessageFormatter {
             if (message == null) {
                 message = messageException.getMessage();
             }
+            if (message == null) {
+            	message = messageException.toString();
+            }
         }
         if (loc != null) {
             if (model != null) {

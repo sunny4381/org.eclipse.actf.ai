@@ -223,11 +223,11 @@ public class NVDLSAXReader {
     }
 
     /*
-      xml:id
+      id
      */
 
     private String getXMLID(Attributes attrs) throws SAXException {
-        return attrs.getValue("xml:id");
+        return attrs.getValue("id");
     }
 
     /*
@@ -488,11 +488,12 @@ public class NVDLSAXReader {
         }
 
         private void parseValidate(Attributes attrs) throws SAXException {
-            AtRet[] ars = new AtRet[4];
+            AtRet[] ars = new AtRet[5];
             ars[0] = new AtRet("useMode");
             ars[1] = new AtRet("message");
             ars[2] = new AtRet("schemaType");
             ars[3] = new AtRet("schema");
+            ars[4] = new AtRet("id");
             getAttrs(attrs, ars);
             String id = uniqueActionID(attrs);
             NVDLValidateAction action = new NVDLValidateAction(id, ars[0].value, baseRule);
@@ -513,9 +514,10 @@ public class NVDLSAXReader {
 
         private AtRet[] parseBaseActionAttributes(Attributes attrs)
             throws SAXException {
-            AtRet[] ars = new AtRet[2];
+            AtRet[] ars = new AtRet[3];
             ars[0] = new AtRet("useMode");
             ars[1] = new AtRet("message");
+            ars[2] = new AtRet("id");
             getAttrs(attrs, ars);
             return ars;
         }

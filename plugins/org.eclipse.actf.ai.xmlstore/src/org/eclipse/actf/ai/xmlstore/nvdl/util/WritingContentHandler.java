@@ -22,17 +22,17 @@ import java.util.Iterator;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.ext.DefaultHandler2;
 
 /**
  * The <code>ContentPrintHandler</code> is a SAX content handler that dumps
  * all SAX events.
  */
-public class WritingContentHandler extends DefaultHandler {
+public class WritingContentHandler extends DefaultHandler2 {
     private final Writer out;
     private final boolean requireClose;
     // private Locator locator;
-    private final HashMap<String,String> prefixMapping = new HashMap<String,String>();
+    private final HashMap<String, String> prefixMapping = new HashMap<String, String>();
 
     private void outputEscape(char[] ch, int start, int length) throws IOException {
         int end = start + length;
@@ -41,10 +41,13 @@ public class WritingContentHandler extends DefaultHandler {
             switch (c) {
             case '<':
                 out.append("&lt;");
+                break;
             case '>':
                 out.append("&gt;");
+                break;
             case '&':
                 out.append("&amp;");
+                break;
             default:
                 out.append(c);
             }
@@ -204,8 +207,19 @@ public class WritingContentHandler extends DefaultHandler {
 
     public void skippedEntity(String name) throws SAXException {
     }
+    
+    @Override
+	public void comment(char[] ch, int start, int length) throws SAXException {
+        try {
+        	out.append("<!-- ");
+        	outputEscape(ch, start, length);
+        	out.append("-->");
+        } catch (IOException e) {
+            throw new SAXException(e);
+        }
+	}
 
-    public WritingContentHandler(String name) {
+	public WritingContentHandler(String name) {
         this.out = new OutputStreamWriter(System.out);
         this.requireClose = false;
     }

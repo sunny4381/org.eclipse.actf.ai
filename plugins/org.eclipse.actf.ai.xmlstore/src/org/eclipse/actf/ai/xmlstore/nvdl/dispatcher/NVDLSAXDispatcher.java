@@ -73,6 +73,9 @@ public class NVDLSAXDispatcher {
         errorCounter = 0;
         currentElement = null;
         nextSectionIdx = 0;
+
+        idMap.clear();
+        asnIDCounter = 0;
     }
 
     private XMLReader reader;
@@ -91,7 +94,6 @@ public class NVDLSAXDispatcher {
                                     Attributes attrs,
                                     boolean requireDecl)
         throws SAXException {
-        ch.startDocument();
         Object effectiveMapping = prefixMapper.startEffectivePrefixMappings(ch);
         if (requireDecl) {
             ch.startPrefixMapping(instancePrefix, NVDLConst.INSTANCE_NS);
@@ -106,10 +108,33 @@ public class NVDLSAXDispatcher {
             ch.endPrefixMapping(instancePrefix);
         }
         prefixMapper.endEffectivePrefixMappings(effectiveMapping, ch);
-        ch.endDocument();
     }
 
-    private void dispatchAttributeSection(List<Interpretation> ips, NVDLAttributes attrs)
+    private NVDLAttributes addASNIDAttribute(Interpretation ip,
+                                             ContentHandler h,
+                                             NVDLAttributes attr,
+                                             String asnID)
+    	throws SAXException {
+        if (h == null) return attr;
+        PrefixMapper.PrefixReturnVal prv = prefixMapper.uniquePrefix(NVDLConst.INSTANCE_REC_PREFIX_BASE,
+                                                                     NVDLConst.INSTANCE_REC_NS);
+        String qName = prv.prefix + ":" + NVDLConst.ASN_ID_ATTR;
+            
+        if (prv.requireDecl) {
+            h.startPrefixMapping(prv.prefix, NVDLConst.INSTANCE_REC_NS);
+            prefixMapper.startPrefixMapping(prv.prefix, NVDLConst.INSTANCE_REC_NS);
+            ip.setPrefix(prv.prefix);
+        }
+        attr.addExtAttribute(NVDLConst.INSTANCE_REC_NS,
+                             NVDLConst.ASN_ID_ATTR,
+                             qName, asnID);
+        return attr;
+        
+    }
+
+    private void dispatchAttributeSection(List<Interpretation> ips,
+                                          NVDLAttributes attrs,
+                                          String asnID)
         throws SAXException {
         Iterator<Interpretation> it = ips.iterator();
         while (it.hasNext()) {
@@ -126,12 +151,17 @@ public class NVDLSAXDispatcher {
             String qName = prv.prefix + ":" + NVDLConst.VIRTUALELEMENT_NAME;
             sendVirtualElement(h, prv.prefix, qName, attrs, prv.requireDecl);
             if (dh != null) {
+                if (emitSectionID) {
+                    attrs = addASNIDAttribute(ip, dh, attrs, asnID);
+                }
                 sendVirtualElement(dh, prv.prefix, qName, attrs, prv.requireDecl);
             }
         }
     }
 
-    private NVDLAttributes dispatchAttribute(Interpretation ip, Attributes attrs)
+    private NVDLAttributes dispatchAttribute(Interpretation ip,
+                                             ContentHandler h,
+                                             Attributes attrs)
     	throws SAXException {
         Map<String, NVDLAttributes> attrsMap = new HashMap<String, NVDLAttributes>();
         int len = attrs.getLength();
@@ -147,13 +177,20 @@ public class NVDLSAXDispatcher {
         }
 
         Iterator<NVDLAttributes> it = attrsMap.values().iterator();
+        boolean isASNIDRequired = false;
+        String asnID = generateASNID();
         while (it.hasNext()) {
             NVDLAttributes pa = it.next();
             List<Interpretation> ipAttrs = pda.getAttributeInterpretation(ip, pa);
             if (pda.isAttributeAttached()) {
                 restAttributes.addAttributes(pa);
+            } else {
+                isASNIDRequired = emitSectionID;
             }
-            dispatchAttributeSection(ipAttrs, pa);
+            dispatchAttributeSection(ipAttrs, pa, asnID);
+        }
+        if (isASNIDRequired) {
+            restAttributes = addASNIDAttribute(ip, h, restAttributes, asnID);
         }
         
         return restAttributes;
@@ -219,26 +256,31 @@ public class NVDLSAXDispatcher {
         int slotNodeID;
     }
 
+    private int asnIDCounter;
+    private String generateASNID() {
+        return Integer.toString(asnIDCounter++);
+    }
+
     private HashMap<String, IDMapVal> idMap = new HashMap<String, IDMapVal>();
 
     private String generateID(Interpretation ip, boolean sectionID, boolean increment) {
         String id = ip.getID();
-        IDMapVal idVal = idMap.get(id);
+        String idForNum;
+        if (sectionID) {
+            idForNum = ip.getPrevID();
+        } else {
+            idForNum = id;
+        }
+        // System.err.println("!"+id+" / "+idForNum);
+        IDMapVal idVal = idMap.get(idForNum);
         int idNum;
         if (idVal == null) {
             idNum = 0;
-            idMap.put(id, new IDMapVal());
+            idMap.put(idForNum, new IDMapVal());
         } else {
-            if (sectionID) {
-                idNum = idVal.sectionID;
-                if (increment) {
-                    idVal.sectionID++;
-                }
-            } else {
-                idNum = idVal.slotNodeID;
-                if (increment) {
-                    idVal.slotNodeID++;
-                }
+            idNum = idVal.slotNodeID;
+            if (!sectionID && increment) {
+                idVal.slotNodeID++;
             }
         }
         if (idNum == 0) {
@@ -496,6 +538,7 @@ public class NVDLSAXDispatcher {
         private void addSectionIDAttribute(Interpretation ip,
                                            ContentHandler h,
                                            NVDLAttributes attr) throws SAXException {
+            if (h == null) return;
             PrefixMapper.PrefixReturnVal prv = prefixMapper.uniquePrefix(NVDLConst.INSTANCE_REC_PREFIX_BASE,
                                                                          NVDLConst.INSTANCE_REC_NS);
             String qName = prv.prefix + ":" + NVDLConst.SECTION_ID_ATTR;
@@ -551,7 +594,7 @@ public class NVDLSAXDispatcher {
                         }
                     }
                 } else {
-                    NVDLAttributes rest = dispatchAttribute(ip, attrs);
+                    NVDLAttributes rest = dispatchAttribute(ip, dh, attrs);
                     h.startElement(uri, localName, qName, rest);
                     if (dh != null) {
                         if (emitSectionID && currentElement.isSectionHead()) {

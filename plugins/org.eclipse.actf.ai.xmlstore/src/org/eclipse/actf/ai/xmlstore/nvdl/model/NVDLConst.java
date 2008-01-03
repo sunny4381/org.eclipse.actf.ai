@@ -17,6 +17,8 @@ package org.eclipse.actf.ai.xmlstore.nvdl.model;
 public class NVDLConst {
     static public final String NVDL_NS = "http://purl.oclc.org/dsdl/nvdl/ns/structure/1.0";
 
+    static public final String INSTANCE_NS_COMMON = "http://purl.oclc.org/dsdl/nvdl/ns/instance";
+
     static public final String INSTANCE_NS = "http://purl.oclc.org/dsdl/nvdl/ns/instance/1.0";
     static public final String INSTANCE_PREFIX_BASE = "nvdlinstance";
     static public final String VIRTUALELEMENT_NAME = "virtualElement";
@@ -27,5 +29,6 @@ public class NVDLConst {
     static public final String SLOT_NODE_START_NAME = "slot-node";
     static public final String SLOT_NODE_END_NAME = "slot-node-end";
     static public final String SLOT_NODE_ID_ATTR = "slot-node-id";
+    static public final String ASN_ID_ATTR = "asn-id";
     static public final String SECTION_ID_ATTR = "sect-id";
 }

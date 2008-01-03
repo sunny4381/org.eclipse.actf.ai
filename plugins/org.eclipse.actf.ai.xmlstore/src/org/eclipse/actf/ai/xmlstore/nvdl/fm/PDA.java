@@ -261,7 +261,7 @@ public class PDA {
                 isAttributeAttached = true;
             }
         }
-        assert (result.size() > 0);
+        assert (isAttributeAttached || (result.size() > 0));
         return result;
     }
 

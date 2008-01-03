@@ -21,7 +21,7 @@ import org.xml.sax.Attributes;
 /**
  * The <code>NVDLAttributes</code> is the proxy class for SAX Attributes.
  */
-class NVDLAttributes implements Attributes, NVDLAttributeSection {
+public class NVDLAttributes implements Attributes, NVDLAttributeSection {
     /********************************************
                Impl. for org.xml.sax.Attributes
     ********************************************/
@@ -191,7 +191,7 @@ class NVDLAttributes implements Attributes, NVDLAttributeSection {
         }
     }
 
-    void addExtAttribute(String uri, String localName, String qName, String value) {
+    public void addExtAttribute(String uri, String localName, String qName, String value) {
         ExtAttr ea = new ExtAttr(uri, localName, qName, value);
         if (extAttrs == null) extAttrs = new ArrayList<ExtAttr>();
         extAttrs.add(ea);
@@ -213,7 +213,7 @@ class NVDLAttributes implements Attributes, NVDLAttributeSection {
     //    Constructors.
     // --------------------------------------------------------------------------------
 
-    NVDLAttributes(NVDLElement baseElement, Attributes base) {
+    public NVDLAttributes(NVDLElement baseElement, Attributes base) {
         this.base = base;
         this.baseElement = baseElement;
         this.sectionNS = null;

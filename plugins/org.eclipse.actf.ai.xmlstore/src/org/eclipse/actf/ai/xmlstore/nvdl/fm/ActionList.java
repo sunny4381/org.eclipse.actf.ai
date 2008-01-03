@@ -103,4 +103,15 @@ public class ActionList {
         }
     }
 
+    public String toString() {
+        StringBuffer buf = new StringBuffer();
+        int size = actions.size();
+        for (int i = 0; i < size; i++) {
+            NVDLAction a = actions.get(i);
+            buf.append(a.getName());
+            buf.append(' ');
+        }
+        buf.append(getCount());
+        return buf.toString();
+    }
 }
