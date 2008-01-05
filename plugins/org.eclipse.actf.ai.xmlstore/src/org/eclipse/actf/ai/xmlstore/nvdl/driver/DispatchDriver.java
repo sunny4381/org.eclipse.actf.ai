@@ -18,6 +18,8 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
+import javax.xml.parsers.SAXParser;
+
 import org.eclipse.actf.ai.xmlstore.nvdl.dispatcher.NVDLSAXDispatcher;
 import org.eclipse.actf.ai.xmlstore.nvdl.model.Location;
 import org.eclipse.actf.ai.xmlstore.nvdl.model.NVDLAction;
@@ -32,14 +34,13 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 
 
 /**
  * The <code>DispatchDriver</code> is a driver for validation.
  */
 public class DispatchDriver implements NVDLSAXDispatcher.DebugHandlerFactory {
-    private XMLReader reader;
+    private SAXParser parser;
     private NVDLSAXReader nvdlReader;
     private ErrorHandler eh;
     private String targetDirectory;
@@ -105,9 +106,9 @@ public class DispatchDriver implements NVDLSAXDispatcher.DebugHandlerFactory {
     }
 
     private void setupReader() throws Exception {
-        reader = NVDLSAXReader.newXMLReader();
-        reader.setErrorHandler(eh);
-        nvdlReader = new NVDLSAXReader(reader, eh);
+        parser = NVDLSAXReader.newSAXParser();
+        parser.getXMLReader().setErrorHandler(eh);
+        nvdlReader = new NVDLSAXReader(parser, eh);
     }
 
     void dispatch(String nvdlFile, String instanceFilename, String targetDirectory)

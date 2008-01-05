@@ -17,6 +17,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
+import javax.xml.parsers.SAXParser;
+
 import org.eclipse.actf.ai.xmlstore.nvdl.model.NVDLRules;
 import org.eclipse.actf.ai.xmlstore.nvdl.reader.NVDLSAXReader;
 import org.eclipse.actf.ai.xmlstore.nvdl.rec.SAXReconstructor;
@@ -34,7 +36,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * The <code>ReconstructionDriver</code> is a driver for reconstruction.
  */
 public class ReconstructionDriver {
-    private XMLReader reader;
+    private SAXParser parser;
     private NVDLSAXReader nvdlReader;
     private ErrorHandler eh;
     // private boolean debug;
@@ -103,9 +105,9 @@ public class ReconstructionDriver {
     }
 
     private void setupReader() throws Exception {
-        reader = NVDLSAXReader.newXMLReader();
-        reader.setErrorHandler(eh);
-        nvdlReader = new NVDLSAXReader(reader, eh);
+        parser = NVDLSAXReader.newSAXParser();
+        parser.getXMLReader().setErrorHandler(eh);
+        nvdlReader = new NVDLSAXReader(parser, eh);
     }
 
     ReconstructionDriver(ErrorHandler eh,

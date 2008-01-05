@@ -13,6 +13,9 @@ package org.eclipse.actf.ai.xmlstore.nvdl.reader;
 
 import java.io.IOException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import javax.xml.validation.SchemaFactory;
 
 import org.eclipse.actf.ai.xmlstore.nvdl.NVDLException;
@@ -37,10 +40,11 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 
 /**
@@ -1138,19 +1142,29 @@ public class NVDLSAXReader {
         return rules;
     }
 
-    public static XMLReader newXMLReader() throws SAXException {
-        XMLReader reader = XMLReaderFactory.createXMLReader();
-        reader.setFeature("http://xml.org/sax/features/namespaces", true);
-        reader.setFeature("http://xml.org/sax/features/namespace-prefixes", true);
-        return reader;
+    public static SAXParser newSAXParser() throws SAXException {
+        SAXParserFactory pf = SAXParserFactory.newInstance();
+        try {
+			pf.setFeature("http://xml.org/sax/features/namespaces", true);
+	        pf.setFeature("http://xml.org/sax/features/namespace-prefixes", true);
+	        pf.setXIncludeAware(true);
+	        return pf.newSAXParser();
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
+			return null;
+		}
     }
 
-    public NVDLSAXReader(XMLReader reader) {
-        this(reader, null);
+    public NVDLSAXReader(SAXParser parser) throws SAXException {
+        this(parser, null);
+    }
+
+    public NVDLSAXReader(ErrorHandler eh) throws SAXException {
+        this(newSAXParser(), eh);
     }
 	
-    public NVDLSAXReader(XMLReader reader, ErrorHandler eh) {
-        this.reader = reader;
+    public NVDLSAXReader(SAXParser parser, ErrorHandler eh) throws SAXException {
+        this.reader = parser.getXMLReader();
         if (eh != null) {
             this.eh = eh;
         } else {

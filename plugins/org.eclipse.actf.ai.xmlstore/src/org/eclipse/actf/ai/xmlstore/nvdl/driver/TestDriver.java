@@ -14,12 +14,8 @@ package org.eclipse.actf.ai.xmlstore.nvdl.driver;
 import java.io.File;
 import java.io.FilenameFilter;
 
+import javax.xml.parsers.SAXParser;
 import javax.xml.validation.ValidatorHandler;
-
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 import org.eclipse.actf.ai.xmlstore.nvdl.NVDLException;
 import org.eclipse.actf.ai.xmlstore.nvdl.dispatcher.NVDLSAXDispatcher;
@@ -28,15 +24,19 @@ import org.eclipse.actf.ai.xmlstore.nvdl.reader.NVDLSAXReader;
 import org.eclipse.actf.ai.xmlstore.nvdl.util.DefaultErrorHandler;
 import org.eclipse.actf.ai.xmlstore.nvdl.util.IRIUtil;
 import org.eclipse.actf.ai.xmlstore.nvdl.util.Log;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 public class TestDriver {
-    XMLReader xmlReader;
+    SAXParser parser;
     NVDLSAXReader r;
 
     TestDriver() throws SAXException {
-        this.xmlReader = NVDLSAXReader.newXMLReader();
-        xmlReader.setErrorHandler(DefaultErrorHandler.getErrorHandler());
-        this.r = new NVDLSAXReader(xmlReader);
+        this.parser = NVDLSAXReader.newSAXParser();
+        parser.getXMLReader().setErrorHandler(DefaultErrorHandler.getErrorHandler());
+        this.r = new NVDLSAXReader(parser);
     }
 
     static public class TestSet {
