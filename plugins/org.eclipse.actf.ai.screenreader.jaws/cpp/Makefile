@@ -10,9 +10,9 @@
 ###############################################################################
 
 BASEPKG = org.eclipse.actf.ai.screenreader.jaws
-JAVAH = $(JAVA_HOME:/=\)\bin\javah
+JAVAH = "$(JAVA_HOME:/=\)\bin\javah"
 JAVAH_FLAGS = -classpath ../bin
-JAVA_INC = $(JAVA_HOME)/include
+JAVA_INC = "$(JAVA_HOME)/include"
 BLD = ..\build
 CC = cl.exe
 CFLAGS = -c -Zi -Od -I $(JAVA_INC)
@@ -32,7 +32,7 @@ clean:
 	-rd /S/Q $(BLD)
 
 headers: 
-	$(JAVAH) $(JAVAH_FLAGS) $(BASEPKG).JawsAPI
+	$(JAVAH) $(JAVAH_FLAGS) $(BASEPKG).JawsAPI $(BASEPKG).JawsWindowUtil
 
 $(DLL): $(OBJS)
 	$(LINK) $(LDFLAGS) $(OBJS) -out:$(DLL) $(LIBS)

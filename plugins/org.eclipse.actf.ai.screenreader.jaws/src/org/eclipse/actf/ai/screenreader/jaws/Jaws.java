@@ -26,7 +26,10 @@ public class Jaws implements ITTSEngine, IScreenReaderControl {
 
     public static final String JAWS_OBSERVE_SPEECH = "ObserveSpeech";
 
+    public static final String SAYALLOFF = "AiBrowserSayAllOff";
+
     JawsAPI jaws = JawsAPI.getInstance();
+    JawsWindowUtil util = JawsWindowUtil.getInstance();
 
     public void dispose() {
         // not supported
@@ -38,7 +41,8 @@ public class Jaws implements ITTSEngine, IScreenReaderControl {
     }
 
     public void setEventListener(IVoiceEventListener eventListener) {
-        jaws.setEventListener(eventListener);
+    	if (util != null)
+    		util.setEventListener(eventListener);
     }
 
     public void setLanguage(String language) {
@@ -50,19 +54,21 @@ public class Jaws implements ITTSEngine, IScreenReaderControl {
     }
 
     public void speak(String text, int flags, int index) {
-        if (jaws == null) return;
+        if (jaws == null || util == null) return;
         if (index < 0) {
             jaws.JawsSayString(text, flags == TTSFLAG_FLUSH);
         }  else {
-            jaws.JawsShowTextToWindow(text, flags == TTSFLAG_FLUSH, index);
+            util.JawsShowTextToWindow(text, flags == TTSFLAG_FLUSH, index);
             // Yield.forWhile(10);
             jaws.JawsRunScript(JAWS_OBSERVE_SPEECH);
         }
     }
 
     public void stop() {
-        if (jaws != null) {
+        if (jaws != null && util != null) {
             jaws.JawsStopSpeech();
+            util.resetJawsWindowText();
+            jaws.JawsRunScript(SAYALLOFF);
         }
     }
 
@@ -79,8 +85,8 @@ public class Jaws implements ITTSEngine, IScreenReaderControl {
     }
     
     public void takeBackControl(IWebBrowserACTF browser){
-        if(jaws != null){
-            jaws.TakeBackControl(browser);
+        if(util != null){
+            util.TakeBackControl(browser);
         }
     }
 

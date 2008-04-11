@@ -13,12 +13,8 @@ package org.eclipse.actf.ai.screenreader.jaws;
 import org.eclipse.actf.ai.voice.IVoiceEventListener;
 import org.eclipse.actf.model.IWebBrowserACTF;
 
-
-
 public class JawsAPI {
     private static JawsAPI instance;
-    private static final String SAYALLOFF = "AiBrowserSayAllOff";
-    
     static{
         try{
             System.loadLibrary("jawsapi-bridge");
@@ -32,15 +28,14 @@ public class JawsAPI {
 
     public static JawsAPI getInstance(){
         if (instance == null) {
-            int handle = JawsPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getShell().handle;
-            if (!_initialize(handle)) return null;
+        	if (!_initialize()) return null;
             instance = new JawsAPI();
         }
         return instance;
     }
-
-    public boolean isAvailable() {
-        return _isAvailable();
+    
+    public boolean JawsRunFunction(String funcName) {
+    	return _JawsRunFunction(funcName);
     }
 
     public boolean JawsSayString(String stringToSpeak, boolean bInterrupt) {
@@ -48,56 +43,25 @@ public class JawsAPI {
         return _JawsSayString(stringToSpeak, bInterrupt);
     }
 
-    public boolean JawsShowTextToWindow(String stringToSpeak, boolean bInterrupt, int index) {
-        // if (bInterrupt) JawsStopSpeech();
-        boolean ret = _setJawsWindowText(stringToSpeak);
-        if (listener != null) {
-            listener.indexReceived(index);
-        }
-        return ret;
-    }
-
     public boolean JawsStopSpeech() {
-        _resetJawsWindowText();
-        JawsRunScript(SAYALLOFF);
-        return _JawsStopSpeech();
+    	// JawsStopSpeech does not work well, so null string will be spoken.
+        // return _JawsStopSpeech();
+    	
+    	return _JawsSayString("", true);
     }
 
     public boolean JawsRunScript(String scriptName) {
         return _JawsRunScript(scriptName);
     }
     
-    public boolean TakeBackControl(IWebBrowserACTF browser){
-        //return _TakeBackControl(browser.getIWebBrowser2());
-        
-        int handle = JawsPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getShell().handle;
-        return _TakeBackControl(handle);
-    }
+	public boolean isAvailable() {
+	    return _isAvailable();
+	}
 
-    private static IVoiceEventListener listener;
-
-    public void setEventListener(IVoiceEventListener eventListener) {
-        listener = eventListener;
-    }
-
-    public static boolean callBack(int param) {
-        System.err.println("Callbacked!!!" + param);
-        if (listener == null) return true;
-        if (param == 0) {
-            listener.indexReceived(-1);
-        } else if (param == 1) {
-            getInstance().JawsStopSpeech();
-            listener.indexReceived(-2);
-        }
-        return true;
-    }
-
-    private static native boolean _initialize(int handle);
-    private static native boolean _isAvailable();
+	private static native boolean _initialize();
+	private static native boolean _isAvailable();
+	private static native boolean _JawsRunFunction(String funcName);
     private static native boolean _JawsSayString(String stringToSpeak, boolean bInterrupt);
     private static native boolean _JawsStopSpeech();
     private static native boolean _JawsRunScript(String scriptName);
-    private static native boolean _TakeBackControl(long browser);
-    private static native boolean _setJawsWindowText(String text);
-    private static native boolean _resetJawsWindowText();
 }

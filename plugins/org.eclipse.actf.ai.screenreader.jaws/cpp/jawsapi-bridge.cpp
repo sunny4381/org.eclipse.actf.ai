@@ -16,11 +16,14 @@
 //#include "stdafx.h"
 #include "common.h"
 #include "org_eclipse_actf_ai_screenreader_jaws_JawsAPI.h"
+#include "org_eclipse_actf_ai_screenreader_jaws_JawsWindowUtil.h"
 
-typedef BOOL (WINAPI *JFWSayStringType)(LPCTSTR lpszStrinToSpeak,BOOL bInterrupt);
+typedef BOOL (WINAPI *JFWRunFunctionType)(LPCTSTR lpszFuncName);
+typedef BOOL (WINAPI *JFWSayStringType)(LPCTSTR lpszStringToSpeak,BOOL bInterrupt);
 typedef BOOL (WINAPI *JFWStopSpeechType)(void);
 typedef BOOL (WINAPI *JFWRunScriptType)(LPCTSTR lpszScriptName);
 
+static JFWRunFunctionType JFWRunFunctionProc;
 static JFWSayStringType JFWSayStringProc;
 static JFWStopSpeechType JFWStopSpeechProc;
 static JFWRunScriptType JFWRunScriptProc;
@@ -29,7 +32,7 @@ static const TCHAR jaws_registry_path[] = "SOFTWARE\\Freedom Scientific\\JAWS";
 static const TCHAR jaws_api_dllname[] = "jfwapi.dll";
 
 static JavaVM *jvm;
-static jclass class_JawsAPI;
+static jclass class_JawsWindowUtil;
 static jmethodID callBackMethodID;
 
 static LPTSTR
@@ -116,13 +119,14 @@ convertJavaString(JNIEnv* env, jstring jstr)
     return tstr;
 }
 
+
 /*
- * Class:     org_eclipse_actf_ai_screenreader_jaws_JawsAPI
- * Method:    _initialize
+ * Class:     org_eclipse_actf_ai_screenreader_jaws_JawsWindowUtil
+ * Method:    _initializeWindow
  * Signature: ()Z
  */
 jboolean JNICALL
-Java_org_eclipse_actf_ai_screenreader_jaws_JawsAPI__1initialize
+Java_org_eclipse_actf_ai_screenreader_jaws_JawsWindowUtil__1initializeWindow
 (JNIEnv* env, jclass jcls, jint topwnd)
 {
     LPTSTR jfwapidllpath = findJFWAPIDLL();
@@ -130,35 +134,62 @@ Java_org_eclipse_actf_ai_screenreader_jaws_JawsAPI__1initialize
 	fprintf(stderr, "Could not find out jfwapi.dll\n");
 	return JNI_FALSE;
     }
-    HMODULE h = LoadLibrary(jfwapidllpath);
-    free(jfwapidllpath);
+    
+    env->GetJavaVM(&jvm);
+    class_JawsWindowUtil = (jclass) env->NewGlobalRef(jcls);
+    callBackMethodID = env->GetStaticMethodID(class_JawsWindowUtil, "callBack", "(I)Z");
 
+    init_jaws_window((HWND) topwnd);
+    
+    return JNI_TRUE;
+}
+
+
+/*
+ * Class:     org_eclipse_actf_ai_screenreader_jaws_JawsAPI
+ * Method:    _initialize
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_eclipse_actf_ai_screenreader_jaws_JawsAPI__1initialize
+(JNIEnv* env, jclass jcls)
+{
+    HMODULE h;
+    LPTSTR jfwapidllpath = findJFWAPIDLL();
+    if (!jfwapidllpath) {
+	fprintf(stderr, "Could not find out jfwapi.dll\n");
+	return JNI_FALSE;
+	
+    }
+    h = LoadLibrary(jfwapidllpath);
+    free(jfwapidllpath);
+	
     if (!h) {
-	fprintf(stderr, "Can't load the \"jfwapi.dll\"\n");
+        fprintf(stderr, "Can't load the \"jfwapi.dll\"\n");
 	return JNI_FALSE;
     }
+    
 
+
+    JFWRunFunctionProc = (JFWRunFunctionType) GetProcAddress(h, "JFWRunFunction");
+    if (!JFWRunFunctionProc) {
+	fprintf(stderr, "Could not obtain JFWRunFunction entry pointer.\n");
+	//return JNI_FALSE;
+    }
     JFWSayStringProc = (JFWSayStringType) GetProcAddress(h, "JFWSayString");
     if (!JFWSayStringProc) {
 	fprintf(stderr, "Could not obtain JFWSayString entry pointer.\n");
-	return JNI_FALSE;
+	//return JNI_FALSE;
     }
     JFWStopSpeechProc = (JFWStopSpeechType) GetProcAddress(h, "JFWStopSpeech");
     if (!JFWStopSpeechProc) {
 	fprintf(stderr, "Could not obtain JFWStopSpeech entry pointer.\n");
-	return JNI_FALSE;
+	//return JNI_FALSE;
     }
     JFWRunScriptProc = (JFWRunScriptType)  GetProcAddress(h, "JFWRunScript");
     if (!JFWRunScriptProc) {
 	fprintf(stderr, "Could not obtain JFWRunScript entry pointer.\n");
-	return JNI_FALSE;
+	//return JNI_FALSE;
     }
-
-    env->GetJavaVM(&jvm);
-    class_JawsAPI = (jclass) env->NewGlobalRef(jcls);
-    callBackMethodID = env->GetStaticMethodID(class_JawsAPI, "callBack", "(I)Z");
-
-    init_jaws_window((HWND) topwnd);
 
     return JNI_TRUE;
 }
@@ -179,6 +210,22 @@ Java_org_eclipse_actf_ai_screenreader_jaws_JawsAPI__1isAvailable
 }
 
 /*
+ * Class:     org_eclipse_actf_ai_screenreader_jaws_JawsAPI
+ * Method:    _JawsRunFunction
+ * Signature: (Ljava/lang/String;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_eclipse_actf_ai_screenreader_jaws_JawsAPI__1JawsRunFunction
+  (JNIEnv *env, jclass jcls, jstring jstringFuncName)
+{
+  if (!JFWRunFunctionProc) 
+    return JNI_FALSE;
+  LPTSTR str = convertJavaString(env, jstringFuncName);
+  jboolean b = (JFWRunFunctionProc)(str);
+  free(str);
+  return b;
+}
+
+/*
  * Class:     Java_org_eclipse_actf_ai_screenreader_jaws_JawsAPI_JawsRunFunction
  * Method:    JawsSayString
  * Signature: (Ljava/lang/String;Z)Z
@@ -187,10 +234,12 @@ jboolean JNICALL
 Java_org_eclipse_actf_ai_screenreader_jaws_JawsAPI__1JawsSayString
 (JNIEnv *env, jclass jcls, jstring jstringToSpeak, jboolean bInterrupt)
 {
+    if (!JFWSayStringProc)
+      return JNI_FALSE;
     LPTSTR str = convertJavaString(env, jstringToSpeak);
     jboolean b = (JFWSayStringProc)(str, bInterrupt);
     free(str);
-    return JNI_TRUE;
+    return b;
 }
 
 
@@ -203,6 +252,8 @@ jboolean JNICALL
 Java_org_eclipse_actf_ai_screenreader_jaws_JawsAPI__1JawsStopSpeech
 (JNIEnv *env, jclass jcls)
 {
+    if (!JFWStopSpeechProc)
+      return JNI_FALSE;
     return (JFWStopSpeechProc)();
 }
 
@@ -215,6 +266,8 @@ jboolean JNICALL
 Java_org_eclipse_actf_ai_screenreader_jaws_JawsAPI__1JawsRunScript
 (JNIEnv *env, jclass jcls, jstring jscriptName)
 {
+    if (!JFWRunScriptProc)
+      return JNI_FALSE;
     LPTSTR str = convertJavaString(env, jscriptName);
     jboolean b = (JFWRunScriptProc)(str);
     free(str);
@@ -223,12 +276,12 @@ Java_org_eclipse_actf_ai_screenreader_jaws_JawsAPI__1JawsRunScript
 }
 
 /*
- * Class:     org_eclipse_actf_ai_screenreader_jaws_JawsAPI
+ * Class:     org_eclipse_actf_ai_screenreader_jaws_JawsWindowUtil
  * Method:    _setJawsWindowText
  * Signature: (Ljava/lang/String;)Z
  */
 jboolean JNICALL
-Java_org_eclipse_actf_ai_screenreader_jaws_JawsAPI__1setJawsWindowText
+Java_org_eclipse_actf_ai_screenreader_jaws_JawsWindowUtil__1setJawsWindowText
 (JNIEnv *env, jclass jcls, jstring text)
 {
     LPTSTR str = convertJavaString(env, text);
@@ -238,12 +291,12 @@ Java_org_eclipse_actf_ai_screenreader_jaws_JawsAPI__1setJawsWindowText
 }
 
 /*
- * Class:     org_eclipse_actf_ai_screenreader_jaws_JawsAPI
+ * Class:     org_eclipse_actf_ai_screenreader_jaws_JawsWindowUtil
  * Method:    _resetJawsWindowText
  * Signature: ()Z
  */
 jboolean JNICALL
-Java_org_eclipse_actf_ai_screenreader_jaws_JawsAPI__1resetJawsWindowText
+Java_org_eclipse_actf_ai_screenreader_jaws_JawsWindowUtil__1resetJawsWindowText
 (JNIEnv *env, jclass jcls)
 {
     reset_jaws_window();
@@ -260,7 +313,7 @@ int callback(int param)
 {
     JNIEnv *env;
     if (jvm->GetEnv((void**) &env, JNI_VERSION_1_2) != JNI_OK) return 0;
-    return env->CallStaticBooleanMethod(class_JawsAPI,
+    return env->CallStaticBooleanMethod(class_JawsWindowUtil,
 					callBackMethodID,
 					(jint) param);
 }

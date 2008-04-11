@@ -13,7 +13,7 @@
 #include <shlguid.h>
 #include <tchar.h>
 #include <windows.h>
-#include "org_eclipse_actf_ai_screenreader_jaws_JawsAPI.h"
+#include "org_eclipse_actf_ai_screenreader_jaws_JawsWindowUtil.h"
 
 WNDPROC original_winproc;
 
@@ -115,7 +115,7 @@ dummy_winproc(HWND hWnd, UINT cmd, WPARAM wParam, LPARAM lParam)
  * Signature: (J)Z
  */
 jboolean JNICALL
-Java_org_eclipse_actf_ai_screenreader_jaws_JawsAPI__1TakeBackControl
+Java_org_eclipse_actf_ai_screenreader_jaws_JawsWindowUtil__1TakeBackControl
 (JNIEnv *env, jclass clazz, jlong browser)
 {
     wm_html_getobject_msgid = RegisterWindowMessage(_T("WM_HTML_GETOBJECT"));
