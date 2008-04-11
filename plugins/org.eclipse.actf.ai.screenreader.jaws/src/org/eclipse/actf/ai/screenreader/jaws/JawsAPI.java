@@ -7,7 +7,7 @@
  *
  * Contributors:
  *    Daisuke SATO - initial API and implementation
- *    Yevgen Borodin
+ *    Yevgen Borodin - [Bug 226468]
  *******************************************************************************/
 package org.eclipse.actf.ai.screenreader.jaws;
 
@@ -35,11 +35,6 @@ public class JawsAPI {
         return instance;
     }
     
-    /**
-     * Yevgen Borodin - [Bug 226468]
-     * @param funcName
-     * @return
-     */
     public boolean JawsRunFunction(String funcName) {
     	return _JawsRunFunction(funcName);
     }

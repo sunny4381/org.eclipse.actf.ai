@@ -8,7 +8,7 @@
  * Contributors:
  *    Hisashi MIYASHITA - initial API and implementation
  *    Daisuke SATO
- *    Yevgen Borodin
+ *    Yevgen Borodin - [Bug 226468]
  *******************************************************************************/
 //#define UNICODE
 #include <stdlib.h>
