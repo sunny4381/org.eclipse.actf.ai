@@ -128,7 +128,7 @@ public class FlashQueryImpl {
         @Override
         public List<Node> query(IFlashNode fn, List<Node> l) {
             ArrayList<Node> cnl = new ArrayList<Node>();
-            Iterator it = pathSegments.iterator();
+            Iterator<Object> it = pathSegments.iterator();
             if (isRelative) {
                 cnl.add(fn);
             } else {
@@ -204,7 +204,7 @@ public class FlashQueryImpl {
         return targets.length > 0;
     }
 
-    public List query(Node base) {
+    public List<Node> query(Node base) {
         if (!(base instanceof IFlashNode)) return null;
         IFlashNode fn = (IFlashNode) base;
 
@@ -215,7 +215,7 @@ public class FlashQueryImpl {
 
         if (isDepthSpecified) {
             List<Node> r2 = new ArrayList<Node>();
-            Iterator it = r.iterator();
+            Iterator<Node> it = r.iterator();
             while (it.hasNext()) {
                 IFlashNode fn2 = (IFlashNode) it.next();
                 IFlashNode fnd = fn2.getNodeAtDepth(depth);
@@ -224,7 +224,7 @@ public class FlashQueryImpl {
             r = r2;
         }
         if (isFrameRangeSpecified) {
-            Iterator it = r.iterator();
+            Iterator<Node> it = r.iterator();
             while (it.hasNext()) {
                 IFlashNode fn2 = (IFlashNode) it.next();
                 int f = fn2.getCurrentFrame();

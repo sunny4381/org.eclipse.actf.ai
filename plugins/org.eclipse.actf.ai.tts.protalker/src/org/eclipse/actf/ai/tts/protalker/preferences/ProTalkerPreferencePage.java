@@ -10,11 +10,11 @@
  *******************************************************************************/
 package org.eclipse.actf.ai.tts.protalker.preferences;
 
+import org.eclipse.actf.ai.tts.TTSRegistry;
 import org.eclipse.actf.ai.tts.protalker.Messages;
 import org.eclipse.actf.ai.tts.protalker.ProTalkerPlugin;
 import org.eclipse.actf.ai.tts.protalker.engine.ProTalker;
-import org.eclipse.actf.ai.voice.internal.TTSRegistry;
-import org.eclipse.actf.ai.voice.preferences.GroupFieldEditorVoicePreferencePage;
+import org.eclipse.actf.ai.voice.preferences.util.GroupFieldEditorVoicePreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 

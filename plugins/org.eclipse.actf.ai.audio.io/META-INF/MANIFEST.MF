@@ -5,7 +5,6 @@ Bundle-SymbolicName: org.eclipse.actf.ai.audio.io
 Bundle-Version: 0.0.1
 Bundle-Activator: org.eclipse.actf.ai.audio.io.Activator
 Bundle-Vendor: Eclipse.org
-Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime
 Eclipse-LazyStart: true

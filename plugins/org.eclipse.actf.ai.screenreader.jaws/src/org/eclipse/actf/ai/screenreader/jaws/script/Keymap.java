@@ -29,7 +29,7 @@ public class Keymap {
 
 			String keyStr = line.substring(0, index).trim();
             if(keyStr.equals("JAWSKey+H")){
-                int i = 1;
+                //int i = 1;
             }
 			scriptName = line.substring(index + 1).trim();
 

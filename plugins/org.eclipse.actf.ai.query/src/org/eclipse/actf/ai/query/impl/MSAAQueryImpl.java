@@ -34,12 +34,12 @@ public class MSAAQueryImpl {
         return (ids != null);
     }
 
-    public List query(Node base) {
+    public List<Node> query(Node base) {
         if (ids == null) return null;
         if (!(base instanceof IMSAANode)) return null;
         IMSAANode mn = (IMSAANode) base;
 
-        List<IMSAANode> r = new ArrayList<IMSAANode>();
+        List<Node> r = new ArrayList<Node>();
         for (int i = 0; i < ids.length; i++) {
             IMSAANode n = mn.searchByID(ids[i]);
             if (n != null) r.add(n);

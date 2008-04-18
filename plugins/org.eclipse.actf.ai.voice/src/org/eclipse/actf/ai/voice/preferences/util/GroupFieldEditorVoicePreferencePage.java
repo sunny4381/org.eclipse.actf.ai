@@ -8,7 +8,7 @@
  * Contributors:
  *    Takashi ITOH - initial API and implementation
  *******************************************************************************/
-package org.eclipse.actf.ai.voice.preferences;
+package org.eclipse.actf.ai.voice.preferences.util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +19,14 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Group;
 
+/**
+ * GroupFieldEditorVoicePreferencePage is a template of the preference page of TTS engine plug-ins.
+ */
 public class GroupFieldEditorVoicePreferencePage extends FieldEditorPreferencePage {
 
-	private List groups = new ArrayList();
+	private List<Group> groups = new ArrayList<Group>();
 	
-	public GroupFieldEditorVoicePreferencePage() {
+	protected GroupFieldEditorVoicePreferencePage() {
 		super(GRID);
 	}
 
@@ -47,7 +50,7 @@ public class GroupFieldEditorVoicePreferencePage extends FieldEditorPreferencePa
 		super.adjustGridLayout();
 		int numColumns = ((GridLayout)getFieldEditorParent().getLayout()).numColumns;
 		for( int i=0; i< groups.size(); i++ ) {
-			Group group = (Group)groups.get(i);
+			Group group = groups.get(i);
 			GridLayout layout = (GridLayout)group.getLayout();
 			GridData data = (GridData)group.getLayoutData(); 
 			layout.numColumns = numColumns;
@@ -56,5 +59,4 @@ public class GroupFieldEditorVoicePreferencePage extends FieldEditorPreferencePa
 	        data.horizontalSpan = numColumns;
 		}
 	}
-
 }

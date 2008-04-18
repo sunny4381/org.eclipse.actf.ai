@@ -19,10 +19,10 @@ import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
 public class DeleteCacheAction implements IWorkbenchWindowActionDelegate {
     
-	private IWorkbenchWindow window;
+	//private IWorkbenchWindow window;
 
     public void init(IWorkbenchWindow window) {
-        this.window = window;
+        //this.window = window;
     }
 
     public void dispose() {

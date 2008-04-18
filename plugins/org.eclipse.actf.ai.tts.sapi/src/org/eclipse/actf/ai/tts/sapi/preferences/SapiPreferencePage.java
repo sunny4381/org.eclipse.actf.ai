@@ -10,12 +10,12 @@
  *******************************************************************************/
 package org.eclipse.actf.ai.tts.sapi.preferences;
 
+import org.eclipse.actf.ai.tts.TTSRegistry;
 import org.eclipse.actf.ai.tts.sapi.Messages;
 import org.eclipse.actf.ai.tts.sapi.SAPIPlugin;
 import org.eclipse.actf.ai.tts.sapi.engine.SapiVoice;
-import org.eclipse.actf.ai.voice.internal.TTSRegistry;
-import org.eclipse.actf.ai.voice.preferences.ComboFieldEditor;
-import org.eclipse.actf.ai.voice.preferences.GroupFieldEditorVoicePreferencePage;
+import org.eclipse.actf.ai.voice.preferences.util.ComboFieldEditor;
+import org.eclipse.actf.ai.voice.preferences.util.GroupFieldEditorVoicePreferencePage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;

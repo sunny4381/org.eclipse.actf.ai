@@ -11,7 +11,7 @@
 package org.eclipse.actf.ai.audio.description.preferences;
 
 import org.eclipse.actf.ai.audio.description.DescriptionPlugin;
-import org.eclipse.actf.ai.voice.internal.TTSRegistry;
+import org.eclipse.actf.ai.tts.TTSRegistry;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 

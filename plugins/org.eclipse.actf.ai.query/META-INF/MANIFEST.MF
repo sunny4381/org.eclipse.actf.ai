@@ -5,7 +5,6 @@ Bundle-SymbolicName: org.eclipse.actf.ai.query
 Bundle-Version: 0.0.1
 Bundle-Activator: org.eclipse.actf.ai.query.QueryPlugin
 Bundle-Vendor: Eclipse.org
-Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.actf.model.dom.dombycom,
  org.eclipse.actf.util.vocab,

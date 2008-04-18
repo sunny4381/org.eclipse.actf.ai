@@ -42,7 +42,7 @@ public class XMLQueryImpl {
         return (ids != null) || (compiledXPath != null);
     }
 
-    public List query(Node base) {
+    public List<Node> query(Node base) {
         List<Node> result = null;
 
         if (ids != null) {
@@ -52,7 +52,7 @@ public class XMLQueryImpl {
             Document doc = base.getOwnerDocument();
             for (int i = 0; i < ids.length; i++) {
                 if (doc instanceof IDocumentEx) {
-                    List r = ((IDocumentEx) doc).getElementsByIdInAllFrames(ids[i]);
+                    List<Node> r = ((IDocumentEx) doc).getElementsByIdInAllFrames(ids[i]);
                     result.addAll(r);
                 } else {
                     Node n = doc.getElementById(ids[i]);

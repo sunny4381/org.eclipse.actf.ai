@@ -88,7 +88,7 @@ public class JawsWindowUtil {
 	        listener.indexReceived(-1);
 	    } else if (param == 1) {
 	        jaws.JawsStopSpeech();
-	        resetJawsWindowText();
+	        getInstance().resetJawsWindowText();
             jaws.JawsRunScript(Jaws.SAYALLOFF);
 	        listener.indexReceived(-2);
 	    }
@@ -98,7 +98,7 @@ public class JawsWindowUtil {
 	/**
 	 * This method hides the white window shown by {@link #JawsShowTextToWindow(String, boolean, int)}.
 	 */
-	public static void resetJawsWindowText() {
+	public void resetJawsWindowText() {
         _resetJawsWindowText();
 	}
 	

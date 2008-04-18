@@ -260,14 +260,6 @@ public class KeyUIImpl implements IKeyHookListener, IManipulator {
 
         int command;
         
-        private Method lookupMethod(Class clazz, String name) {
-            try {
-                return clazz.getMethod(name, new Class[0]);
-            } catch (Exception e) {
-                return null;
-            }
-        }
-
         KC(Type type, int vkey, int mod, String name) {
             this.type = type;
             this.vkey = vkey;
@@ -275,15 +267,20 @@ public class KeyUIImpl implements IKeyHookListener, IManipulator {
             this.name = name;
 
             if (type == Type.FUNCTION) {
-                method = lookupMethod(INavigatorUI.class, name);
-                if (method != null) {
+            	try {
+            		method = INavigatorUI.class.getMethod(name);
                     target = Target.INAVIGATORUI;
-                } else {
-                    method = lookupMethod(IBrowserControl.class, name);
-                    if (method == null) {
+            	} catch (Exception e) {
+            		method = null;
+            	}
+            	
+                if (method == null) {
+                	try {
+                		method = IBrowserControl.class.getMethod(name);
+                        target = Target.IBROWSERCONTROL;
+                	} catch (Exception e){
                         System.err.println("No such method:" + name);
-                    }
-                    target = Target.IBROWSERCONTROL;
+                	}
                 }
             } else if (type == Type.COMMAND) {
                 try {

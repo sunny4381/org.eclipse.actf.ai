@@ -311,7 +311,7 @@ public abstract class NavigatorImpl implements INavigatorUI, IVoiceEventListener
 
     private int vcCount, scCount;
 
-    private boolean mcAvailable = false;
+    //private boolean mcAvailable = false;
 
     private void speakMediaInfo() throws TreeManagerException {
         IVideoControl vc = treeManager.getVideoControl();

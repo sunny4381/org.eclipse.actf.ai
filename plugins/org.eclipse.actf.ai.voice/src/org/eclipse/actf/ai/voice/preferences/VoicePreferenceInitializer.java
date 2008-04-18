@@ -10,9 +10,9 @@
  *******************************************************************************/
 package org.eclipse.actf.ai.voice.preferences;
 
+import org.eclipse.actf.ai.tts.TTSRegistry;
 import org.eclipse.actf.ai.voice.IVoice;
 import org.eclipse.actf.ai.voice.VoicePlugin;
-import org.eclipse.actf.ai.voice.internal.TTSRegistry;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 

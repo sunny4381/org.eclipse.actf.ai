@@ -83,7 +83,7 @@ public class QueryImpl implements IQuery {
     }
 
     private static class NodeListImpl implements NodeList {
-        private List nodeList;
+        private List<Node> nodeList;
 
         public Node item(int index) {
             if ((index < 0) || (index >= nodeList.size()))
@@ -95,9 +95,9 @@ public class QueryImpl implements IQuery {
             return nodeList.size();
         }
 
-        NodeListImpl(List nodeList) {
+        NodeListImpl(List<Node> nodeList) {
             if (nodeList == null) {
-                this.nodeList = new ArrayList(0);
+                this.nodeList = new ArrayList<Node>(0);
             } else {
                 this.nodeList = nodeList;
             }
@@ -109,7 +109,7 @@ public class QueryImpl implements IQuery {
     }
 
     public NodeList query(Node base) {
-        List result = null;
+        List<Node> result = null;
         if ((xmlQuery != null) && (xmlQuery.hasTarget())) {
             result = xmlQuery.query(base);
         }
@@ -117,12 +117,12 @@ public class QueryImpl implements IQuery {
             if (result == null) {
                 result = flashQuery.query(base);
             } else {
-                List r = new ArrayList();
-                for (Iterator iter = result.iterator(); iter.hasNext();) {
-                    Node node = (Node) iter.next();
+                List<Node> r = new ArrayList<Node>();
+                for (Iterator<Node> iter = result.iterator(); iter.hasNext();) {
+                    Node node = iter.next();
                     if (!(node instanceof IFlashNode))
                         continue;
-                    List list = flashQuery.query((IFlashNode)node);
+                    List<Node> list = flashQuery.query((IFlashNode)node);
                     if (list != null)
                         r.addAll(list);
                 }
@@ -133,12 +133,12 @@ public class QueryImpl implements IQuery {
             if (result == null) {
                 result = msaaQuery.query(base);
             } else {
-                List r = new ArrayList();
-                for (Iterator iter = result.iterator(); iter.hasNext();) {
-                    Node node = (Node) iter.next();
+                List<Node> r = new ArrayList<Node>();
+                for (Iterator<Node> iter = result.iterator(); iter.hasNext();) {
+                    Node node = iter.next();
                     if (!(node instanceof IFlashNode))
                         continue;
-                    List list = msaaQuery.query(((IFlashNode)node).getMSAA());
+                    List<Node> list = msaaQuery.query(((IFlashNode)node).getMSAA());
                     if (list != null)
                         r.addAll(list);
                 }

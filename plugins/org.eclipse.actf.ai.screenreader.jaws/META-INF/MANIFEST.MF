@@ -5,7 +5,6 @@ Bundle-SymbolicName: org.eclipse.actf.ai.screenreader.jaws;singleton:=true
 Bundle-Version: 0.0.1
 Bundle-Activator: org.eclipse.actf.ai.screenreader.jaws.JawsPlugin
 Bundle-Vendor: Eclipse.org
-Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.actf.common,

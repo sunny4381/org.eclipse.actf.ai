@@ -116,7 +116,7 @@ public class Key {
         }
 
         try {
-            Class c = Class.forName("java.awt.event.KeyEvent");
+            Class<java.awt.event.KeyEvent> c = java.awt.event.KeyEvent.class;
             Field f = c.getField(code);
             return ((Integer) f.get(null)).intValue();
         } catch (Exception e) {

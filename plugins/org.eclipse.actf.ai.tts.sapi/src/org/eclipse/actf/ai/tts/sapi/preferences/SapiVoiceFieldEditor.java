@@ -12,7 +12,7 @@
 package org.eclipse.actf.ai.tts.sapi.preferences;
 
 import org.eclipse.actf.ai.tts.sapi.engine.SapiVoice;
-import org.eclipse.actf.ai.voice.preferences.ComboFieldEditor;
+import org.eclipse.actf.ai.voice.preferences.util.ComboFieldEditor;
 import org.eclipse.swt.widgets.Composite;
 
 

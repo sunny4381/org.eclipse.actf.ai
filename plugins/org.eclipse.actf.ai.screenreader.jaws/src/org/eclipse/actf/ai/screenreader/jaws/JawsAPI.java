@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.actf.ai.screenreader.jaws;
 
-import org.eclipse.actf.ai.voice.IVoiceEventListener;
-import org.eclipse.actf.model.IWebBrowserACTF;
 
 /**
  * JawsAPI is the wrapper of "jawsapi-bridge.dll" library which is the wrapper of "jfwapi.dll".

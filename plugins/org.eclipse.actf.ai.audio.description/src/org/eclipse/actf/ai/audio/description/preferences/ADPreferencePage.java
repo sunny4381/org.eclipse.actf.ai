@@ -13,7 +13,7 @@ package org.eclipse.actf.ai.audio.description.preferences;
 
 import org.eclipse.actf.ai.audio.description.DescriptionPlugin;
 import org.eclipse.actf.ai.audio.description.Messages;
-import org.eclipse.actf.ai.voice.internal.TTSRegistry;
+import org.eclipse.actf.ai.tts.TTSRegistry;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
 import org.eclipse.swt.widgets.Composite;

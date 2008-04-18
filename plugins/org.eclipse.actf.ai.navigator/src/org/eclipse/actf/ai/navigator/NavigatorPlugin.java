@@ -12,7 +12,7 @@ package org.eclipse.actf.ai.navigator;
 
 import org.eclipse.actf.ai.navigator.extension.MetadataCacheCleanerExtension;
 import org.eclipse.actf.ai.navigator.views.NavigatorTreeView;
-import org.eclipse.actf.ai.voice.internal.AbstractPreferenceUIPlugin;
+import org.eclipse.actf.ai.voice.preferences.util.AbstractPreferenceUIPlugin;
 import org.eclipse.jface.action.IMenuManager;
 import org.osgi.framework.BundleContext;
 

@@ -19,7 +19,7 @@ import org.eclipse.actf.ai.tts.sapi.SAPIPlugin;
 import org.eclipse.actf.ai.tts.sapi.engine.SapiVoice;
 import org.eclipse.actf.ai.tts.sapi.engine.SpObjectToken;
 import org.eclipse.actf.ai.tts.sapi.engine.SpeechObjectTokens;
-import org.eclipse.actf.ai.voice.internal.Voice;
+import org.eclipse.actf.ai.voice.VoicePlugin;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.ole.win32.Variant;
 
@@ -43,7 +43,7 @@ public class SapiTestManager {
             SpeechObjectTokens voiceTokens = SpeechObjectTokens.getTokens(varVoices);
             if( null != voiceTokens ) {
                 String exclude = Platform.getResourceString(SAPIPlugin.getDefault().getBundle(), "%voice.exclude"); //$NON-NLS-1$
-                List voiceList = new ArrayList();
+                List<String[]> voiceList = new ArrayList<String[]>();
                 int count = voiceTokens.getCount();
                 for (int i = 0; i < count; i++) {
                     Variant varVoice = voiceTokens.getItem(i);
@@ -57,7 +57,7 @@ public class SapiTestManager {
                         }
                     }
                 }
-                voiceNames = (String[][])voiceList.toArray(new String[voiceList.size()][]);
+                voiceNames = voiceList.toArray(new String[voiceList.size()][]);
             }
             varVoices.dispose();
         }
@@ -65,7 +65,7 @@ public class SapiTestManager {
         if (null != varAudioOutputs) {
             SpeechObjectTokens audioOutputTokens = SpeechObjectTokens.getTokens(varAudioOutputs);
             if (null != audioOutputTokens) {
-                List audioOutputList = new ArrayList();
+                List<String[]> audioOutputList = new ArrayList<String[]>();
                 int count = audioOutputTokens.getCount();
                 for (int i = 0; i < count; i++) {
                     Variant varAudioOutput = audioOutputTokens.getItem(i);
@@ -77,7 +77,7 @@ public class SapiTestManager {
                         }
                     }
                 }
-                audioOutputNames= (String[][])audioOutputList.toArray(new String[audioOutputList.size()][]);
+                audioOutputNames= audioOutputList.toArray(new String[audioOutputList.size()][]);
             }
             varAudioOutputs.dispose();
         }
@@ -143,7 +143,7 @@ public class SapiTestManager {
                 sapiVoice.setAudioOutputName(audioOutputName);
             }
         }
-        sapiVoice.setSpeed(Voice.getDefaultSpeed());
+        sapiVoice.setSpeed(VoicePlugin.getDefault().getDefaultSpeed());
         sapiVoice.speak(SAMPLE_TEXT, ITTSEngine.TTSFLAG_FLUSH, -1);
     }
 }

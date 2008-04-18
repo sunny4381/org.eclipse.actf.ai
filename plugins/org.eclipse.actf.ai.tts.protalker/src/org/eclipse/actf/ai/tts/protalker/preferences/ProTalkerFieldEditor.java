@@ -13,8 +13,8 @@ package org.eclipse.actf.ai.tts.protalker.preferences;
 import org.eclipse.actf.ai.tts.ITTSEngine;
 import org.eclipse.actf.ai.tts.protalker.Messages;
 import org.eclipse.actf.ai.tts.protalker.engine.ProTalker;
-import org.eclipse.actf.ai.voice.internal.Voice;
-import org.eclipse.actf.ai.voice.preferences.ComboButtonFieldEditor;
+import org.eclipse.actf.ai.voice.VoicePlugin;
+import org.eclipse.actf.ai.voice.preferences.util.ComboButtonFieldEditor;
 import org.eclipse.jface.dialogs.DialogPage;
 import org.eclipse.swt.widgets.Composite;
 
@@ -50,7 +50,7 @@ public class ProTalkerFieldEditor extends ComboButtonFieldEditor {
 	protected void testPressed(int index) {
 		if (index >= 0) {
 			proTalker.setVoice(value);
-			proTalker.setSpeed(Voice.getDefaultSpeed());
+			proTalker.setSpeed(VoicePlugin.getDefault().getDefaultSpeed());
 			proTalker.speak(SAMPLE_TEXT, ITTSEngine.TTSFLAG_FLUSH, -1);
 		}
 	}

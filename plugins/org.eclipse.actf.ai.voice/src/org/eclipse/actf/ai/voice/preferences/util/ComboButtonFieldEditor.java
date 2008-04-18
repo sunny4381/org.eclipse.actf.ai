@@ -8,11 +8,10 @@
  * Contributors:
  *    Takashi ITOH - initial API and implementation
  *******************************************************************************/
-package org.eclipse.actf.ai.voice.preferences;
+package org.eclipse.actf.ai.voice.preferences.util;
 
 import org.eclipse.actf.ai.voice.Messages;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.util.Assert;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -23,13 +22,16 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 
+/**
+ * ComboButtonFieldEditor has a combobox with a button.
+ */
 public class ComboButtonFieldEditor extends ComboFieldEditor {
 
 	private Button testButton;
 
 	private String testButtonText;
 
-	public ComboButtonFieldEditor(String name, String labelText,
+	protected ComboButtonFieldEditor(String name, String labelText,
 			String[][] labelsAndValues, Composite parent) {
 		super(name, labelText, labelsAndValues, parent);
 	}
@@ -50,6 +52,9 @@ public class ComboButtonFieldEditor extends ComboFieldEditor {
 		testButton.setLayoutData(gd);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.actf.ai.voice.preferences.ComboFieldEditor#getNumberOfControls()
+	 */
 	public int getNumberOfControls() {
 		return super.getNumberOfControls() + 1;
 	}
@@ -80,13 +85,19 @@ public class ComboButtonFieldEditor extends ComboFieldEditor {
 		return testButton;
 	}
 
+	/**
+	 * @param text The text of the button.
+	 */
 	public void setTestButtonText(String text) {
-		Assert.isNotNull(text);
+		assert text != null;
 		testButtonText = text;
 		if (testButton != null)
 			testButton.setText(text);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.actf.ai.voice.preferences.ComboFieldEditor#setEnabled(boolean, org.eclipse.swt.widgets.Composite)
+	 */
 	public void setEnabled(boolean enabled, Composite parent) {
 		super.setEnabled(enabled, parent);
 		if (testButton != null) {

@@ -8,10 +8,9 @@
  * Contributors:
  *    Takashi ITOH - initial API and implementation
  *******************************************************************************/
-package org.eclipse.actf.ai.voice.preferences;
+package org.eclipse.actf.ai.voice.preferences.util;
 
 import org.eclipse.jface.preference.FieldEditor;
-import org.eclipse.jface.util.Assert;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -21,13 +20,16 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
+/**
+ * ComboFieldEditor has a combobox.
+ */
 public class ComboFieldEditor extends FieldEditor {
 	
 	Combo comboField;
     private String[][] labelsAndValues;
     protected String value;
 
-	public ComboFieldEditor(String name, String labelText, String[][] labelsAndValues, Composite parent) {
+	protected ComboFieldEditor(String name, String labelText, String[][] labelsAndValues, Composite parent) {
         init(name, labelText);
         initLabelsAndValues(labelsAndValues);
         createControl(parent);
@@ -35,7 +37,7 @@ public class ComboFieldEditor extends FieldEditor {
 	}
 	
 	protected void initLabelsAndValues(String[][] labelsAndValues) {
-        Assert.isTrue(checkArray(labelsAndValues));
+		assert checkArray(labelsAndValues) == true;
         this.labelsAndValues = labelsAndValues;
 	}
 	
@@ -71,6 +73,9 @@ public class ComboFieldEditor extends FieldEditor {
         }
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.preference.FieldEditor#getNumberOfControls()
+	 */
 	public int getNumberOfControls() {
 		return 2;
 	}
@@ -103,6 +108,9 @@ public class ComboFieldEditor extends FieldEditor {
         return;
     }
 
+    /**
+     * @return The combobox object.
+     */
     public Combo getComboControl() {
 		return comboField;
     }
@@ -138,6 +146,9 @@ public class ComboFieldEditor extends FieldEditor {
 		return comboField;
 	}
 
+    /* (non-Javadoc)
+     * @see org.eclipse.jface.preference.FieldEditor#setEnabled(boolean, org.eclipse.swt.widgets.Composite)
+     */
     public void setEnabled(boolean enabled, Composite parent) {
         super.setEnabled(enabled, parent);
         getComboControl(parent).setEnabled(enabled);

@@ -10,11 +10,12 @@
  *******************************************************************************/
 package org.eclipse.actf.ai.voice.preferences;
 
+import org.eclipse.actf.ai.tts.TTSRegistry;
 import org.eclipse.actf.ai.voice.IVoice;
 import org.eclipse.actf.ai.voice.Messages;
 import org.eclipse.actf.ai.voice.VoicePlugin;
-import org.eclipse.actf.ai.voice.internal.TTSRegistry;
 import org.eclipse.actf.ai.voice.internal.Voice;
+import org.eclipse.actf.ai.voice.preferences.util.GroupFieldEditorVoicePreferencePage;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
 import org.eclipse.jface.preference.ScaleFieldEditor;
 import org.eclipse.swt.SWT;

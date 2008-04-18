@@ -10,7 +10,7 @@
  *******************************************************************************/
 package org.eclipse.actf.ai.tts.protalker;
 
-import org.eclipse.actf.ai.voice.internal.AbstractPreferenceUIPlugin;
+import org.eclipse.actf.ai.voice.preferences.util.AbstractPreferenceUIPlugin;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;

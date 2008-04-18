@@ -10,8 +10,8 @@
  *******************************************************************************/
 package org.eclipse.actf.ai.voice;
 
-import org.eclipse.actf.ai.voice.internal.AbstractPreferenceUIPlugin;
 import org.eclipse.actf.ai.voice.internal.Voice;
+import org.eclipse.actf.ai.voice.preferences.util.AbstractPreferenceUIPlugin;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -74,5 +74,13 @@ public class VoicePlugin extends AbstractPreferenceUIPlugin {
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.actf.ai.voice", path); //$NON-NLS-1$
+	}
+	
+	
+	/**
+	 * @return The default speed of the TTS engine which is saved in the preference. 
+	 */
+	public int getDefaultSpeed() {
+		return getPreferenceStore().getInt(IVoice.PREF_SPEED);
 	}
 }

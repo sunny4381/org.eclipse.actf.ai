@@ -11,6 +11,7 @@
 package org.eclipse.actf.ai.voice.internal;
 
 import org.eclipse.actf.ai.tts.ITTSEngine;
+import org.eclipse.actf.ai.tts.TTSRegistry;
 import org.eclipse.actf.ai.voice.IVoice;
 import org.eclipse.actf.ai.voice.IVoiceEventListener;
 import org.eclipse.actf.ai.voice.VoicePlugin;
@@ -19,6 +20,10 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 
 
+/**
+ * Voice manages TTS engines using preference.
+ * This speaks string with specified TTS engine in the preference.
+ */
 public class Voice implements IVoice, IPropertyChangeListener {
 
 	private ITTSEngine ttsEngine = null;
@@ -27,13 +32,16 @@ public class Voice implements IVoice, IPropertyChangeListener {
 	
     private static final IPreferenceStore preferenceStore = VoicePlugin.getDefault().getPreferenceStore();
 	
+	/**
+	 * Constructor of the Voice.
+	 */
 	public Voice() {
 		ttsEngine = newTTSEngine();
 		VoicePlugin.getDefault().addPropertyChangeListener(this);
 		setSpeed();
 	}
 	
-	public ITTSEngine newTTSEngine() {
+	private ITTSEngine newTTSEngine() {
 		ITTSEngine engine = TTSRegistry.createTTSEngine(preferenceStore.getString(PREF_ENGINE));
 		if( null == engine ) {
 			engine = TTSRegistry.createTTSEngine(TTSRegistry.getDefaultEngine());
@@ -41,6 +49,9 @@ public class Voice implements IVoice, IPropertyChangeListener {
 		return engine;
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+	 */
 	public void propertyChange(PropertyChangeEvent event) {
 		if( PREF_ENGINE.equals(event.getProperty()) ) {
 			if( null != ttsEngine ) {
@@ -57,43 +68,60 @@ public class Voice implements IVoice, IPropertyChangeListener {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.actf.ai.voice.IVoice#speak(java.lang.String, boolean)
+	 */
 	public void speak(String text, boolean flush) {
 		speak(text,flush,-1);
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.eclipse.actf.ai.voice.IVoice#speak(java.lang.String, boolean, int)
+	 */
 	public void speak(String text, boolean flush, int index) {
 		if( null != ttsEngine ) {
 			ttsEngine.speak(text,flush?ITTSEngine.TTSFLAG_FLUSH:ITTSEngine.TTSFLAG_DEFAULT,index);
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.eclipse.actf.ai.voice.IVoice#stop()
+	 */
 	public void stop() {
 		if( null != ttsEngine ) {
 			ttsEngine.stop();
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.eclipse.actf.ai.voice.IVoice#getSpeed()
+	 */
 	public int getSpeed() {
 		if( null != ttsEngine ) {
 			return ttsEngine.getSpeed();
 		}
 		return -1;
 	}
-	
-	public static int getDefaultSpeed() {
-		return preferenceStore.getInt(PREF_SPEED);
-	}
 
+	/**
+	 * Set the settings to the default speed of the TTS engine. 
+	 */
 	public void setSpeed() {
-		setSpeed(getDefaultSpeed());
+		setSpeed(VoicePlugin.getDefault().getDefaultSpeed());
 	}
     
+	/* (non-Javadoc)
+	 * @see org.eclipse.actf.ai.voice.IVoice#setSpeed(int)
+	 */
 	public void setSpeed(int speed) {
 		if( null != ttsEngine ) {
 			ttsEngine.setSpeed(speed);
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.eclipse.actf.ai.voice.IVoice#setEventListener(org.eclipse.actf.ai.voice.IVoiceEventListener)
+	 */
 	public void setEventListener(IVoiceEventListener eventListener) {
 		this.eventListener = eventListener;
 		if( null != ttsEngine ) {
@@ -101,6 +129,9 @@ public class Voice implements IVoice, IPropertyChangeListener {
 		}
 	}
 	
+	/**
+	 * Prepare to dispose the object.
+	 */
 	public void dispose() {
 		if( null != ttsEngine ) {
 			ttsEngine.dispose();
@@ -108,6 +139,9 @@ public class Voice implements IVoice, IPropertyChangeListener {
 		}
 	}
     
+    /* (non-Javadoc)
+     * @see org.eclipse.actf.ai.voice.IVoice#getTTSEngine()
+     */
     public ITTSEngine getTTSEngine() {
         return ttsEngine;
     }

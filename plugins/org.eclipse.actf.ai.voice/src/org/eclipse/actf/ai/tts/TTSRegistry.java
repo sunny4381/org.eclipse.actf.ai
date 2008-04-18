@@ -8,16 +8,18 @@
  * Contributors:
  *    Takashi ITOH - initial API and implementation
  *******************************************************************************/
-package org.eclipse.actf.ai.voice.internal;
+package org.eclipse.actf.ai.tts;
 
 import java.util.Arrays;
 import java.util.Comparator;
 
-import org.eclipse.actf.ai.tts.ITTSEngine;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 
 
+/**
+ * TTSRegistry manages the TTS engine plug-ins.
+ */
 public class TTSRegistry {
 
     private static final String TTS_EXTENSION = "org.eclipse.actf.ai.voice.TTSEngine"; //$NON-NLS-1$
@@ -32,12 +34,12 @@ public class TTSRegistry {
         initialize();
     }
 
-    public static void initialize() {
+    private static void initialize() {
         ttsElements = Platform.getExtensionRegistry().getConfigurationElementsFor(TTS_EXTENSION);
-        Arrays.sort(ttsElements, new Comparator() {
-            public int compare(Object o1, Object o2) {
-                String s1 = ((IConfigurationElement)o1).getAttribute("priority");
-                String s2 = ((IConfigurationElement)o2).getAttribute("priority");
+        Arrays.sort(ttsElements, new Comparator<IConfigurationElement>() {
+            public int compare(IConfigurationElement c1, IConfigurationElement c2) {
+                String s1 = c1.getAttribute("priority");
+                String s2 = c2.getAttribute("priority");
                 int i1 = 0;
                 int i2 = 0;
                 try {
@@ -63,6 +65,10 @@ public class TTSRegistry {
         }
     }
     
+    /**
+     * @param id The ID of TTS engine plug-in.
+     * @return Whether the TTS engine specified the ID is available or not.
+     */
     public static boolean isAvailable(String id){
         try {
             for (int i = 0; i < ttsElements.length; i++) {
@@ -76,6 +82,10 @@ public class TTSRegistry {
         return false;
     }
 
+    /**
+     * This returns the ID of TTS engine which has the highest priority in the available engines.
+     * @return The ID of the default TTS engine.
+     */
     public static String getDefaultEngine() {
         for (int i = 0; i < ttsElements.length; i++) {
             if (availables[i]) {
@@ -85,6 +95,10 @@ public class TTSRegistry {
         return DEFAULT_TTS;
     }
 
+    /**
+     * This returns {"name", "id"} pairs of TTS engine plug-ins.
+     * @return The string array of {"name", "id"} pairs.
+     */
     public static String[][] getLabelAndIds() {
         String[][] labelAndIds = new String[ttsElements.length][2];
         for (int i = 0; i < ttsElements.length; i++) {
@@ -97,6 +111,10 @@ public class TTSRegistry {
         return labelAndIds;
     }
 
+    /**
+     * @param id The ID of TTS engine plug-in.
+     * @return The instance of ITTSEngine specified by the ID.
+     */
     public static ITTSEngine createTTSEngine(String id) {
         try {
             for (int i = 0; i < ttsElements.length; i++) {

@@ -34,7 +34,7 @@ public class KeybindScriptGenerator {
 
     private String userPath = ".";
 
-    private String userName = "";
+    //private String userName = "";
 
     private String appName;
 
@@ -44,7 +44,7 @@ public class KeybindScriptGenerator {
 
     private Vector<Key> keys = new Vector<Key>();
 
-    private static final int TYPE_ALL = 7;
+    //private static final int TYPE_ALL = 7;
 
     private static final int TYPE_COMMON = 1;
 
@@ -324,7 +324,7 @@ public class KeybindScriptGenerator {
         pw.println();
         pw.println();
 
-        HashSet generated = new HashSet();
+        HashSet<String> generated = new HashSet<String>();
         for (int i = 0; i < keys.size(); i++) {
             Key key = keys.get(i);
             
