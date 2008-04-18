@@ -15,6 +15,9 @@ import org.eclipse.core.runtime.Plugin;
 import org.osgi.framework.BundleContext;
 
 
+/**
+ * The main plugin class to be used in the desktop.
+ */
 public class QueryPlugin extends Plugin {
 
 	//The shared instance.

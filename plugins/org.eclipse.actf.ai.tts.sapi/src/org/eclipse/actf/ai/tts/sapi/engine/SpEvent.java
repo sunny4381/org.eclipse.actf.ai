@@ -12,6 +12,10 @@ package org.eclipse.actf.ai.tts.sapi.engine;
 
 import org.eclipse.actf.util.win32.MemoryUtil;
 
+/**
+ * COM wrapper of SPEVENT structure.
+ * @see "Microsoft Speech API SPEVENT"
+ */
 public class SpEvent {
 
 	private int address = MemoryUtil.GlobalAlloc(24);

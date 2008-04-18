@@ -12,17 +12,75 @@
 package org.eclipse.actf.ai.audio.io;
 
 
+/**
+ * This interface provides for processing audio stream between a IAudioReader and a IAudioWriter.
+ * The simplest implementation provides the function to transfer a audio stream from the IAudioReader to the IAudioWriter.
+ * You can creates IAudioPipe that have function to repeat or convert the audio stream.
+ * 
+ * The pipe should create a thread to manager the timeline of the audio stream.
+ */
 public interface IAudioPipe {
+    /**
+     * @param listener The listener to be added.
+     */
     void addAudioPipeListener(AudioPipeListener listener);
     
-    void setInterval(int interval);
+    /**
+     * The pipe thread will be processed every <i>interval</i>. 
+     * The interval might be sufficiently-small than the buffer size of the pipe. 
+     * @param milliSeconds The interval time in milliseconds.
+     * @see #setBufferSize(int)
+     */
+    void setInterval(int milliSeconds);
+    
+    /**
+     * @param priority The priority of the pipe thread.
+     * @see Thread#setPriority(int)
+     */
     void setPriority(int priority);
-    void setBufferSize(int miliSeconds);
+    
+    /**
+     * The pipe will read buffer-size data from the audio stream of the IAudioReader at one interval.
+     * If you want to stop the audio play back immediately when you call {@link #stop()}
+     * then you have to set the buffer size as small as possible. 
+     * But this will be coin side of generating noise because of the data missing for the play back device.
+     * @param milliSeconds The length of the buffer size in milliSeconds.
+     */
+    void setBufferSize(int milliSeconds);
+    
+    /**
+     * @return Whether the pipe is running or not.
+     */
     boolean isActive();
     
+    /**
+     * The pipe opens the IAudioReader and IAudioWriter.
+     * Firstly, the pipe gets the format of the IAudioReader then the IAudioWriter is opened with 
+     * the format or converted format.  
+     */
     void prepare();
+    
+    /**
+     * @param delay The delay time to start the pipe in millisecond.
+     * @see #start()
+     */
     void start(int delay);
+    
+    /**
+     * The pipe starts to process the audio stream. This creates a thread.
+     */
     void start();
+    
+    /**
+     * The pipe will be stopped. The play back device will be stopped within the buffer size.
+     * The thread is terminated.
+     * @see #setBufferSize(int)
+     */
     void stop();
+    
+    /**
+     * This function blocks until the pipe is finished. 
+     * The pipe will be finished when the IAudioReader is finished or {@link #stop()} is called.  
+     */
     void join();
 }

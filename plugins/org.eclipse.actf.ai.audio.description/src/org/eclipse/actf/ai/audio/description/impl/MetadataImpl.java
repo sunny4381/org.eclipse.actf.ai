@@ -159,4 +159,8 @@ public class MetadataImpl implements IMetadata {
     public String getLang() {
         return lang;
     }
+
+	public int getImportance() {
+		return importance;
+	}
 }

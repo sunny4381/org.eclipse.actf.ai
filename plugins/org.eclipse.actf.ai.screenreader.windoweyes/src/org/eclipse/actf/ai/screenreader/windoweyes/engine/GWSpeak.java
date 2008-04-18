@@ -22,6 +22,9 @@ import org.eclipse.swt.widgets.Display;
 
 
 
+/**
+ * The implementation of ITTSEngine to use WindowEyes as voice engine.
+ */
 public class GWSpeak implements ITTSEngine {
 
     private IGWSpeak dispGWSpeak = null;        // Instanceof GWSpeak.Speak ActiveX

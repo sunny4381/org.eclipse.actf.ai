@@ -45,10 +45,11 @@ public class MediaControlImpl implements IMediaControl {
     private void initialize(IHandle handle) {
         this.handle = handle;
         MetadataManager temp = map.get(handle);
+        IMetadataProvider provider = null;
         
         if(temp == null){
             String url = handle.getWebBrowser().getURL();
-            IMetadataProvider provider = DescriptionPlugin.getDefault().getMetadata(url);
+            provider = DescriptionPlugin.getDefault().getMetadata(url);
             temp = new MetadataManager(handle, provider);
             
             if(handle.getVideoControl() != null)
@@ -61,7 +62,7 @@ public class MediaControlImpl implements IMediaControl {
         }
         manager = temp;
         manager.start();
-        DescriptionPlugin.getDefault().setActiveMetadata(manager);
+        DescriptionPlugin.getDefault().setActiveMetadataProvider(provider);
         
         if(manager.hasMetadata()){
             if(oldManager != null){

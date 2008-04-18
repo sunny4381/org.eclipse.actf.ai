@@ -16,6 +16,9 @@ import java.util.ResourceBundle;
 
 
 
+/**
+ * This provides the resource string.
+ */
 public class Messages {
     private static final String BUNDLE_NAME = "messages"; //$NON-NLS-1$
 
@@ -23,7 +26,11 @@ public class Messages {
 
     private Messages() {
     }
-
+    
+    /**
+     * @param key The name of the resouce string.
+     * @return The string specified the key.
+     */
     public static String getString(String key) {
         // TODO Auto-generated method stub
         try {

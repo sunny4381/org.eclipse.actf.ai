@@ -9,12 +9,9 @@ Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.actf.ai.fennec,
- org.eclipse.actf.common,
  org.eclipse.actf.ai.navigator,
  org.eclipse.actf.ai.voice,
- org.eclipse.actf.ai.xmlstore
+ org.eclipse.actf.ai.xmlstore,
+ org.eclipse.actf.common
 Eclipse-LazyStart: true
-Export-Package: org.eclipse.actf.ai.audio.description,
- org.eclipse.actf.ai.audio.description.impl,
- org.eclipse.actf.ai.audio.description.util,
- org.eclipse.actf.ai.audio.description.views
+Export-Package: org.eclipse.actf.ai.audio.description

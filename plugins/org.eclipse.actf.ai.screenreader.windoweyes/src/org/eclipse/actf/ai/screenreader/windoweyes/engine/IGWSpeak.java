@@ -19,6 +19,9 @@ import org.eclipse.swt.internal.ole.win32.IDispatch;
 
 
 
+/**
+ * WindowEyes COM wrapper.
+ */
 public class IGWSpeak extends IDispatch {
 
     public static final GUID IID = COMUtil.IIDFromString("{A42771AD-03C7-11D3-9F6E-00C095EE683F}"); //$NON-NLS-1$

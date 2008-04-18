@@ -258,7 +258,11 @@ public class MetadataProviderImpl implements IMetadataProvider {
 
     ArrayList<ArrayList<IMetadata>> alternatives;
 
-    public int getAlternatives() {
+    public void setAlternative() {
+    	setAlternative(this.locale);
+    }
+    
+    public void setAlternative(Locale locale) {
         Set<Key> keys = metadataList.keySet();
         alternatives = new ArrayList<ArrayList<IMetadata>>();
         for (Iterator<Key> i = keys.iterator(); i.hasNext();) {
@@ -269,11 +273,6 @@ public class MetadataProviderImpl implements IMetadataProvider {
         }
         if (alternatives.size() > 0)
             setMetadata(alternatives.get(0));
-        return alternatives.size();
-    }
-
-    public void setAlternative(int index) {
-        metadata = alternatives.get(index);
     }
 
     public void setMetadata(ArrayList<IMetadata> metadata) {

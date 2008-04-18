@@ -18,7 +18,9 @@ import org.eclipse.actf.model.IWebBrowserACTF;
 
 
 
-
+/**
+ * The implementation of ITTSEngine to use JAWS as voice engine.
+ */
 public class Jaws implements ITTSEngine, IScreenReaderControl {
     public static final String JAWS_ON_SCRIPT = "JawsOn";
 
@@ -31,28 +33,46 @@ public class Jaws implements ITTSEngine, IScreenReaderControl {
     JawsAPI jaws = JawsAPI.getInstance();
     JawsWindowUtil util = JawsWindowUtil.getInstance();
 
+    /* (non-Javadoc)
+     * @see org.eclipse.actf.ai.tts.ITTSEngine#dispose()
+     */
     public void dispose() {
         // not supported
     }
 
+    /* (non-Javadoc)
+     * @see org.eclipse.actf.ai.tts.ITTSEngine#getSpeed()
+     */
     public int getSpeed() {
         // not supported
         return 0;
     }
 
+    /* (non-Javadoc)
+     * @see org.eclipse.actf.ai.tts.ITTSEngine#setEventListener(org.eclipse.actf.ai.voice.IVoiceEventListener)
+     */
     public void setEventListener(IVoiceEventListener eventListener) {
     	if (util != null)
     		util.setEventListener(eventListener);
     }
 
+    /* (non-Javadoc)
+     * @see org.eclipse.actf.ai.tts.ITTSEngine#setLanguage(java.lang.String)
+     */
     public void setLanguage(String language) {
         // not supported
     }
 
+    /* (non-Javadoc)
+     * @see org.eclipse.actf.ai.tts.ITTSEngine#setSpeed(int)
+     */
     public void setSpeed(int speed) {
         // not supported
     }
 
+    /* (non-Javadoc)
+     * @see org.eclipse.actf.ai.tts.ITTSEngine#speak(java.lang.String, int, int)
+     */
     public void speak(String text, int flags, int index) {
         if (jaws == null || util == null) return;
         if (index < 0) {
@@ -64,6 +84,9 @@ public class Jaws implements ITTSEngine, IScreenReaderControl {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.eclipse.actf.ai.tts.ITTSEngine#stop()
+     */
     public void stop() {
         if (jaws != null && util != null) {
             jaws.JawsStopSpeech();
@@ -72,29 +95,44 @@ public class Jaws implements ITTSEngine, IScreenReaderControl {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.eclipse.actf.ai.navigator.IScreenReaderControl#screenReaderOff()
+     */
     public void screenReaderOff() {
         if (jaws != null) {
             jaws.JawsRunScript(JAWS_OFF_SCRIPT);
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.eclipse.actf.ai.navigator.IScreenReaderControl#screenReaderOn()
+     */
     public void screenReaderOn() {
         if (jaws != null) {
             jaws.JawsRunScript(JAWS_ON_SCRIPT);
         }
     }
     
+    /* (non-Javadoc)
+     * @see org.eclipse.actf.ai.navigator.IScreenReaderControl#takeBackControl(org.eclipse.actf.model.IWebBrowserACTF)
+     */
     public void takeBackControl(IWebBrowserACTF browser){
         if(util != null){
             util.TakeBackControl(browser);
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.eclipse.actf.ai.tts.ITTSEngine#setGender(java.lang.String)
+     */
     public void setGender(String gender) {
         // TODO Auto-generated method stub
         
     }
 
+    /* (non-Javadoc)
+     * @see org.eclipse.actf.ai.tts.ITTSEngine#isAvailable()
+     */
     public boolean isAvailable() {
         if (jaws == null) return false;
         return jaws.isAvailable();

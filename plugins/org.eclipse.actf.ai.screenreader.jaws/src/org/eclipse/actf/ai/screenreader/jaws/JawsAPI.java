@@ -14,6 +14,9 @@ package org.eclipse.actf.ai.screenreader.jaws;
 import org.eclipse.actf.ai.voice.IVoiceEventListener;
 import org.eclipse.actf.model.IWebBrowserACTF;
 
+/**
+ * JawsAPI is the wrapper of "jawsapi-bridge.dll" library which is the wrapper of "jfwapi.dll".
+ */
 public class JawsAPI {
     private static JawsAPI instance;
     static{
@@ -27,6 +30,9 @@ public class JawsAPI {
     private JawsAPI() {
     }
 
+    /**
+     * @return The singleton instance of JawsAPI.
+     */
     public static JawsAPI getInstance(){
         if (instance == null) {
         	if (!_initialize()) return null;
@@ -35,26 +41,49 @@ public class JawsAPI {
         return instance;
     }
     
+    /**
+     * Execute the JAWS function named <i>funcName</i>.
+     * @param funcName The function name to be executed.
+     * @return If the invocation is succeeded then true is returned.
+     */
     public boolean JawsRunFunction(String funcName) {
     	return _JawsRunFunction(funcName);
     }
 
+    /**
+     * Order to speak <i>stringToSpeak</i> to JAWS.
+     * @param stringToSpeak The string to be spoken.
+     * @param bInterrupt If this flag is true then JAWS is stopped speaking and speaks the string,
+     * Otherwise the string is buffered at the end of the speech.
+     * @return If the invocation is succeeded then true is returned.
+     */
     public boolean JawsSayString(String stringToSpeak, boolean bInterrupt) {
         if (bInterrupt) _JawsStopSpeech();
         return _JawsSayString(stringToSpeak, bInterrupt);
     }
 
+    /**
+     * Order to stop speaking to JAWS.
+     * @return If the invocation is succeeded then true is returned.
+     */
     public boolean JawsStopSpeech() {
-    	// JawsStopSpeech does not work well, so null string will be spoken.
+    	// JawsStopSpeech does not work well, so null string will be spoken with interrupt flag.
         // return _JawsStopSpeech();
-    	
     	return _JawsSayString("", true);
     }
 
+    /**
+     * Execute the JAWS script named <i>funcName</i>.
+     * @param scriptName The script name to be executed.
+     * @return If the invocation is succeeded then true is returned.
+     */
     public boolean JawsRunScript(String scriptName) {
         return _JawsRunScript(scriptName);
     }
     
+	/**
+	 * @return If JAWS is running then it returns <i>true</i>.
+	 */
 	public boolean isAvailable() {
 	    return _isAvailable();
 	}

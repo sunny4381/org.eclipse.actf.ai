@@ -12,8 +12,14 @@
 package org.eclipse.actf.ai.audio.io;
 
 
+/**
+ * This represents an exception caused by the reason about this utilities.
+ */
 public class AudioIOException extends Exception{
 
+    /**
+     * @param string The message of the exception.
+     */
     public AudioIOException(String string) {
         super(string);
     }

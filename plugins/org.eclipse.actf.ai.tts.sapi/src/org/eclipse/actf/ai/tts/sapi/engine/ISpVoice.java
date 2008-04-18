@@ -18,6 +18,10 @@ import org.eclipse.swt.internal.ole.win32.IDispatch;
 
 
 
+/**
+ * COM wrapper of ISpVoice interface.
+ * @see "Microsoft Speech API ISpVoice"
+ */
 public class ISpVoice extends IDispatch {
 
     public static final GUID IID = COMUtil.IIDFromString("{96749377-3391-11D2-9EE3-00C04F797396}"); //$NON-NLS-1$

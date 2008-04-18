@@ -14,6 +14,11 @@ import org.eclipse.swt.ole.win32.OLE;
 import org.eclipse.swt.ole.win32.OleAutomation;
 import org.eclipse.swt.ole.win32.Variant;
 
+
+/*
+ * COM Wrapper of ISpeechObjectTokens interface
+ * @see "Microsoft Speech API ISpeechObjectTokens"
+ */
 public class SpeechObjectTokens {
 
 	private OleAutomation automation;

@@ -20,31 +20,31 @@ import org.eclipse.swt.widgets.Display;
 
 
 
-public class ProTalker implements IndexListener, ITTSEngine, IPropertyChangeListener {
+/**
+ * The implementation of ITTSEngine to use ProTalker.
+ */
+public class ProTalker implements ITTSEngine, IPropertyChangeListener {
 
     public static final String ID = "org.eclipse.actf.ai.tts.protalker.engine.ProTalker"; //$NON-NLS-1$
 
     private ProTalkerBridge engine;
 
-    private IVoiceEventListener eventListener = null;
-
     public ProTalker() {
         engine = new ProTalkerBridge(Display.getDefault());
-        engine.addIndexListener(this);
         setVoice();
         ProTalkerPlugin.getDefault().addPropertyChangeListener(this);
     }
 
+    /* (non-Javadoc)
+     * @see org.eclipse.actf.ai.tts.ITTSEngine#setEventListener(org.eclipse.actf.ai.voice.IVoiceEventListener)
+     */
     public void setEventListener(IVoiceEventListener eventListener) {
-        this.eventListener = eventListener;
-    }
-
-    public void receivedIndex(int index) {
-        if (null != eventListener) {
-            eventListener.indexReceived(index);
-        }
+    	engine.addIndexListener(eventListener);
     }
     
+    /* (non-Javadoc)
+     * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+     */
     public void propertyChange(PropertyChangeEvent event) {
         if( ID.equals(event.getProperty()) ) {
             stop();
@@ -52,38 +52,51 @@ public class ProTalker implements IndexListener, ITTSEngine, IPropertyChangeList
         }
     }
 
-
+    /* (non-Javadoc)
+     * @see org.eclipse.actf.ai.tts.ITTSEngine#speak(java.lang.String, int, int)
+     */
     public void speak(String text, int flags, int index) {
         engine.speak(text, flags, index);
     }
 
+    /* (non-Javadoc)
+     * @see org.eclipse.actf.ai.tts.ITTSEngine#stop()
+     */
     public void stop() {
         engine.reset();
     }
 
-    public void dispose() {
-        engine.removeIndexListener(this);
-        eventListener = null;
-    }
-
+    /* (non-Javadoc)
+     * @see org.eclipse.actf.ai.tts.ITTSEngine#getSpeed()
+     */
     public int getSpeed() {
         return engine.getSpeed();
     }
 
+    /* (non-Javadoc)
+     * @see org.eclipse.actf.ai.tts.ITTSEngine#setSpeed(int)
+     */
     public void setSpeed(int speed) {
         engine.setSpeed(speed*8/5+100);
     }
 
+    /* (non-Javadoc)
+     * @see org.eclipse.actf.ai.tts.ITTSEngine#setLanguage(java.lang.String)
+     */
     public void setLanguage(String language) {
         // NOT AVAILABLE
     }
     
     private static IPreferenceStore preferenceStore = ProTalkerPlugin.getDefault().getPreferenceStore();
-    public void setVoice(){
+    private void setVoice(){
         String voiceName = preferenceStore.getString(ID);
         setVoice(voiceName);
     }
     
+    /**
+     * Set the voice type of the voice engine.
+     * @param type "male" or "female".
+     */
     public void setVoice(String type){
         if(type.equals("male")){
             engine.setVoice(ProTalkerBridge.VOICE_MALE);
@@ -93,16 +106,24 @@ public class ProTalker implements IndexListener, ITTSEngine, IPropertyChangeList
         }
     }
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.actf.ai.tts.ITTSEngine#setGender(java.lang.String)
+	 */
 	public void setGender(String gender) {
-		// TODO Auto-generated method stub
-		
+		//Not available
 	}
 
-    public int getPriority() {
-        return 400;
-    }
-
+    /* (non-Javadoc)
+     * @see org.eclipse.actf.ai.tts.ITTSEngine#isAvailable()
+     */
     public boolean isAvailable() {
         return engine.isAvailable();
     }
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.actf.ai.tts.ITTSEngine#dispose()
+	 */
+	public void dispose() {
+		
+	}
 }

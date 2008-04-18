@@ -33,23 +33,41 @@ import org.osgi.framework.BundleContext;
 
 
 /**
- * The activator class controls the plug-in life cycle
+ * The activator class controls the plug-in life cycle.
+ * And this provides information of audio description and TTS function to speak the description. 
  */
 public class DescriptionPlugin extends AbstractPreferenceUIPlugin implements IPropertyChangeListener {
 
-    // The plug-in ID
+    /**
+     * The plug-in ID.
+     */
     public static final String PLUGIN_ID = "org.eclipse.actf.ai.audio.description";
 
+    /**
+     * The preferences ID of TTS engine for audio description.
+     */
     public static final String PREF_ENGINE = "AudioDescriptionTTSEngine";
 
-    // The shared instance
+    /*
+     * The shared instance.
+     */
     private static DescriptionPlugin plugin;
 
+    /*
+     * The switch weather enable or disable audio description speaking.
+     */
     private boolean enable = false;
 
-    private MetadataManager activeManager;
+    /*
+     * The current active audio description manager. 
+     * If the target page has no audio description then this should be null.
+     */
+    private IMetadataProvider activeProvider;
 
-    ITTSEngine engine;
+    /*
+     * The instance of TTS engine for audio description.
+     */
+    private ITTSEngine engine;
 
     /**
      * The constructor
@@ -58,6 +76,11 @@ public class DescriptionPlugin extends AbstractPreferenceUIPlugin implements IPr
         plugin = this;
     }
 
+    /**
+     * @param url The URL string which determines audio description files in the XMLStore
+     * @see org.eclipse.actf.ai.xmlstore.XMLStorePlugin#getXMLStoreService
+     * @return metadata information
+     */
     public IMetadataProvider getMetadata(String url) {
         IXMLStoreService service = XMLStorePlugin.getDefault().getXMLStoreService();
         IXMLStore store = service.getRootStore();
@@ -76,7 +99,7 @@ public class DescriptionPlugin extends AbstractPreferenceUIPlugin implements IPr
         if (provider != null){
             provider.reload();
             provider.setLocale(Locale.getDefault());
-            provider.getAlternatives();
+            provider.setAlternative();
         }
         return provider;
     }
@@ -92,11 +115,19 @@ public class DescriptionPlugin extends AbstractPreferenceUIPlugin implements IPr
         initialize();
     }
 
+    /**
+     * The initializer of the plug-in.
+     */
     private void initialize() {
         engine = newTTSEngine();
         DescriptionPlugin.getDefault().addPropertyChangeListener(this);
     }
 
+    
+    /**
+     * @return TTS engine using the preference value
+     * @see #engine
+     */
     private ITTSEngine newTTSEngine() {
         ITTSEngine engine;
         String e = DescriptionPlugin.getDefault().getPreferenceStore().getString(DescriptionPlugin.PREF_ENGINE);
@@ -110,6 +141,9 @@ public class DescriptionPlugin extends AbstractPreferenceUIPlugin implements IPr
         return engine;
     }
 
+    /* (non-Javadoc)
+     * @see org.eclipse.actf.ai.voice.internal.AbstractPreferenceUIPlugin#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+     */
     @Override
     public void propertyChange(PropertyChangeEvent event) {
         if (DescriptionPlugin.PREF_ENGINE.equals(event.getProperty())) {
@@ -121,6 +155,9 @@ public class DescriptionPlugin extends AbstractPreferenceUIPlugin implements IPr
         }
     }
 
+    /**
+     * @return instance of TTS engine.
+     */
     public ITTSEngine getTTSEngine() {
         return engine;
     }
@@ -145,16 +182,33 @@ public class DescriptionPlugin extends AbstractPreferenceUIPlugin implements IPr
         return plugin;
     }
 
-    DescriptionView view;
+    
+    /**
+     * The instance of the view.
+     */
+    private DescriptionView view;
 
+    /**
+     * @param view Keep the instance of the view to share the instance.
+     */
     public void setDescriptionView(DescriptionView view) {
         this.view = view;
     }
 
+    /**
+     * @return shared instance of the view.
+     */
     public DescriptionView getDescriptionView() {
         return view;
     }
 
+    /**
+     * @param flag The switch to enable/disable
+     * @return The status of the audio description plug-in
+     * @see IMediaControl.STATUS_NOT_AVAILABLE
+     * @see IMediaControl.STATUS_ON
+     * @see IMediaControl.STATUS_OFF
+     */
     public int setEnable(boolean flag) {
         if(!isAvailable()){
             enable = false;
@@ -170,33 +224,59 @@ public class DescriptionPlugin extends AbstractPreferenceUIPlugin implements IPr
         }
     }
 
+    /**
+     * @return The availability of the plug-in. If there is no active metadata manager then this returns false.
+     * @see #setActiveMetadataProvider(MetadataManager)
+     */
     public boolean isAvailable() {
-        if (activeManager == null)
+        if (activeProvider == null)
             return false;
-        return activeManager.hasMetadata();
+        return activeProvider.hasMetadata();
     }
     
+    
+    /**
+     * @return The availability of TTS engine.
+     */
     public boolean canSpeak() {
         return engine != null;
     }
 
+    /**
+     * @param str The string to be spoken.
+     */
     public void speak(String str) {
         if(engine != null)
             engine.speak(str, ITTSEngine.TTSFLAG_FLUSH, -1);
     }
 
+    /**
+     * Toggle the enable and disable of the plug-in.
+     * @return The status of the plug-in.
+     * @see #setEnable(boolean)
+     */
     public int toggleEnable() {
         return setEnable(!getEnable());
     }
 
+    /**
+     * @return The value of enable/disable
+     */
     public boolean getEnable() {
         return enable;
     }
 
-    public void setActiveMetadata(MetadataManager manager) {
-        this.activeManager = manager;
+    /**
+     * @param manager The active metadata provider to know the metadata avilability
+     */
+    public void setActiveMetadataProvider(IMetadataProvider provider) {
+        this.activeProvider = provider;
     }
     
+    /**
+     * @param key The key for the resource string.
+     * @return The resource string.
+     */
     public static String getString(String key) {
         return Platform.getResourceString(getDefault().getBundle(), key);
     }

@@ -15,7 +15,9 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 
-
+/**
+ * This provides the resource string.
+ */
 public class Messages {
     private static final String BUNDLE_NAME = "messages"; //$NON-NLS-1$
 
@@ -23,7 +25,11 @@ public class Messages {
 
     private Messages() {
     }
-
+    
+    /**
+     * @param key The name of the resource string.
+     * @return The string specified the key.
+     */
     public static String getString(String key) {
         try {
             return RESOURCE_BUNDLE.getString(key);

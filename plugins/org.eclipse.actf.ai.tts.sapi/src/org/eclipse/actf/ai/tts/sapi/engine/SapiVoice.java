@@ -24,6 +24,9 @@ import org.eclipse.swt.ole.win32.OleAutomation;
 import org.eclipse.swt.ole.win32.Variant;
 
 
+/**
+ * The implementation of ITTSEngine to use Microsoft Speech API.
+ */
 public class SapiVoice implements ITTSEngine, IPropertyChangeListener {
 
     public static final String ID = "org.eclipse.actf.ai.tts.sapi.engine.SapiVoice";   //$NON-NLS-1$
@@ -60,6 +63,9 @@ public class SapiVoice implements ITTSEngine, IPropertyChangeListener {
         setAudioOutputName();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+	 */
 	public void propertyChange(PropertyChangeEvent event) {
 		if( ID.equals(event.getProperty()) ) {
 			stop();
@@ -71,10 +77,16 @@ public class SapiVoice implements ITTSEngine, IPropertyChangeListener {
         } 
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.eclipse.actf.ai.tts.ITTSEngine#setEventListener(org.eclipse.actf.ai.voice.IVoiceEventListener)
+	 */
 	public void setEventListener(IVoiceEventListener eventListener) {
 		spNotifySource.setEventListener(eventListener);
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.eclipse.actf.ai.tts.ITTSEngine#speak(java.lang.String, int, int)
+	 */
 	public void speak(String text, int flags, int index) {
 		int firstFlag = SVSFlagsAsync;
 		if( 0 != (TTSFLAG_FLUSH & flags) ) {
@@ -100,14 +112,24 @@ public class SapiVoice implements ITTSEngine, IPropertyChangeListener {
         }
     }
 	
+	/* (non-Javadoc)
+	 * @see org.eclipse.actf.ai.tts.ITTSEngine#stop()
+	 */
 	public void stop() {
 		speak("",TTSFLAG_FLUSH,-1); //$NON-NLS-1$
 	}
 	
+	/**
+	 * @param rate The rate property to be set.
+	 * @return The invocation is succeeded then it returns true.
+	 */
 	public boolean setRate(int rate) {
         return OLE.S_OK == dispSpVoice.put_Rate(rate);
 	}
 	
+	/**
+	 * @return The rate property of the voice engine.
+	 */
 	public int getRate() {
         NativeIntAccess nia = new NativeIntAccess();
         try {
@@ -121,21 +143,33 @@ public class SapiVoice implements ITTSEngine, IPropertyChangeListener {
         return -1;
 	}
 	
+	/**
+	 * @param varVoice The voice object to be set.
+	 * @return The invocation is succeeded then it returns true.
+	 */
 	public boolean setVoice(Variant varVoice) {
         return OLE.S_OK == dispSpVoice.put_Voice(varVoice.getDispatch().getAddress());
 	}
     
+    /**
+     * @param varAudioOutput The audio output object to be set.
+	 * @return The invocation is succeeded then it returns true.
+     */
     public boolean setAudioOutput(Variant varAudioOutput) {
         return OLE.S_OK == dispSpVoice.put_AudioOutput(null!=varAudioOutput ? varAudioOutput.getDispatch().getAddress() : 0);
     }
 	
-	public void setVoiceName() {
+	private void setVoiceName() {
 		String voiceName = preferenceStore.getString(ID);
 		if( voiceName.length()>0 ) {
 			setVoiceName("name="+voiceName); //$NON-NLS-1$
 		}
 	}
 
+	/**
+	 * @param voiceName The voice name to be set.
+	 * @return The invocation is succeeded then it returns true.
+	 */
 	public boolean setVoiceName(String voiceName) {
 		boolean success = false;
 		Variant varVoices = getVoices(voiceName,null);
@@ -152,7 +186,7 @@ public class SapiVoice implements ITTSEngine, IPropertyChangeListener {
 		return success;
 	}
 	
-    public void setAudioOutputName() {
+    private void setAudioOutputName() {
         String audioOutput = preferenceStore.getString(AUDIO_OUTPUT);
         if( audioOutput.length()>0 ) {
             setAudioOutputName(audioOutput); //$NON-NLS-1$
@@ -162,6 +196,10 @@ public class SapiVoice implements ITTSEngine, IPropertyChangeListener {
         }
     }
 
+    /**
+     * @param audioOutput The audio output name to be set.
+	 * @return The invocation is succeeded then it returns true.
+     */
     public boolean setAudioOutputName(String audioOutput) {
         boolean success = false;
         Variant varAudioOutputs = getAudioOutputs(null,null);
@@ -184,10 +222,20 @@ public class SapiVoice implements ITTSEngine, IPropertyChangeListener {
         return success;
     }
 	
+    /**
+     * @param requiredAttributes
+     * @param optionalAttributes
+     * @return The tokens of voices.
+     */
     public Variant getVoices(String requiredAttributes, String optionalAttributes) {
         return getTokens(idGetVoices, requiredAttributes, optionalAttributes);
     }
     
+    /**
+     * @param requiredAttributes
+     * @param optionalAttributes
+     * @return The tokens of audio outputs.
+     */
     public Variant getAudioOutputs(String requiredAttributes, String optionalAttributes) {
         return getTokens(idGetAudioOutputs, requiredAttributes, optionalAttributes);
     }
@@ -210,20 +258,32 @@ public class SapiVoice implements ITTSEngine, IPropertyChangeListener {
 		return 0;
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.eclipse.actf.ai.tts.ITTSEngine#dispose()
+	 */
 	public void dispose() {
 		varSapiVoice.dispose();
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.eclipse.actf.ai.tts.ITTSEngine#getSpeed()
+	 */
 	public int getSpeed() {
 		int rate = getRate();	// -10 <= rate <= 10
 		return (rate+10)*5;		// 0 <= speed <= 100
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.actf.ai.tts.ITTSEngine#setSpeed(int)
+	 */
 	public void setSpeed(int speed) {
 		int rate = speed/5 -10;
 		setRate(rate);
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.eclipse.actf.ai.tts.ITTSEngine#setLanguage(java.lang.String)
+	 */
 	public void setLanguage(String language) {
 		String token;
 		if( LANG_JAPANESE.equals(language) ) {
@@ -238,9 +298,15 @@ public class SapiVoice implements ITTSEngine, IPropertyChangeListener {
 		setVoiceName(token);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.actf.ai.tts.ITTSEngine#setGender(java.lang.String)
+	 */
 	public void setGender(String gender) {
 	}
 
+    /* (non-Javadoc)
+     * @see org.eclipse.actf.ai.tts.ITTSEngine#isAvailable()
+     */
     public boolean isAvailable() {
         return automation != null;
     }

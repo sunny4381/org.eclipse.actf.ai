@@ -17,20 +17,31 @@ import org.w3c.dom.Node;
 
 
 
+/**
+ * This class has factory methods for creating query objects. 
+ */
 public class QueryService {
+    /**
+     * @param e The element to be parsed.
+     * @param parentQuery The parent query of the query will be parsed.
+     * @return An instance of query for "Fennec".
+     */
     public static IQuery parse(Element e, IQuery parentQuery) {
         return QueryImpl.parse(e, parentQuery);
     }
 
+    /**
+     * @param xpath The XPath to be used in the query.
+     * @return An instance of XPath query.
+     */
     public static IQuery createFromXPath(String xpath) {
         return QueryImpl.parseXPath(xpath);
     }
     
-    /*
-     * domTarget : 
-     * usrParent : <attach> node in user metadata DOM
-     * 
-     * return    : <node> node in the specified <attach> node
+    /**
+     * @param domTarget The target DOM node to be queried by the created query. 
+     * @param usrParent The parent node of the created query.
+     * @return An instance of query which returns the domTarget.
      */
     public static Node serializeQuery(Node domTarget, Node usrParent) {
         return QueryImpl.serializeQuery(domTarget, usrParent);

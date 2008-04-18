@@ -18,6 +18,10 @@ import org.eclipse.swt.internal.ole.win32.IDispatch;
 import org.eclipse.swt.ole.win32.OLE;
 
 
+/**
+ * COM wrapper of ISpNotifySource interface.
+ * @see "Microsoft Speech API ISpNotifySource"
+ */
 public class ISpNotifySource extends IDispatch {
 
     public static final GUID IID = COMUtil.IIDFromString("{5EFF4AEF-8487-11D2-961C-00C04F8EE628}"); //$NON-NLS-1$

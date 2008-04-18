@@ -22,7 +22,7 @@ import org.eclipse.actf.ai.navigator.IMediaControl.IHandle;
 
 
 
-public class MetadataManager{
+public class MetadataManager {
 
     private IMetadataProvider metadataProvider;
 
