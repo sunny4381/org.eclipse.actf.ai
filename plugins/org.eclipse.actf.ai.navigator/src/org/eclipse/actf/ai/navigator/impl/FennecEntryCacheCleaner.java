@@ -6,19 +6,19 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Hisashi MIYASHITA - initial API and implementation
+ *    Daisuke SATO - initial API and implementation
  *******************************************************************************/
-package org.eclipse.actf.ai.fennec.impl;
 
-import org.w3c.dom.Node;
+package org.eclipse.actf.ai.navigator.impl;
 
-class NVM3TableRowMetadata extends NVM3BundleMetadata {
+import org.eclipse.actf.ai.navigator.IMetadataCacheCleaner;
 
-	protected NVM3TableRowMetadata(NVM3ServiceImpl nvm3Service,
-                                       NVM3Mode mode,
-                                       Node node,
-                                       NVM3Metadata[] mds) {
-		super(nvm3Service, mode, node, mds);
-	}
+
+
+public class FennecEntryCacheCleaner implements IMetadataCacheCleaner {
+
+    public void clearCache() {
+        //FennecPlugin.getDefault().initFennecEntry();
+    }
+
 }
-

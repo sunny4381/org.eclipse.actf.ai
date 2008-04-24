@@ -27,6 +27,9 @@ import org.eclipse.swt.widgets.Text;
 
 
 
+/**
+ * This is a dialog to ask the user to input URL.
+ */
 public class URLOpenDialog {
 
 	private Shell _shell;
@@ -38,6 +41,10 @@ public class URLOpenDialog {
 	private int _returnCode = 0;
 
 	// Checked:030806
+	/**
+	 * Constructor.
+	 * @param shell The shell to be parent of the dialog.
+	 */
 	public URLOpenDialog(Shell shell) {
 		this._shell = new Shell(shell, SWT.DIALOG_TRIM | SWT.PRIMARY_MODAL);
 		this._shell.setLayout(new GridLayout());
@@ -80,20 +87,6 @@ public class URLOpenDialog {
 			}
 		});
 
-        
-//		Button openButton = new Button(composite, SWT.PUSH);
-//		openButton.setText(DialogConst.BROWSE); //$NON-NLS-1$
-//		openButton.addSelectionListener(new SelectionAdapter() {
-//			public void widgetSelected(SelectionEvent e) {
-//				FileDialog openDialog = new FileDialog(_shell, SWT.OPEN);
-//				String openFile = openDialog.open();
-//
-//				if (openFile != null && !openFile.equals("")) { //$NON-NLS-1$
-//					_urlText.setText(openFile);
-//				}
-//			}
-//		});
-
 		this._shell.setDefaultButton(okButton);
 	}
 
@@ -128,6 +121,10 @@ public class URLOpenDialog {
 	}
 
 	// Checked:030806
+	/**
+	 * Open the dialog and return 1 or 0 when the user click OK button or cancel button respectively.
+	 * @return 1 (OK button), 0 (Cancel button)
+	 */
 	public int open() {
 		this._shell.setText(Messages.getString("DialogOpenURL.Open_URL_2"));
 
@@ -148,6 +145,9 @@ public class URLOpenDialog {
 		return this._returnCode;
 	}
     
+    /**
+     * @return The URL input by the user.
+     */
     public String getUrl(){
         return this._url;
     }

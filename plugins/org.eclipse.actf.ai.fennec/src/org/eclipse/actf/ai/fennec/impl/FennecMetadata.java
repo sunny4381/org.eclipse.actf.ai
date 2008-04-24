@@ -13,15 +13,15 @@ package org.eclipse.actf.ai.fennec.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.actf.ai.fennec.NVM3Exception;
+import org.eclipse.actf.ai.fennec.FennecException;
 import org.eclipse.actf.ai.fennec.treemanager.ITreeItem;
 import org.eclipse.actf.ai.query.IQuery;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 
-abstract class NVM3Metadata {
-    protected final NVM3ServiceImpl nvm3Service;
+abstract class FennecMetadata {
+    protected final FennecServiceImpl fennecService;
     private final IQuery query;
 
     private final boolean hasTarget;
@@ -54,7 +54,7 @@ abstract class NVM3Metadata {
             baseNode = (Node) baseItem.getBaseNode();
         }
         if (baseNode == null) {
-            baseNode = nvm3Service.getDocumentElement();
+            baseNode = fennecService.getDocumentElement();
         }
         if (baseNode == null) return emptyNodeList;
         return q.query(baseNode);
@@ -68,13 +68,13 @@ abstract class NVM3Metadata {
         return query(this.query, baseItem);
     }
 
-    protected final NVM3Mode mode;
+    protected final FennecMode mode;
 
     public abstract String getAltText(ITreeItem item);
     public abstract String getDescription(ITreeItem item);
     public abstract short getHeadingLevel(ITreeItem item);
 
-    List buildItems(TreeItemNVM3 baseItem, Node baseNode, int trigger) throws NVM3Exception {
+    List buildItems(TreeItemFennec baseItem, Node baseNode, int trigger) throws FennecException {
         if (hasTargets()) {
             NodeList nl;
             if (baseNode != null) {
@@ -86,15 +86,15 @@ abstract class NVM3Metadata {
             ArrayList result = new ArrayList(len);
             for (int i = 0; i < len; i++) {
                 Node n = nl.item(i);
-                TreeItemNVM3 newItem = TreeItemNVM3.newTreeItem(this, baseItem, n);
+                TreeItemFennec newItem = TreeItemFennec.newTreeItem(this, baseItem, n);
                 if (newItem != null) {
                     result.add(newItem);
                 }
             }
             return result;
-        } else if (this instanceof NVM3BundleMetadata) {
+        } else if (this instanceof FennecBundleMetadata) {
             ArrayList result = new ArrayList(1);
-            TreeItemNVM3 newItem = TreeItemNVM3.newTreeItem(this, baseItem, null);
+            TreeItemFennec newItem = TreeItemFennec.newTreeItem(this, baseItem, null);
             if (newItem != null) {
                 result.add(newItem);
             }
@@ -103,27 +103,27 @@ abstract class NVM3Metadata {
         return null;
     }
 
-    TreeItemNVM3 buildRootItem() throws NVM3Exception {
-        List items = buildItems(null, null, NVM3Mode.TRIGGER_MOVE);
+    TreeItemFennec buildRootItem() throws FennecException {
+        List items = buildItems(null, null, FennecMode.TRIGGER_MOVE);
         if ((items == null) || (items.size() == 0)) {
             return null;
         }
         if (items.size() == 1) {
-            TreeItemNVM3 root = (TreeItemNVM3) items.get(0);
-            return root.expand(NVM3Mode.TRIGGER_MOVE);
+            TreeItemFennec root = (TreeItemFennec) items.get(0);
+            return root.expand(FennecMode.TRIGGER_MOVE);
         } else {
-            TreeItemNVM3 root = TreeItemNVM3.newTreeItem(this, null, nvm3Service.getDocumentElement());
+            TreeItemFennec root = TreeItemFennec.newTreeItem(this, null, fennecService.getDocumentElement());
             if (root == null) return null;
             root.setChildItems(items);
             return root;
         }
     }
 
-    abstract List expand(TreeItemNVM3 pItem, int trigger) throws NVM3Exception;
+    abstract List expand(TreeItemFennec pItem, int trigger) throws FennecException;
 
-    protected NVM3Metadata(NVM3ServiceImpl nvm3Service,
-                           IQuery q, NVM3Mode mode) {
-        this.nvm3Service = nvm3Service;
+    protected FennecMetadata(FennecServiceImpl fennecService,
+                           IQuery q, FennecMode mode) {
+        this.fennecService = fennecService;
         this.query = q;
         if (q != null) {
             this.hasTarget = q.hasTarget();
@@ -134,10 +134,10 @@ abstract class NVM3Metadata {
         this.mode.addMetadata(this);
     }
 
-    protected NVM3Metadata(NVM3ServiceImpl nvm3Service,
-                           NVM3Mode mode,
+    protected FennecMetadata(FennecServiceImpl fennecService,
+                           FennecMode mode,
                            Node node) {
-        this.nvm3Service = nvm3Service;
+        this.fennecService = fennecService;
         this.query = null;
         this.hasTarget = false;
         this.mode = mode;

@@ -27,87 +27,90 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
-
-
-
 public class DescriptionView extends ViewPart {
-    public static final String ID = "org.eclipse.actf.ai.audio.description.views.DescriptionView";
+	public static final String ID = "org.eclipse.actf.ai.audio.description.views.DescriptionView";
 
-    private VideoStatusViewer status;
+	private VideoStatusViewer status;
 
-    private TableViewer tableViewer;
-    
-    @Override
-    public void createPartControl(Composite parent) {
-        initView(parent);
-        DescriptionPlugin.getDefault().setDescriptionView(this);
-    }
+	private TableViewer tableViewer;
 
-    private void initView(Composite parent) {
-        GridLayout gLayout = new GridLayout(1, true);
-        gLayout.marginWidth = 0;
-        gLayout.marginHeight = 0;
-        parent.setLayout(gLayout);
+	@Override
+	public void createPartControl(Composite parent) {
+		initView(parent);
+		DescriptionPlugin.getDefault().setDescriptionView(this);
+	}
 
-        status = new VideoStatusViewer(parent);
+	private void initView(Composite parent) {
+		GridLayout gLayout = new GridLayout(1, true);
+		gLayout.marginWidth = 0;
+		gLayout.marginHeight = 0;
+		parent.setLayout(gLayout);
 
-        tableViewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
-        MetadataContentProvider provider = new MetadataContentProvider();
-        tableViewer.setContentProvider(provider);
-        tableViewer.setLabelProvider(provider);
+		status = new VideoStatusViewer(parent);
 
-        Table table = tableViewer.getTable();
-        table.setHeaderVisible(true);
-        table.setLinesVisible(true);
-        TableColumn tableColumnProperty = new TableColumn(table, SWT.LEFT);
-        tableColumnProperty.setText(Messages.getString("AudioDescription.view.time"));
-        tableColumnProperty.setWidth(70);
-        TableColumn tableColumnValue = new TableColumn(table, SWT.LEFT);
-        tableColumnValue.setText(Messages.getString("AudioDescription.view.desc"));
-        tableColumnValue.setWidth(130);
-        
-        GridData data = new GridData(GridData.FILL_BOTH);
-        table.setLayoutData(data);
-    }
+		tableViewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL
+				| SWT.V_SCROLL | SWT.BORDER);
+		MetadataContentProvider provider = new MetadataContentProvider();
+		tableViewer.setContentProvider(provider);
+		tableViewer.setLabelProvider(provider);
 
-    @Override
-    public void setFocus() {
+		Table table = tableViewer.getTable();
+		table.setHeaderVisible(true);
+		table.setLinesVisible(true);
+		TableColumn tableColumnProperty = new TableColumn(table, SWT.LEFT);
+		tableColumnProperty.setText(Messages
+				.getString("AudioDescription.view.time"));
+		tableColumnProperty.setWidth(70);
+		TableColumn tableColumnValue = new TableColumn(table, SWT.LEFT);
+		tableColumnValue.setText(Messages
+				.getString("AudioDescription.view.desc"));
+		tableColumnValue.setWidth(130);
 
-    }
+		GridData data = new GridData(GridData.FILL_BOTH);
+		table.setLayoutData(data);
+	}
 
-    public void setTime(double time) {
-        status.setTime(time);
-    }
-    public void setInput(Object input){
-        if(tableViewer.getTable().isDisposed())
-            return;
-        tableViewer.setInput(input);
-    }
-    public void setIndex(int index){
-        if(tableViewer.getTable().isDisposed())
-            return;
-        tableViewer.getTable().select(index);
-    }
+	@Override
+	public void setFocus() {
 
-    public void setEnable(boolean b) {
-        status.setEnable(b);
-    }
-    
-    public boolean toggleViewShowing() {
-        IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-        IViewPart part = page.findView(ID);
+	}
 
-        if (part != null) {
-            page.hideView(part);
-            return false;
-        } else {
-            try {
-                page.showView(ID);
-                return true;
-            } catch (PartInitException e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
-    }
+	public void setTime(double time) {
+		status.setTime(time);
+	}
+
+	public void setInput(Object input) {
+		if (tableViewer.getTable().isDisposed())
+			return;
+		tableViewer.setInput(input);
+	}
+
+	public void setIndex(int index) {
+		if (tableViewer.getTable().isDisposed())
+			return;
+		tableViewer.getTable().select(index);
+	}
+
+	public void setEnable(boolean b) {
+		status.setEnable(b);
+	}
+
+	public boolean toggleViewShowing() {
+		IWorkbenchPage page = PlatformUI.getWorkbench()
+				.getActiveWorkbenchWindow().getActivePage();
+		IViewPart part = page.findView(ID);
+
+		if (part != null) {
+			page.hideView(part);
+			return false;
+		} else {
+			try {
+				page.showView(ID);
+				return true;
+			} catch (PartInitException e) {
+				e.printStackTrace();
+			}
+		}
+		return false;
+	}
 }

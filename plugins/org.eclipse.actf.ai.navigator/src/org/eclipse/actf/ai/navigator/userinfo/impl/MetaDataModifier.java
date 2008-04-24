@@ -99,7 +99,7 @@ public class MetaDataModifier implements IUserInfoConstants, IMetaDataModifier {
         IXMLStore store1 = store0.specify(sel1);
         if (store1 == null)
             return null;
-        IXMLSelector sel2 = service.getSelectorWithIRI(site);
+        IXMLSelector sel2 = service.getSelectorWithURI(site);
         IXMLStore store2 = store1.specify(sel2);
         if (store2 == null)
             return null;

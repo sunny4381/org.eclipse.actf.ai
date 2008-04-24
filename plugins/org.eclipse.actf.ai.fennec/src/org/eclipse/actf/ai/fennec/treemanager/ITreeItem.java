@@ -14,105 +14,211 @@ import org.eclipse.actf.util.vocab.AbstractTerms;
 import org.eclipse.actf.util.vocab.IEvalTarget;
 import org.w3c.dom.Node;
 
-
-
 /**
- * The main plugin class to be used in the desktop.
+ * ITreeItem interface defines the methods to be implemented by the
+ * representation of the tree node of the Fennec tree.
  */
 public interface ITreeItem extends IEvalTarget {
-    // Get the parent item.  If this is the root, return null.
-    ITreeItem getParent();
+	/**
+	 * Get the parent item. If this is the root, return null.
+	 * 
+	 * @return the parent ITreeItem.
+	 */
+	ITreeItem getParent();
 
-    // Get the child items.
-    // Even if it has no children, return an empty array (size == 0) instead of null.
-    ITreeItem[] getChildItems();
+	/**
+	 * Get the child items. Even if it has no children, return an empty array
+	 * (size == 0) instead of null.
+	 * 
+	 * @return the array of the child ITreeItems.
+	 */
+	ITreeItem[] getChildItems();
 
-    // return nth of the children of this parent.
-    int getNth();
+	/**
+	 * @return the nth of the children of this parent.
+	 */
+	int getNth();
 
-    // short text.
-    String getUIString();
+	/**
+	 * @return the short text of the item.
+	 */
+	String getUIString();
 
-    // long descriptive text.
-    String getDescription();
-    
-    // Return a text to represent the node.
-    // This text is inappropriate to be notified to users.
-    String getNodeString();
+	/**
+	 * @return the long descriptive text of the item.
+	 */
+	String getDescription();
 
-    // Heading level.  0 means this node is not a heading.
-    short getHeadingLevel();
+	/**
+	 * This text is inappropriate to be notified to users.
+	 * 
+	 * @return the text to represent the item.
+	 */
+	String getNodeString();
 
-    // Return the URI of the link of this tree item if it has a link.
-    String getLinkURI();
+	/**
+	 * Heading level. 0 means this node is not a heading.
+	 * 
+	 * @return the heading level of the item.
+	 */
+	short getHeadingLevel();
 
-    // This is a deprecated API.  It may breaks independence on content types.
-    Object getBaseNode();
+	/**
+	 * @return the URI of the link of this tree item if it has a link.
+	 */
+	String getLinkURI();
 
-    AbstractTerms getTerms();
-    
-    // Return true if this item accepts some input.
-    // !FN!
-    boolean isInputable();
+	/**
+	 * @deprecated This is a deprecated API. It may breaks independence on
+	 *             content types.
+	 * @return the base node of the item.
+	 */
+	Object getBaseNode();
 
-    // Return true if this item accepts click operations.
-    // !FN!
-    boolean isClickable();
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.actf.util.vocab.IEvalTarget#getTerms()
+	 */
+	AbstractTerms getTerms();
 
-    // Return true if this item contains some image.
-    // !FN!
-    boolean isImage();
+	// !FN!
+	/**
+	 * @return true if this item accepts some input.
+	 */
+	boolean isInputable();
 
-    // [0]...mimetype [1]...URI [2] ... png clut URI
-    // !FN!
-    String[] getStillPictureData();
+	// !FN!
+	/**
+	 * @return true if this item accepts click operations.
+	 */
+	boolean isClickable();
 
-    // Return the URI of the image.
-    // String getImageURI();
+	// !FN!
+	/**
+	 * @return true if this item contains some image.
+	 */
+	boolean isImage();
 
-    // Click this item.
-    int doClick() throws TreeManagerException;
+	// !FN!
+	/**
+	 * @return [0]...mimetype [1]...URI [2] ... png clut URI
+	 */
+	String[] getStillPictureData();
 
-    // Optional API.  Do not use it currently.
-    int stay() throws TreeManagerException;
+	/**
+	 * Click the item.
+	 * 
+	 * @return {@link ITreeManager#CLICKED} or {@link ITreeManager#NOACTION}
+	 * @throws TreeManagerException
+	 */
+	int doClick() throws TreeManagerException;
 
-    // Highlight this item.
-    int highlight() throws TreeManagerException;
+	/**
+	 * Optional API. Do not use it currently.
+	 * 
+	 * @return
+	 * @throws TreeManagerException
+	 */
+	int stay() throws TreeManagerException;
 
-    // Unhighlight this item.
-    int unhighlight() throws TreeManagerException;
-    
-    // Set focus to this item.
-    // This method only sets the input focus if possible.
-    boolean setFocus();
+	/**
+	 * Highlight the item.
+	 * 
+	 * @return {@link ITreeManager#NOACTION}
+	 * @throws TreeManagerException
+	 */
+	int highlight() throws TreeManagerException;
 
-    // Set the text to this item.  (This method may be used for a text edit widget)
-    int setText(String text) throws TreeManagerException;
+	/**
+	 * Unhighlight the item.
+	 * 
+	 * @return {@link ITreeManager#NOACTION}
+	 * @throws TreeManagerException
+	 */
+	int unhighlight() throws TreeManagerException;
 
-    // Return the set text.
-    String getText() throws TreeManagerException;
+	/**
+	 * Set focus to this item. This method only sets the input focus if
+	 * possible.
+	 * 
+	 * @return
+	 */
+	boolean setFocus();
 
-    // Form
-    int getRadioIndex();
+	/**
+	 * Set the text to this item. (This method may be used for a text edit
+	 * widget)
+	 * 
+	 * @param text the text to be set.
+	 * @return {@link ITreeManager#NOACTION}
+	 * @throws TreeManagerException
+	 */
+	int setText(String text) throws TreeManagerException;
 
-    int getRadioTotal();
+	/**
+	 * Return the set text.
+	 * @return the text of the item.
+	 * @throws TreeManagerException
+	 */
+	String getText() throws TreeManagerException;
 
-    void setSelectedIndices(int[] indices);
+	// Form
+	/**
+	 * @return the index of the item in the radio group. 
+	 */
+	int getRadioIndex();
 
-    int[] getSelectedIndices();
+	/**
+	 * @return the total number of radio buttons in the radio group.
+	 */
+	int getRadioTotal();
 
-    int getOptionsCount();
+	/**
+	 * @param indices the indices to be set to the item.
+	 */
+	void setSelectedIndices(int[] indices);
 
-    String getOptionTextAt(int i);
+	/**
+	 * @return the indices of the item.
+	 */
+	int[] getSelectedIndices();
 
-    int getListIndex();
-    
-    int getListTotal();
-    
-    public String getFormLabel();
+	/**
+	 * @return the number of the options in the item.
+	 */
+	int getOptionsCount();
 
-    // User Annotation.
-    Node serializeQuery(Node parent);
+	/**
+	 * @param index the index of the option.
+	 * @return the text of the option specified the index.
+	 */
+	String getOptionTextAt(int index);
 
-    char getAccessKey();
+	/**
+	 * @return the index of the item in the list.
+	 */
+	int getListIndex();
+
+	/**
+	 * @return the number of the lists item in the list including the item.
+	 */
+	int getListTotal();
+
+	/**
+	 * @return the label text of the item.
+	 */
+	public String getFormLabel();
+
+	// User Annotation.
+	/**
+	 * @param parent the target node to be serialized.
+	 * @return the serialized result in form of Node.
+	 */
+	Node serializeQuery(Node parent);
+
+	/**
+	 * @return the code of the access key declared of the item.
+	 */
+	char getAccessKey();
 }

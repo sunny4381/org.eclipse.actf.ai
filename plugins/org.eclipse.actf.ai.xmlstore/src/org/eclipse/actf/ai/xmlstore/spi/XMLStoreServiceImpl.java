@@ -74,7 +74,7 @@ public class XMLStoreServiceImpl implements IXMLStoreService {
         }
     }
 
-    public IXMLSelector getSelectorWithIRI(String iri) {
+    public IXMLSelector getSelectorWithURI(String iri) {
         return new XMLSelectorWithIRI(iri);
     }
 
@@ -228,13 +228,13 @@ public class XMLStoreServiceImpl implements IXMLStoreService {
         return false;
     }
 
-    public static final String NVM3_NAMESPACE_URI = "http://www.ibm.com/xmlns/prod/aiBrowser/fennec";
+    public static final String Fennec_NAMESPACE_URI = "http://www.ibm.com/xmlns/prod/aiBrowser/fennec";
 
-    public static final String NVM3_DOCUMENT_ELEMENT_NAME = "fennec";
+    public static final String Fennec_DOCUMENT_ELEMENT_NAME = "fennec";
 
     public boolean exportAllAnnotations(File dest) {
         try {
-            IXMLSelector selector = getSelectorWithDocElem(NVM3_DOCUMENT_ELEMENT_NAME, NVM3_NAMESPACE_URI);
+            IXMLSelector selector = getSelectorWithDocElem(Fennec_DOCUMENT_ELEMENT_NAME, Fennec_NAMESPACE_URI);
             IXMLStore store = getRootStore().specify(selector);
 
             ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(dest));

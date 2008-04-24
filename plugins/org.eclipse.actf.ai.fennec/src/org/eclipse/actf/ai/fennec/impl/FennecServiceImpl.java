@@ -10,10 +10,10 @@
  *******************************************************************************/
 package org.eclipse.actf.ai.fennec.impl;
 
-import org.eclipse.actf.ai.fennec.INVM3Entry;
-import org.eclipse.actf.ai.fennec.INVM3Service;
-import org.eclipse.actf.ai.fennec.NVM3Exception;
-import org.eclipse.actf.ai.fennec.NVM3InterruptedException;
+import org.eclipse.actf.ai.fennec.IFennecEntry;
+import org.eclipse.actf.ai.fennec.IFennecService;
+import org.eclipse.actf.ai.fennec.FennecException;
+import org.eclipse.actf.ai.fennec.FennecInterruptedException;
 import org.eclipse.actf.ai.fennec.treemanager.IAccessKeyList;
 import org.eclipse.actf.ai.fennec.treemanager.ISoundControl;
 import org.eclipse.actf.ai.fennec.treemanager.ITreeItem;
@@ -31,12 +31,12 @@ import org.eclipse.actf.util.vocab.Vocabulary;
 import org.w3c.dom.Element;
 
 
-public class NVM3ServiceImpl implements INVM3Service {
-    private NVM3Metadata rootMetadata;
+public class FennecServiceImpl implements IFennecService {
+    private FennecMetadata rootMetadata;
 
     private int status;
 
-    private TreeItemNVM3 lastItem;
+    private TreeItemFennec lastItem;
 
     private IDocumentEx document;
 
@@ -49,30 +49,30 @@ public class NVM3ServiceImpl implements INVM3Service {
     }
 
     private void initDefaultMetadata() {
-        NVM3Mode rootMode = new NVM3Mode(NVM3Mode.TYPE_SIMPLE);
-        NVM3Mode nextMode = new NVM3Mode(NVM3Mode.TYPE_ATTACH, NVM3Mode.TRIGGER_ALWAYS, true, false, false);
+        FennecMode rootMode = new FennecMode(FennecMode.TYPE_SIMPLE);
+        FennecMode nextMode = new FennecMode(FennecMode.TYPE_ATTACH, FennecMode.TRIGGER_ALWAYS, true, false, false);
         // /HTML/FRAMESET/FRAME/HTML/BODY
         //IQuery q = QueryService.createFromXPath("/HTML/BODY|/HTML/FRAMESET//FRAME/HTML/BODY");
         //IQuery q = QueryService.createFromXPath("//HTML/BODY");
         IQuery q = QueryService.createFromXPath("/HTML");
-        NVM3Metadata[] mds = new NVM3Metadata[1];
-        mds[0] = NVM3RecombinantMetadata.newAttach(this, q, rootMode, nextMode, null);
-        rootMetadata = new NVM3GroupMetadata(this, null, rootMode, mds);
+        FennecMetadata[] mds = new FennecMetadata[1];
+        mds[0] = FennecRecombinantMetadata.newAttach(this, q, rootMode, nextMode, null);
+        rootMetadata = new FennecGroupMetadata(this, null, rootMode, mds);
     }
 
-    public NVM3ServiceImpl(INVM3Entry entry, IDocumentEx document) throws NVM3Exception {
+    public FennecServiceImpl(IFennecEntry entry, IDocumentEx document) throws FennecException {
         this.document = document;
         this.root = document.getDocumentElement();
         try {
-            NVM3DOMReader reader = new NVM3DOMReader(this);
+            FennecDOMReader reader = new FennecDOMReader(this);
             rootMetadata = reader.parse(entry);
             this.status = UNINIT;
         } catch (Exception e) {
-            throw new NVM3Exception("Failed to load NVM3 data.", e);
+            throw new FennecException("Failed to load Fennec data.", e);
         }
     }
 
-    public NVM3ServiceImpl(IDocumentEx document) {
+    public FennecServiceImpl(IDocumentEx document) {
         this.document = document;
         this.root = document.getDocumentElement();
         initDefaultMetadata();
@@ -82,7 +82,7 @@ public class NVM3ServiceImpl implements INVM3Service {
         return status;
     }
 
-    public int analyze() throws NVM3Exception {
+    public int analyze() throws FennecException {
         analyzedResult = new AnalyzedResult();
         if (root instanceof INodeEx) {
             cachedVideoControl = null;
@@ -100,13 +100,13 @@ public class NVM3ServiceImpl implements INVM3Service {
     
     private IFlashNode[] cachedFlashTopNodes;
 
-    public int initialize() throws NVM3Exception {
+    public int initialize() throws FennecException {
         if (analyzedResult == null) {
             analyze();
         }
         lastItem = rootMetadata.buildRootItem();
         if (lastItem == null) {
-            throw new NVM3Exception("Failed to initialize", null);
+            throw new FennecException("Failed to initialize", null);
         }
         status = NORMAL;
         return ITreeManager.MOVED;
@@ -116,8 +116,8 @@ public class NVM3ServiceImpl implements INVM3Service {
         return lastItem;
     }
 
-    private int update(ITreeItem target, int trigger) throws NVM3Exception {
-        TreeItemNVM3 targetItem = (TreeItemNVM3) target;
+    private int update(ITreeItem target, int trigger) throws FennecException {
+        TreeItemFennec targetItem = (TreeItemFennec) target;
         if (targetItem.getParent() == null) {
             return initialize();
         } else {
@@ -128,34 +128,34 @@ public class NVM3ServiceImpl implements INVM3Service {
         }
         if (targetItem == null) {
             status = UNINIT;
-            throw new NVM3InterruptedException("Lost my way"); // $ NON-NLS-1
+            throw new FennecInterruptedException("Lost my way"); // $ NON-NLS-1
         }
         lastItem = targetItem;
         return ITreeManager.MOVED;
     }
 
-    public int moveUpdate(ITreeItem target) throws NVM3Exception {
-        return update(target, NVM3Mode.TRIGGER_MOVE);
+    public int moveUpdate(ITreeItem target) throws FennecException {
+        return update(target, FennecMode.TRIGGER_MOVE);
     }
 
-    public int moveUpdate(ITreeItem target, boolean update) throws NVM3Exception {
+    public int moveUpdate(ITreeItem target, boolean update) throws FennecException {
         if (update) {
-            return update(target, NVM3Mode.TRIGGER_MOVE);
+            return update(target, FennecMode.TRIGGER_MOVE);
         } else {
-            return update(target, NVM3Mode.TRIGGER_MOVE | NVM3Mode.TRIGGER_WITHOUTCHANGE);
+            return update(target, FennecMode.TRIGGER_MOVE | FennecMode.TRIGGER_WITHOUTCHANGE);
         }
     }
 
-    public int clickUpdate(ITreeItem target) throws NVM3Exception {
-        return update(target, NVM3Mode.TRIGGER_CLICK) | ITreeManager.CLICKED;
+    public int clickUpdate(ITreeItem target) throws FennecException {
+        return update(target, FennecMode.TRIGGER_CLICK) | ITreeManager.CLICKED;
     }
 
-    private int searchForwardChildren(int idx, TreeItemNVM3 item, IProposition proposition) throws NVM3Exception {
+    private int searchForwardChildren(int idx, TreeItemFennec item, IProposition proposition) throws FennecException {
         int st;
-        item = item.expandChildItems(NVM3Mode.TRIGGER_KEEP);
+        item = item.expandChildItems(FennecMode.TRIGGER_KEEP);
         ITreeItem[] childItems = item.getChildItems();
         for (int i = idx; i < childItems.length; i++) {
-            TreeItemNVM3 cItem = (TreeItemNVM3) childItems[i];
+            TreeItemFennec cItem = (TreeItemFennec) childItems[i];
             if (proposition.eval(cItem)) {
                 return moveUpdate(cItem) | ITreeManager.FOUND;
             }
@@ -166,11 +166,11 @@ public class NVM3ServiceImpl implements INVM3Service {
         return ITreeManager.NOACTION;
     }
 
-    private int searchForwardInternal(int idx, TreeItemNVM3 item, IProposition proposition) throws NVM3Exception {
+    private int searchForwardInternal(int idx, TreeItemFennec item, IProposition proposition) throws FennecException {
         int st = searchForwardChildren(idx, item, proposition);
         if ((st & ITreeManager.FOUND) != 0)
             return st;
-        TreeItemNVM3 pItem = (TreeItemNVM3) item.getParent();
+        TreeItemFennec pItem = (TreeItemFennec) item.getParent();
         if (pItem == null)
             return ITreeManager.NOACTION;
         st = searchForwardInternal(item.getNth() + 1, pItem, proposition);
@@ -190,12 +190,12 @@ public class NVM3ServiceImpl implements INVM3Service {
         return parent.getChildItems();
     }
 
-    public int searchForward(IProposition proposition) throws NVM3Exception {
+    public int searchForward(IProposition proposition) throws FennecException {
         return searchForwardInternal(0, lastItem, proposition);
     }
 
-    private int searchBackwardInternal(boolean first, TreeItemNVM3 item, IProposition proposition) throws NVM3Exception {
-        TreeItemNVM3 pItem = (TreeItemNVM3) item.getParent();
+    private int searchBackwardInternal(boolean first, TreeItemFennec item, IProposition proposition) throws FennecException {
+        TreeItemFennec pItem = (TreeItemFennec) item.getParent();
         if (pItem == null)
             return ITreeManager.NOACTION;
         int nth = item.getNth() - 1;
@@ -206,20 +206,20 @@ public class NVM3ServiceImpl implements INVM3Service {
             return searchBackwardInternal(false, pItem, proposition);
         }
         if (first) {
-            pItem = pItem.expandChildItems(NVM3Mode.TRIGGER_KEEP);
+            pItem = pItem.expandChildItems(FennecMode.TRIGGER_KEEP);
         }
         ITreeItem[] siblings = pItem.getChildItems();
         if (nth >= siblings.length) {
             nth = siblings.length - 1;
         }
-        item = (TreeItemNVM3) siblings[nth];
+        item = (TreeItemFennec) siblings[nth];
 
         while (true) {
-            item = item.expandChildItems(NVM3Mode.TRIGGER_KEEP);
+            item = item.expandChildItems(FennecMode.TRIGGER_KEEP);
             ITreeItem[] childItems = item.getChildItems();
             if (childItems.length == 0)
                 break;
-            item = (TreeItemNVM3) childItems[childItems.length - 1];
+            item = (TreeItemFennec) childItems[childItems.length - 1];
         }
         if (proposition.eval(item)) {
             return moveUpdate(item) | ITreeManager.FOUND;
@@ -227,7 +227,7 @@ public class NVM3ServiceImpl implements INVM3Service {
         return searchBackwardInternal(false, item, proposition);
     }
 
-    public int searchBackward(IProposition predicate) throws NVM3Exception {
+    public int searchBackward(IProposition predicate) throws FennecException {
         return searchBackwardInternal(true, lastItem, predicate);
     }
 
@@ -259,30 +259,30 @@ public class NVM3ServiceImpl implements INVM3Service {
         return cachedFlashTopNodes;
     }
 
-    private void expandWholeTreeInternal(TreeItemNVM3 item) throws NVM3Exception {
-        item = item.expandChildItems(NVM3Mode.TRIGGER_KEEP);
+    private void expandWholeTreeInternal(TreeItemFennec item) throws FennecException {
+        item = item.expandChildItems(FennecMode.TRIGGER_KEEP);
         ITreeItem[] childItems = item.getChildItems();
         for (int i = 0; i < childItems.length; i++) {
-            expandWholeTreeInternal((TreeItemNVM3) childItems[i]);
+            expandWholeTreeInternal((TreeItemFennec) childItems[i]);
         }
     }
 
-    private int skipToNode(Element e) throws NVM3Exception {
+    private int skipToNode(Element e) throws FennecException {
         initialize();
         return searchForward(Vocabulary.nodeLocation(e, false));
     }
 
-    public int skipToAnchor(String target) throws NVM3Exception {
+    public int skipToAnchor(String target) throws FennecException {
         Element el = document.getTargetElement(target);
         if (el != null)
             return skipToNode(el);
         return ITreeManager.NOACTION;
     }
 
-    public ITreeItem expandWholeTree() throws NVM3Exception {
+    public ITreeItem expandWholeTree() throws FennecException {
         initialize();
-        if (lastItem instanceof TreeItemNVM3) {
-            expandWholeTreeInternal((TreeItemNVM3) lastItem);
+        if (lastItem instanceof TreeItemFennec) {
+            expandWholeTreeInternal((TreeItemFennec) lastItem);
         }
         return lastItem;
     }

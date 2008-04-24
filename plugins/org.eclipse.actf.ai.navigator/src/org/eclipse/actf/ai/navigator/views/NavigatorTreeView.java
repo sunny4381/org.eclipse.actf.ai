@@ -51,8 +51,6 @@ import org.w3c.dom.Node;
 
 
 public class NavigatorTreeView extends ViewPart {
-    public static final String ID = "org.eclipse.actf.ai.navigator.views.NavigatorTreeView"; //$NON-NLS-1$
-
     private TreeViewer treeViewer;
 
     private TableViewer tableViewer;
@@ -260,20 +258,20 @@ public class NavigatorTreeView extends ViewPart {
 
     public boolean isShown() {
         IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-        IViewPart part = page.findView(ID);
+        IViewPart part = page.findView(NavigatorPlugin.NAVIGATOR_TREE_VIEW_ID);
         return part != null;
     }
 
     public boolean toggleViewShowing() {
         IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-        IViewPart part = page.findView(ID);
+        IViewPart part = page.findView(NavigatorPlugin.NAVIGATOR_TREE_VIEW_ID);
 
         if (part != null) {
             page.hideView(part);
             return false;
         } else {
             try {
-                page.showView(ID);
+                page.showView(NavigatorPlugin.NAVIGATOR_TREE_VIEW_ID);
                 return true;
             } catch (PartInitException e) {
                 e.printStackTrace();
@@ -304,10 +302,10 @@ public class NavigatorTreeView extends ViewPart {
         }
     }
 
-    public void showNVM3Name(String name) {
+    public void showFennecName(String name) {
         ModeContribution mc = getModeContribution(ModeContribution.MODE_CONTRIBUTION_ID);
         if (mc != null) {
-            mc.showNVM3Name(name);
+            mc.showFennecName(name);
             update();
         }
     }

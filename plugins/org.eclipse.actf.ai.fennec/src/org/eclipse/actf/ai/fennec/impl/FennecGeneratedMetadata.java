@@ -13,13 +13,13 @@ package org.eclipse.actf.ai.fennec.impl;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.actf.ai.fennec.NVM3Exception;
+import org.eclipse.actf.ai.fennec.FennecException;
 import org.eclipse.actf.ai.fennec.treemanager.ITreeItem;
 import org.eclipse.actf.model.dom.dombycom.INodeEx;
 import org.w3c.dom.Node;
 
 
-class NVM3GeneratedMetadata extends NVM3BundleMetadata {
+class FennecGeneratedMetadata extends FennecBundleMetadata {
     private final Node node;
     
     @Override
@@ -57,12 +57,12 @@ class NVM3GeneratedMetadata extends NVM3BundleMetadata {
     }
 
     @Override
-    List expand(TreeItemNVM3 pItem, int trigger) throws NVM3Exception {
+    List expand(TreeItemFennec pItem, int trigger) throws FennecException {
         ITreeItem[] childItems = pItem.getChildItems();
         if (!mode.changed(pItem, trigger) && pItem.hasAlreadyChildRefreshed()) {
             return Arrays.asList(childItems);
         } else {
-            TreeItemNVM3 bItem = mode.buildItemContinued(node, pItem);
+            TreeItemFennec bItem = mode.buildItemContinued(node, pItem);
             if ((bItem != null) && bItem.hasChild()) {
                 return Arrays.asList(bItem.getChildItems());
             }
@@ -70,23 +70,23 @@ class NVM3GeneratedMetadata extends NVM3BundleMetadata {
         return null;
     }
 
-    public static NVM3GeneratedMetadata generate(NVM3RecombinantMetadata metadata, NVM3Mode mode, Node node,
-            NVM3Metadata[] childMds) {
-        return new NVM3GeneratedMetadata(metadata.nvm3Service, mode, node, childMds);
+    public static FennecGeneratedMetadata generate(FennecRecombinantMetadata metadata, FennecMode mode, Node node,
+            FennecMetadata[] childMds) {
+        return new FennecGeneratedMetadata(metadata.fennecService, mode, node, childMds);
     }
 
-    private NVM3GeneratedMetadata(NVM3ServiceImpl nvm3Service, NVM3Mode mode, Node node, NVM3Metadata[] childMds) {
-        super(nvm3Service, mode, node, childMds);
+    private FennecGeneratedMetadata(FennecServiceImpl fennecService, FennecMode mode, Node node, FennecMetadata[] childMds) {
+        super(fennecService, mode, node, childMds);
         this.node = node;
     }
 
-    public static NVM3Metadata generate(NVM3GeneratedMetadata meta, NVM3GeneratedMetadata meta2) {
-        NVM3Metadata[] childMds = new NVM3Metadata[meta.childMetadata.length+meta2.childMetadata.length];
+    public static FennecMetadata generate(FennecGeneratedMetadata meta, FennecGeneratedMetadata meta2) {
+        FennecMetadata[] childMds = new FennecMetadata[meta.childMetadata.length+meta2.childMetadata.length];
         for(int i=0; i<meta.childMetadata.length; i++)
             childMds[i] = meta.childMetadata[i];
         for(int i=0; i<meta2.childMetadata.length; i++)
             childMds[meta.childMetadata.length+i] = meta2.childMetadata[i];
-        return new NVM3GeneratedMetadata(meta.nvm3Service, meta.mode, meta.node, childMds);
+        return new FennecGeneratedMetadata(meta.fennecService, meta.mode, meta.node, childMds);
     }
 
 }

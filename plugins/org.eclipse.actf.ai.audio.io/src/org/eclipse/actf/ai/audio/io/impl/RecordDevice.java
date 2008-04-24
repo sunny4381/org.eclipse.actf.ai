@@ -20,94 +20,96 @@ import javax.sound.sampled.TargetDataLine;
 import org.eclipse.actf.ai.audio.io.AudioIOException;
 import org.eclipse.actf.ai.audio.io.IAudioReader;
 
-
-
-
 public class RecordDevice implements IAudioReader {
 
-    private Mixer recordMixer;
+	private Mixer recordMixer;
 
-    private AudioFormat format;
+	private AudioFormat format;
 
-    private TargetDataLine recordLine;
+	private TargetDataLine recordLine;
 
-    @Override
-    public boolean equals(Object o) {
-        if (o instanceof RecordDevice) {
-            RecordDevice rd = (RecordDevice) o;
-            if (recordMixer.equals(rd.recordMixer)) {
-                return format.getChannels() == rd.format.getChannels()
-                        && format.getFrameRate() == rd.format.getFrameRate()
-                        && format.getSampleSizeInBits() == rd.format.getSampleSizeInBits();
-            }
-        }
-        return false;
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof RecordDevice) {
+			RecordDevice rd = (RecordDevice) o;
+			if (recordMixer.equals(rd.recordMixer)) {
+				return format.getChannels() == rd.format.getChannels()
+						&& format.getFrameRate() == rd.format.getFrameRate()
+						&& format.getSampleSizeInBits() == rd.format
+								.getSampleSizeInBits();
+			}
+		}
+		return false;
+	}
 
-    public RecordDevice(Mixer mixer, int sampleRate, int channels) {
-        this.recordMixer = mixer;
-        format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, sampleRate, 16, channels, 2 * channels, sampleRate,
-                false);
-        if (!recordMixer.isLineSupported(new DataLine.Info(TargetDataLine.class, format))) {
-            check(sampleRate, channels);
-        }
-    }
+	public RecordDevice(Mixer mixer, int sampleRate, int channels) {
+		this.recordMixer = mixer;
+		format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, sampleRate,
+				16, channels, 2 * channels, sampleRate, false);
+		if (!recordMixer.isLineSupported(new DataLine.Info(
+				TargetDataLine.class, format))) {
+			check(sampleRate, channels);
+		}
+	}
 
-    private void check(int sampleRate, int channels) {
-        AudioFormat temp;
-        int[] samples = new int[] { 48000, 44100, 22050, 16000, 8000 };
+	private void check(int sampleRate, int channels) {
+		AudioFormat temp;
+		int[] samples = new int[] { 48000, 44100, 22050, 16000, 8000 };
 
-        outer: for (int i = 0; i < samples.length; i++) {
-            if (samples[i] < sampleRate) {
-                temp = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, samples[i], 16, channels, 2 * channels,
-                        samples[i], false);
-                if (recordMixer.isLineSupported(new DataLine.Info(TargetDataLine.class, temp))) {
-                    format = temp;
-                    break outer;
-                }
-            }
-        }
-    }
+		outer: for (int i = 0; i < samples.length; i++) {
+			if (samples[i] < sampleRate) {
+				temp = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,
+						samples[i], 16, channels, 2 * channels, samples[i],
+						false);
+				if (recordMixer.isLineSupported(new DataLine.Info(
+						TargetDataLine.class, temp))) {
+					format = temp;
+					break outer;
+				}
+			}
+		}
+	}
 
-    public String getName() {
-        return "Device \"" + recordMixer.getMixerInfo().getName() + //
-                " (" + (format.getFrameRate() / 1000) + " kHz, " + format.getChannels() + "ch)" + "\"";
-    }
+	public String getName() {
+		return "Device \"" + recordMixer.getMixerInfo().getName()
+				+ //
+				" (" + (format.getFrameRate() / 1000) + " kHz, "
+				+ format.getChannels() + "ch)" + "\"";
+	}
 
-    public AudioFormat getAudioFormat() {
-        return format;
-    }
+	public AudioFormat getAudioFormat() {
+		return format;
+	}
 
-    synchronized public void close() {
-        if (recordLine != null)
-            recordLine.close();
-    }
+	synchronized public void close() {
+		if (recordLine != null)
+			recordLine.close();
+	}
 
-    public boolean isClosed() {
-        return !recordLine.isOpen();
-    }
+	public boolean isClosed() {
+		return !recordLine.isOpen();
+	}
 
-    public boolean canRead(){
-        DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
-        return recordMixer.isLineSupported(info);
-    }
-    
-    synchronized public void open() throws AudioIOException {
-        DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
+	public boolean canRead() {
+		DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
+		return recordMixer.isLineSupported(info);
+	}
 
-        try {
-            recordLine = (TargetDataLine) recordMixer.getLine(info);
-            recordLine.open(format);
-            recordLine.start();
-        } catch (LineUnavailableException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    
+	synchronized public void open() throws AudioIOException {
+		DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
 
-    synchronized public int read(byte[] data, int offset, int length) throws AudioIOException {
-        return recordLine.read(data, offset, length);
-    }
+		try {
+			recordLine = (TargetDataLine) recordMixer.getLine(info);
+			recordLine.open(format);
+			recordLine.start();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+	}
+
+	synchronized public int read(byte[] data, int offset, int length)
+			throws AudioIOException {
+		return recordLine.read(data, offset, length);
+	}
 
 }

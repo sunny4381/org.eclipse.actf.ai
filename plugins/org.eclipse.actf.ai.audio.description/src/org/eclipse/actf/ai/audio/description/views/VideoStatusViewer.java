@@ -19,48 +19,47 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-
-
-
 public class VideoStatusViewer {
-    
-    private Composite parent;
-    private Label status;
-    private boolean enable = false;
-    private String timeText;
 
+	private Composite parent;
+	private Label status;
+	private boolean enable = false;
+	private String timeText;
 
-    public VideoStatusViewer(Composite parent){
-        this.parent = parent;
-        initialize();
-    }
-    
-    public void initialize(){
-        status = new Label(parent, SWT.NONE);
-        GridData data = new GridData(GridData.FILL_HORIZONTAL);
-        status.setLayoutData(data);
-        status.setAlignment(SWT.RIGHT);
-        setTime(0);
-        enable = DescriptionPlugin.getDefault().getEnable();
-    }
-    
-    public void setTime(double time){
-        timeText = TimeFormatUtil.getTimeString(time);
-        refreshText();
-    }
-    
-    private void refreshText(){
-        if(status.isDisposed())
-            return;
-        if(enable){
-            status.setText(Messages.getString("AudioDescription.view.enable")+" "+timeText);
-        }else{
-            status.setText(Messages.getString("AudioDescription.view.notEnable")+" "+timeText);
-        }
-    }
+	public VideoStatusViewer(Composite parent) {
+		this.parent = parent;
+		initialize();
+	}
 
-    public void setEnable(boolean b) {
-        enable = b;
-        refreshText();
-    }
+	public void initialize() {
+		status = new Label(parent, SWT.NONE);
+		GridData data = new GridData(GridData.FILL_HORIZONTAL);
+		status.setLayoutData(data);
+		status.setAlignment(SWT.RIGHT);
+		setTime(0);
+		enable = DescriptionPlugin.getDefault().getEnable();
+	}
+
+	public void setTime(double time) {
+		timeText = TimeFormatUtil.getTimeString(time);
+		refreshText();
+	}
+
+	private void refreshText() {
+		if (status.isDisposed())
+			return;
+		if (enable) {
+			status.setText(Messages.getString("AudioDescription.view.enable")
+					+ " " + timeText);
+		} else {
+			status.setText(Messages
+					.getString("AudioDescription.view.notEnable")
+					+ " " + timeText);
+		}
+	}
+
+	public void setEnable(boolean b) {
+		enable = b;
+		refreshText();
+	}
 }

@@ -21,19 +21,28 @@ import org.eclipse.swt.widgets.Label;
 
 
 
+/**
+ * This shows the mode information of the navigator.
+ */
 public class ModeContribution extends ControlContribution {
 
-    public ModeContribution(String id) {
-        super(id);
+    /**
+     * Default constructor.
+     */
+    public ModeContribution() {
+        super(MODE_CONTRIBUTION_ID);
     }
 
+    /**
+     * The ID of this UI contribution.
+     */
     public static final String MODE_CONTRIBUTION_ID = "navigator.mode";
 
     private Composite c;
 
-    private Label nvm3;
+    private Label fennec;
     
-    private String nvm3Text;
+    private String metadataText;
 
     private Label mode;
     
@@ -53,9 +62,9 @@ public class ModeContribution extends ControlContribution {
         rl.wrap = false;
         c.setLayout(rl);
 
-        nvm3 = new Label(c, SWT.NONE);
-        if(nvm3Text != null)
-            nvm3.setText(nvm3Text);
+        fennec = new Label(c, SWT.NONE);
+        if(metadataText != null)
+            fennec.setText(metadataText);
         mode = new Label(c, SWT.NONE);
         if(modeText != null)
             mode.setText(modeText);
@@ -63,11 +72,19 @@ public class ModeContribution extends ControlContribution {
         return c;
     }
 
+    /**
+     * <i>metadataText  [modeText]</i> will be shown.
+     * @param name The mode name.
+     */
     public void setMode(String name) {
         modeText = "  [" + name + "]";
     }
 
-    public void showNVM3Name(String name) {
-        nvm3Text = name;
+    /**
+     * <i>metadataText  [modeText]</i> will be shown.
+     * @param name The name of the metadata name.
+     */
+    public void showFennecName(String name) {
+        metadataText = name;
     }
 }

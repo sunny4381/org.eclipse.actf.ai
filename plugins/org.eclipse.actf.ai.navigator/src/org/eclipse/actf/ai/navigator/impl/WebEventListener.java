@@ -14,10 +14,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
 
-import org.eclipse.actf.ai.fennec.INVM3Mediator;
-import org.eclipse.actf.ai.fennec.NVM3Plugin;
+import org.eclipse.actf.ai.fennec.IFennecMediator;
+import org.eclipse.actf.ai.fennec.FennecPlugin;
 import org.eclipse.actf.ai.fennec.treemanager.ILocation;
-import org.eclipse.actf.ai.navigator.NavigatorPlugin;
 import org.eclipse.actf.ai.navigator.broker.RequestBroker;
 import org.eclipse.actf.ai.navigator.extension.ManipulatorExtension;
 import org.eclipse.actf.ai.navigator.extension.MediaControlExtension;
@@ -36,8 +35,8 @@ public class WebEventListener implements IWebBrowserACTFEventListener {
 
     private static final String ABOUT_BLANK_URL = "about:blank";
 
-    private NVM3Plugin getNVM3Plugin() {
-        return NVM3Plugin.getDefault();
+    private FennecPlugin getFennecPlugin() {
+        return FennecPlugin.getDefault();
     }
 
     // --------------------------------------------------------------------------------
@@ -88,7 +87,6 @@ public class WebEventListener implements IWebBrowserACTFEventListener {
 
         BrowserState(IWebBrowserACTF webBrowser) {
             this.navigator = new NavigatorImplEx(WebEventListener.this, webBrowser, 30, 1000);
-            NavigatorPlugin.getDefault().setNavigatorUI(this.navigator);
             this.state = STATE_NONE;
         }
     }
@@ -161,8 +159,8 @@ public class WebEventListener implements IWebBrowserACTFEventListener {
         }
         MediaControlExtension.start(bs.navigator.getMediaControlHandle());
 
-        INVM3Mediator mediator = getNVM3Plugin().newNVM3Mediator(webBrowser);
-        bs.navigator.setNVM3Mediator(mediator);
+        IFennecMediator mediator = getFennecPlugin().newFennecMediator(webBrowser);
+        bs.navigator.setFennecMediator(mediator);
         bs.navigator.startNavigation(webBrowser, !isRefresh);
         requestBroker.setNavigator(bs.navigator, webBrowser);
 

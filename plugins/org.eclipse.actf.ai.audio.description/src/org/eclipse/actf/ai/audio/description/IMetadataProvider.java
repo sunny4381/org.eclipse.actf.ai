@@ -17,53 +17,70 @@ import java.util.Locale;
  * This represents an audio description file.
  */
 public interface IMetadataProvider {
-    /**
-     * @return The number of items.
-     */
-    public int getSize();
+	/**
+	 * @return the number of items.
+	 */
+	public int getSize();
 
-    /**
-     * @param index The index of the item.
-     * @return The item of audio description specified by the index.
-     */
-    public IMetadata getItem(int index);
+	/**
+	 * {@link #prepareMetadata()} should be called before calling this method.
+	 * 
+	 * @param index
+	 *            the index of the item.
+	 * @return the item of audio description specified by the index.
+	 */
+	public IMetadata getItem(int index);
 
-    /**
-     * @return The list of the items of audio description. 
-     */
-    public ArrayList<IMetadata> getAllItems();
+	/**
+	 * {@link #prepareMetadata()} should be called before calling this method.
+	 * 
+	 * @return the list of the items of audio description.
+	 */
+	public ArrayList<IMetadata> getAllItems();
 
-    /**
-     * @param position The position of the video in 1/1000 second from the start of the video.
-     * @return The index of the item corresponding to the position.
-     */
-    public int getIndex(int position);
+	/**
+	 * {@link #prepareMetadata()} should be called before calling this method.
+	 * 
+	 * @param position
+	 *            the position of the video in 1/1000 second from the start of
+	 *            the video.
+	 * @return the index of the item corresponding to the position.
+	 */
+	public int getIndex(int position);
 
-    /**
-     * @param locale Set the locale information to the provider. The provider selects descriptions specified in the locale. 
-     */
-    public void setLocale(Locale locale);
-    
-    /**
-     * Set the metadata information in default locale.
-     * @see #setLocale(Locale)
-     * @see #setAlternative(Locale)
-     */
-    public void setAlternative();
+	/**
+	 * Set the locale information to the provider. The provider selects
+	 * descriptions for the locale.
+	 * 
+	 * @param locale
+	 *            the local to be set.
+	 */
+	public void setLocale(Locale locale);
 
-    /**
-     * Set the metadata information in specified locale.
-     * @param locale Set the metadata information in specified locale.
-     */
-    public void setAlternative(Locale locale);
+	/**
+	 * Prepare the metadata information in the default locale or the locale
+	 * specified by {@link #setLocale(Locale)}.
+	 * 
+	 * @see #setLocale(Locale)
+	 * @see #prepareMetadata(Locale)
+	 */
+	public void prepareMetadata();
 
-    /**
-     * Reload the audio description file.
-     */
-    public void reload();
-    
-    /**
-     * @return Return true if this has any metadata information.
-     */
-    public boolean hasMetadata();
+	/**
+	 * Prepare the metadata information in the specified locale.
+	 * 
+	 * @param locale
+	 *            the local to be used.
+	 */
+	public void prepareMetadata(Locale locale);
+
+	/**
+	 * Reload the audio description file.
+	 */
+	public void reload();
+
+	/**
+	 * @return whether the instance has any metadata information or not.
+	 */
+	public boolean hasMetadata();
 }

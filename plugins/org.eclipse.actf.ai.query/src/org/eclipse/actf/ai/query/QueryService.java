@@ -15,35 +15,38 @@ import org.eclipse.actf.ai.query.impl.QueryImpl;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-
-
 /**
- * This class has factory methods for creating query objects. 
+ * This class has factory methods for creating query objects.
  */
 public class QueryService {
-    /**
-     * @param e The element to be parsed.
-     * @param parentQuery The parent query of the query will be parsed.
-     * @return An instance of query for "Fennec".
-     */
-    public static IQuery parse(Element e, IQuery parentQuery) {
-        return QueryImpl.parse(e, parentQuery);
-    }
+	/**
+	 * @param e
+	 *            the element to be parsed.
+	 * @param parentQuery
+	 *            the parent query of the query will be parsed.
+	 * @return new instance of query for "Fennec".
+	 */
+	public static IQuery parse(Element e, IQuery parentQuery) {
+		return QueryImpl.parse(e, parentQuery);
+	}
 
-    /**
-     * @param xpath The XPath to be used in the query.
-     * @return An instance of XPath query.
-     */
-    public static IQuery createFromXPath(String xpath) {
-        return QueryImpl.parseXPath(xpath);
-    }
-    
-    /**
-     * @param domTarget The target DOM node to be queried by the created query. 
-     * @param usrParent The parent node of the created query.
-     * @return An instance of query which returns the domTarget.
-     */
-    public static Node serializeQuery(Node domTarget, Node usrParent) {
-        return QueryImpl.serializeQuery(domTarget, usrParent);
-    }
+	/**
+	 * @param xpath
+	 *            the XPath to be used in the query.
+	 * @return new instance of XPath query.
+	 */
+	public static IQuery createFromXPath(String xpath) {
+		return QueryImpl.parseXPath(xpath);
+	}
+
+	/**
+	 * @param domTarget
+	 *            the target DOM node to be queried by the created query.
+	 * @param usrParent
+	 *            the parent node of the created query.
+	 * @return new instance of query which returns the domTarget.
+	 */
+	public static Node serializeQuery(Node domTarget, Node usrParent) {
+		return QueryImpl.serializeQuery(domTarget, usrParent);
+	}
 }

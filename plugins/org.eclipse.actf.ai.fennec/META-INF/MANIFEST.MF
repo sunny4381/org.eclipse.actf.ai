@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Eclipse ACTF Fennec Plug-in (Incubation)
 Bundle-SymbolicName: org.eclipse.actf.ai.fennec
 Bundle-Version: 0.0.1
-Bundle-Activator: org.eclipse.actf.ai.fennec.NVM3Plugin
+Bundle-Activator: org.eclipse.actf.ai.fennec.FennecPlugin
 Bundle-Vendor: Eclipse.org
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.runtime,

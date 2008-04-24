@@ -12,69 +12,69 @@ package org.eclipse.actf.ai.fennec.impl;
 
 import java.util.List;
 
-import org.eclipse.actf.ai.fennec.NVM3Exception;
+import org.eclipse.actf.ai.fennec.FennecException;
 import org.eclipse.actf.ai.query.IQuery;
 import org.w3c.dom.Node;
 
 
-class NVM3RecombinantMetadata extends NVM3BundleMetadata {
+class FennecRecombinantMetadata extends FennecBundleMetadata {
     static public final int TYPE_SIMPLE = 0;
     static public final int TYPE_ATTACH = 1;
     static public final int TYPE_UNWRAP = 2;
 
     private final int type;
-    private NVM3Mode nextMode;
+    private FennecMode nextMode;
 
-    public NVM3Mode getNextMode() {
+    public FennecMode getNextMode() {
         return nextMode;
     }
 
-    List expand(TreeItemNVM3 pItem, int trigger) throws NVM3Exception {
+    List expand(TreeItemFennec pItem, int trigger) throws FennecException {
         return nextMode.expand(pItem, null, trigger);
     }
 
-    List buildItems(TreeItemNVM3 baseItem, Node baseNode, int trigger) throws NVM3Exception {
+    List buildItems(TreeItemFennec baseItem, Node baseNode, int trigger) throws FennecException {
         return nextMode.expand(baseItem, baseNode, trigger);
     }
 
-    TreeItemNVM3 buildRootItem() throws NVM3Exception {
-        TreeItemNVM3 root = super.buildRootItem();
+    TreeItemFennec buildRootItem() throws FennecException {
+        TreeItemFennec root = super.buildRootItem();
         if (root == null) {
-            throw new NVM3Exception("NVM3.EMPTY_PAGE", null);            
+            throw new FennecException("Fennec.EMPTY_PAGE", null);            
         }
         return root;
     }
 
 
-    static NVM3RecombinantMetadata newAttach(NVM3ServiceImpl nvm3Service,
-                                             IQuery q, NVM3Mode mode,
-                                             NVM3Mode nextMode,
-                                             NVM3Metadata[] mds) {
-        NVM3RecombinantMetadata md = new NVM3RecombinantMetadata(nvm3Service,
+    static FennecRecombinantMetadata newAttach(FennecServiceImpl fennecService,
+                                             IQuery q, FennecMode mode,
+                                             FennecMode nextMode,
+                                             FennecMetadata[] mds) {
+        FennecRecombinantMetadata md = new FennecRecombinantMetadata(fennecService,
                                                                  q, mode,
                                                                  nextMode, mds,
                                                                  TYPE_ATTACH);
         return md;
     }
 
-    static NVM3RecombinantMetadata newUnwrap(NVM3ServiceImpl nvm3Service,
-                                             IQuery q, NVM3Mode mode,
-                                             NVM3Mode nextMode,
-                                             NVM3Metadata[] mds) {
-        NVM3RecombinantMetadata md = new NVM3RecombinantMetadata(nvm3Service,
+    static FennecRecombinantMetadata newUnwrap(FennecServiceImpl fennecService,
+                                             IQuery q, FennecMode mode,
+                                             FennecMode nextMode,
+                                             FennecMetadata[] mds) {
+        FennecRecombinantMetadata md = new FennecRecombinantMetadata(fennecService,
                                                                  q, mode,
                                                                  nextMode, mds,
                                                                  TYPE_UNWRAP);
         return md;
     }
 
-    private NVM3RecombinantMetadata(NVM3ServiceImpl nvm3Service,
+    private FennecRecombinantMetadata(FennecServiceImpl fennecService,
                                     IQuery q,
-                                    NVM3Mode mode,
-                                    NVM3Mode nextMode,
-                                    NVM3Metadata[] mds,
+                                    FennecMode mode,
+                                    FennecMode nextMode,
+                                    FennecMetadata[] mds,
                                     int type) {
-        super(nvm3Service, q, mode, mds);
+        super(fennecService, q, mode, mds);
         this.type = type;
         this.nextMode = nextMode;
         nextMode.setBaseMetadata(this);

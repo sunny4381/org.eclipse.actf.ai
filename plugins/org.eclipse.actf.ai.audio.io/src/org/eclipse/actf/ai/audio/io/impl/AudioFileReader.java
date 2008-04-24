@@ -23,117 +23,118 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import org.eclipse.actf.ai.audio.io.AudioIOException;
 import org.eclipse.actf.ai.audio.io.IAudioReader;
 
-
-
-
 public class AudioFileReader implements IAudioReader {
 
-    private File file;
+	private File file;
 
-    private URL url;
+	private URL url;
 
-    private AudioFormat format;
+	private AudioFormat format;
 
-    private AudioInputStream stream;
+	private AudioInputStream stream;
 
-    private boolean opened = false;
+	private boolean opened = false;
 
-    private boolean closed = false;
+	private boolean closed = false;
 
-    public AudioFileReader(String fileName) {
-        setFile(fileName);
-    }
+	public AudioFileReader(String fileName) {
+		setFile(fileName);
+	}
 
-    public AudioFileReader(URL url) {
-        setURL(url);
-    }
+	public AudioFileReader(URL url) {
+		setURL(url);
+	}
 
-    public String getName() {
-        if (file != null)
-            return "File \"" + file.getName() + "\"";
-        if (url != null)
-            return "URL \"" + url.getPath() + "\"";
-        return "";
-    }
+	public String getName() {
+		if (file != null)
+			return "File \"" + file.getName() + "\"";
+		if (url != null)
+			return "URL \"" + url.getPath() + "\"";
+		return "";
+	}
 
-    private void setFile(String fileName) {
-        this.file = new File(fileName);
-    }
+	private void setFile(String fileName) {
+		this.file = new File(fileName);
+	}
 
-    private void setURL(URL url) {
-        this.url = url;
-    }
+	private void setURL(URL url) {
+		this.url = url;
+	}
 
-    public boolean canRead() {
-        try {
-            if (file != null)
-                AudioSystem.getAudioInputStream(file);
-            if (url != null)
-                AudioSystem.getAudioFileFormat(url);
-            return true;
-        } catch (UnsupportedAudioFileException e) {
-        } catch (IOException e) {
-        }
-        return false;
-    }
+	public boolean canRead() {
+		try {
+			if (file != null)
+				AudioSystem.getAudioInputStream(file);
+			if (url != null)
+				AudioSystem.getAudioFileFormat(url);
+			return true;
+		} catch (UnsupportedAudioFileException e) {
+		} catch (IOException e) {
+		}
+		return false;
+	}
 
-    synchronized public void open() throws AudioIOException {
-        try {
-            if (file != null)
-                stream = AudioSystem.getAudioInputStream(file);
-            if (url != null)
-                stream = AudioSystem.getAudioInputStream(url);
-            AudioFormat baseFormat = stream.getFormat();
+	synchronized public void open() throws AudioIOException {
+		try {
+			if (file != null)
+				stream = AudioSystem.getAudioInputStream(file);
+			if (url != null)
+				stream = AudioSystem.getAudioInputStream(url);
+			
+			// AudioFormat baseFormat = stream.getFormat();
+			// 
+			// AudioFormat decodedFormat = new AudioFormat(baseFormat
+			// .getEncoding(), baseFormat.getSampleRate(), 16, baseFormat
+			// .getChannels(), baseFormat.getChannels() * 2, baseFormat
+			// .getSampleRate(), false);
+			//
+			// stream = AudioSystem.getAudioInputStream(decodedFormat, stream);
 
-            AudioFormat decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, baseFormat.getSampleRate(),
-                    16, baseFormat.getChannels(), baseFormat.getChannels() * 2, baseFormat.getSampleRate(), false);
+			format = stream.getFormat();
+			opened = true;
+			closed = false;
+		} catch (UnsupportedAudioFileException e) {
+			throw new AudioIOException("Unsupported audio file type.", e);
+		} catch (IOException e) {
+			throw new AudioIOException(e.toString(), e);
+		}
+	}
 
-            stream = AudioSystem.getAudioInputStream(decodedFormat, stream);
+	public AudioFormat getAudioFormat() {
+		return format;
+	}
 
-            format = stream.getFormat();
-            opened = true;
-            closed = false;
-        } catch (UnsupportedAudioFileException e) {
-            throw new AudioIOException("Unsupported audio file type");
-        } catch (IOException e) {
-            throw new AudioIOException(e.toString());
-        }
-    }
+	synchronized public int read(byte[] data, int offset, int length)
+			throws AudioIOException {
+		if (!opened) {
+			throw new AudioIOException("This is not opened.", null);
+		}
+		try {
+			int nBytesRead = stream.read(data, offset, length);
+			if (nBytesRead == -1) {
+				stream.close();
+				opened = false;
+				closed = true;
+				nBytesRead = 0;
+			}
+			return nBytesRead;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
 
-    public AudioFormat getAudioFormat() {
-        return format;
-    }
+	synchronized public void close() {
+		try {
+			if (stream != null)
+				stream.close();
+		} catch (IOException e) {
+		}
+		opened = false;
+		closed = true;
+	}
 
-    synchronized public int read(byte[] data, int offset, int length) throws AudioIOException {
-        if (!opened) {
-            throw new AudioIOException("not opened");
-        }
-        try {
-            int nBytesRead = stream.read(data, offset, length);
-            if (nBytesRead == -1) {
-                stream.close();
-                opened = false;
-                closed = true;
-                nBytesRead = 0;
-            }
-            return nBytesRead;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
-    synchronized public void close() {
-        try {
-            if (stream != null)
-                stream.close();
-        } catch (IOException e) {
-        }
-        opened = false;
-        closed = true;
-    }
-
-    public boolean isClosed() {
-        return closed;
-    }
+	public boolean isClosed() {
+		return closed;
+	}
 }

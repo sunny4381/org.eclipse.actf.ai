@@ -16,16 +16,15 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-
 /**
  * The main plugin class to be used in the desktop.
  */
 public class VoicePlugin extends AbstractPreferenceUIPlugin {
 
-	//The shared instance.
+	// The shared instance.
 	private static VoicePlugin plugin;
 	private static Voice voice;
-	
+
 	/**
 	 * The constructor.
 	 */
@@ -34,12 +33,12 @@ public class VoicePlugin extends AbstractPreferenceUIPlugin {
 	}
 
 	public static IVoice getVoice() {
-		if( null == voice ) {
+		if (null == voice) {
 			voice = new Voice();
 		}
 		return voice;
 	}
-	
+
 	/**
 	 * This method is called upon plug-in activation
 	 */
@@ -52,10 +51,10 @@ public class VoicePlugin extends AbstractPreferenceUIPlugin {
 	 */
 	public void stop(BundleContext context) throws Exception {
 		super.stop(context);
-		if( null != voice ) {
+		if (null != voice) {
 			voice.dispose();
 		}
-        plugin = null;
+		plugin = null;
 	}
 
 	/**
@@ -66,19 +65,21 @@ public class VoicePlugin extends AbstractPreferenceUIPlugin {
 	}
 
 	/**
-	 * Returns an image descriptor for the image file at the given
-	 * plug-in relative path.
-	 *
-	 * @param path the path
+	 * Returns an image descriptor for the image file at the given plug-in
+	 * relative path.
+	 * 
+	 * @param path
+	 *            the path
 	 * @return the image descriptor
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
-		return AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.actf.ai.voice", path); //$NON-NLS-1$
+		return AbstractUIPlugin.imageDescriptorFromPlugin(
+				"org.eclipse.actf.ai.voice", path); //$NON-NLS-1$
 	}
-	
-	
+
 	/**
-	 * @return The default speed of the TTS engine which is saved in the preference. 
+	 * @return The default speed of the TTS engine which is saved in the
+	 *         preference.
 	 */
 	public int getDefaultSpeed() {
 		return getPreferenceStore().getInt(IVoice.PREF_SPEED);

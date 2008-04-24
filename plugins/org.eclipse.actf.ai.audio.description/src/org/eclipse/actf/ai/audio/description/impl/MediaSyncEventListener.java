@@ -14,29 +14,26 @@ package org.eclipse.actf.ai.audio.description.impl;
 import org.eclipse.actf.ai.fennec.treemanager.IMediaSyncEventListener;
 import org.eclipse.actf.ai.navigator.IMediaControl.IHandle;
 
-
-
-
 public class MediaSyncEventListener implements IMediaSyncEventListener {
 
-    private static final double EVENT_INTERVAL = 0.1; // 100ms
-    
-    private IHandle handle;
-    private MetadataManager manager;
-    
-    public MediaSyncEventListener(IHandle handle, MetadataManager manager) {
-        this.handle = handle;
-        this.manager = manager;
-    }
+	private static final double EVENT_INTERVAL = 0.1; // 100ms
 
-    public void run(){
-        if(handle.getVideoControl() != null){
-            double time = handle.getVideoControl().getCurrentPosition();
-            manager.process(time);
-        }
-    }
-    
-    public double getInterval() {
-        return EVENT_INTERVAL;
-    }
+	private IHandle handle;
+	private MetadataManager manager;
+
+	public MediaSyncEventListener(IHandle handle, MetadataManager manager) {
+		this.handle = handle;
+		this.manager = manager;
+	}
+
+	public void run() {
+		if (handle.getVideoControl() != null) {
+			double time = handle.getVideoControl().getCurrentPosition();
+			manager.process(time);
+		}
+	}
+
+	public double getInterval() {
+		return EVENT_INTERVAL;
+	}
 }

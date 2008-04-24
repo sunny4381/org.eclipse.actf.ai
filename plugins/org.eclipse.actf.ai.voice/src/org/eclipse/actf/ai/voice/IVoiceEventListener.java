@@ -18,13 +18,15 @@ import java.util.EventListener;
 public interface IVoiceEventListener extends EventListener {
 
 	/**
-     * Invoked when TTS engine begins speaking text or complete speaking text.
-     * This event only occurs if index parameter is specified on IVoice#speak() request.  
+	 * Invoked when TTS engine begins speaking text or complete speaking text.
+	 * This event only occurs if index parameter is specified on IVoice#speak()
+	 * request.
+	 * 
 	 * @param index
-     *          Positive integer when TTS engine begins speaking text
-     *          -1 when TTS engine completed speaking text
-     * @see IVoice#speak(String, boolean, int)          
+	 *            positive integer when TTS engine begins speaking text -1 when
+	 *            TTS engine completed speaking text
+	 * @see IVoice#speak(String, boolean, int)
 	 */
 	public abstract void indexReceived(int index);
-	
+
 }

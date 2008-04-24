@@ -11,13 +11,25 @@
 
 package org.eclipse.actf.ai.xmlstore;
 
+/**
+ * XMLStoreException is thrown when a XML parsing is failed.
+ */
 public class XMLStoreException extends Exception {
     private static final long serialVersionUID = -4630681290620194750L;
     
-    public XMLStoreException(String message, Throwable t) {
-        super(message, t);
+    /**
+     * @param message
+     * @param cause
+     * @see Exception#Exception(String, Throwable)
+     */
+    public XMLStoreException(String message, Throwable cause) {
+        super(message, cause);
     }
 
+    /**
+     * @param message
+     * @see Exception#Exception(String)
+     */
     public XMLStoreException(String message) {
         super(message);
     }

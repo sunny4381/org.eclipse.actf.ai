@@ -12,6 +12,14 @@
 package org.eclipse.actf.ai.navigator;
 
 
+/**
+ * IMetadataCacheCleaner interface defines a method to clear the memory cache of the metadata.
+ * The instances are managed by extension manager. 
+ */
 public interface IMetadataCacheCleaner {
+    /**
+     * Clear the memory cache of the metadata.
+     * The application will read metadata again from the disk.
+     */
     void clearCache();
 }

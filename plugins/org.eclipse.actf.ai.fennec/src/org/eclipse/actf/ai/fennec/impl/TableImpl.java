@@ -18,9 +18,9 @@ import org.eclipse.actf.ai.fennec.treemanager.ITableRow;
 
 
 public class TableImpl implements ITable {
-    private NVM3TableMetadata tableMetadata;
+    private FennecTableMetadata tableMetadata;
 
-    public ITableRow[] getRow(int row) {
+    public ITableRow getRow(int row) {
         // TODO Auto-generated method stub
         return null;
     }

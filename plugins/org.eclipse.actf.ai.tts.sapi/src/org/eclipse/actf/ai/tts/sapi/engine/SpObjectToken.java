@@ -14,23 +14,23 @@ import org.eclipse.swt.ole.win32.OLE;
 import org.eclipse.swt.ole.win32.OleAutomation;
 import org.eclipse.swt.ole.win32.Variant;
 
-
 /*
  * COM Wrapper of SpObjectToken interface
+ * 
  * @see "Microsoft Speech API SpObjectToken"
  */
 public class SpObjectToken {
 
 	private OleAutomation automation;
 	private int idGetDescription;
-	
+
 	public SpObjectToken(Variant varToken) {
 		automation = varToken.getAutomation();
 		idGetDescription = getIDsOfNames("GetDescription"); //$NON-NLS-1$
 	}
-	
+
 	public static SpObjectToken getToken(Variant varToken) {
-		if( null == varToken && OLE.VT_DISPATCH!=varToken.getType() ) {
+		if (null == varToken && OLE.VT_DISPATCH != varToken.getType()) {
 			return null;
 		}
 		return new SpObjectToken(varToken);
@@ -38,16 +38,16 @@ public class SpObjectToken {
 
 	public String getDescription(int locale) {
 		try {
-			return automation.invoke(idGetDescription,new Variant[]{new Variant(locale)}).getString().trim();
-		}
-		catch( Exception e) {
+			return automation.invoke(idGetDescription,
+					new Variant[] { new Variant(locale) }).getString().trim();
+		} catch (Exception e) {
 		}
 		return null;
 	}
-	
+
 	private int getIDsOfNames(String name) {
-		int dispid[] = automation.getIDsOfNames(new String[]{name});
-		if( null != dispid ) {
+		int dispid[] = automation.getIDsOfNames(new String[] { name });
+		if (null != dispid) {
 			return dispid[0];
 		}
 		return 0;

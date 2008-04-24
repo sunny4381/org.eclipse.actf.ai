@@ -18,8 +18,8 @@ import org.eclipse.actf.ai.audio.io.AudioFactory;
 import org.eclipse.actf.ai.audio.io.IAudioPipe;
 import org.eclipse.actf.ai.audio.io.IAudioReader;
 import org.eclipse.actf.ai.audio.io.IAudioWriter;
-import org.eclipse.actf.ai.fennec.INVM3Entry;
-import org.eclipse.actf.ai.fennec.INVM3Mediator;
+import org.eclipse.actf.ai.fennec.IFennecEntry;
+import org.eclipse.actf.ai.fennec.IFennecMediator;
 import org.eclipse.actf.ai.fennec.treemanager.IAccessKeyList;
 import org.eclipse.actf.ai.fennec.treemanager.ILocation;
 import org.eclipse.actf.ai.fennec.treemanager.IMediaSyncEventListener;
@@ -72,7 +72,7 @@ public abstract class NavigatorImpl implements INavigatorUI, IVoiceEventListener
 
     private IWebBrowserACTF webBrowser;
 
-    private INVM3Mediator nvm3Mediator;
+    private IFennecMediator fennecMediator;
 
     private ITreeManager treeManager;
 
@@ -372,13 +372,13 @@ public abstract class NavigatorImpl implements INavigatorUI, IVoiceEventListener
         }
     }
 
-    private void sayNVM3Name(String nvm3Name, boolean flag) {
+    private void sayFennecName(String fennecName, boolean flag) {
         String text = getMessageFormatter().mes("Navigator.FENNEC_NAME",
-                                           new Object[] { nvm3Name });
+                                           new Object[] { fennecName });
         speak(text, flag, true);
     }
 
-    private void sayNoNVM3(boolean flag) {
+    private void sayNoFennec(boolean flag) {
         speakWithFormat("Navigator.NO_FENNEC", flag);
     }
 
@@ -728,21 +728,21 @@ public abstract class NavigatorImpl implements INavigatorUI, IVoiceEventListener
     }
 
     // --------------------------------------------------------------------------------
-    // NVM3 Control
+    // Fennec Control
     // --------------------------------------------------------------------------------
 
-    private int currentNVM3Idx = 1;
+    private int currentFennecIdx = 1;
     
-    private INVM3Entry currentEntry = null;
+    private IFennecEntry currentEntry = null;
     
-    protected INVM3Entry getCurrentEntry() {
+    protected IFennecEntry getCurrentEntry() {
         return currentEntry;
     }
 
-    private void selectNVM3(boolean next, boolean flush) {
-        selectNVM3(next, flush, true);
+    private void selectFennec(boolean next, boolean flush) {
+        selectFennec(next, flush, true);
     }
-    private void selectNVM3(boolean next, boolean flush, boolean sayFlag) {
+    private void selectFennec(boolean next, boolean flush, boolean sayFlag) {
         if (lastHighlighted != null) {
             try {
                 lastHighlighted.unhighlight();
@@ -750,29 +750,29 @@ public abstract class NavigatorImpl implements INavigatorUI, IVoiceEventListener
             }
         }
 
-        INVM3Entry[] entries = nvm3Mediator.getNVM3Entries();
+        IFennecEntry[] entries = fennecMediator.getFennecEntries();
         if (next) {
             if (entries.length == 0) {
                 speakWithFormat("Navigator.NO_OTHER_FENNEC", true);
                 return;
             }
-            currentNVM3Idx++;
+            currentFennecIdx++;
         }
-        if (currentNVM3Idx > entries.length)
-            currentNVM3Idx = 0;
+        if (currentFennecIdx > entries.length)
+            currentFennecIdx = 0;
         try {
             restoreLocation(getLocation());
-            if (currentNVM3Idx == 0) {
-                initNVM3(null, flush, sayFlag);
+            if (currentFennecIdx == 0) {
+                initFennec(null, flush, sayFlag);
             } else {
-                initNVM3(entries[currentNVM3Idx - 1], flush, sayFlag);
+                initFennec(entries[currentFennecIdx - 1], flush, sayFlag);
             }
             speakActiveItem(false, false, JumpMode.NONE);
         } catch (TreeManagerException e) {
         }
     }
 
-    protected void selectUserNVM3() {
+    protected void selectUserFennec() {
         if (lastHighlighted != null) {
             try {
                 lastHighlighted.unhighlight();
@@ -780,12 +780,12 @@ public abstract class NavigatorImpl implements INavigatorUI, IVoiceEventListener
             }
         }
 
-        INVM3Entry[] entries = nvm3Mediator.getNVM3Entries();
+        IFennecEntry[] entries = fennecMediator.getFennecEntries();
         for (int i = 0; i < entries.length; i++) {
             if (entries[i].isUserEntry()) {
                 try {
                     restoreLocation(getLocation());
-                    initNVM3(entries[i], true, true);
+                    initFennec(entries[i], true, true);
                     speakActiveItem(false, false, JumpMode.NONE);
                 } catch (TreeManagerException e) {
                 }
@@ -796,15 +796,15 @@ public abstract class NavigatorImpl implements INavigatorUI, IVoiceEventListener
         return;
     }
 
-    public void selectNextNVM3() {
-        selectNVM3(true, true);
+    public void selectNextFennec() {
+        selectFennec(true, true);
     }
     
-    void setNVM3Mediator(INVM3Mediator nvm3Mediator) {
-        if (this.nvm3Mediator != null) {
-            this.nvm3Mediator.release();
+    void setFennecMediator(IFennecMediator fennecMediator) {
+        if (this.fennecMediator != null) {
+            this.fennecMediator.release();
         }
-        this.nvm3Mediator = nvm3Mediator;
+        this.fennecMediator = fennecMediator;
         // TODO
         this.treeManager = null;
         this.lastHighlighted = null;
@@ -812,7 +812,7 @@ public abstract class NavigatorImpl implements INavigatorUI, IVoiceEventListener
     }
 
 
-    private String getNVM3Name(INVM3Entry entry) {
+    private String getFennecName(IFennecEntry entry) {
         if (entry == null)
             return getMessageFormatter().mes("Navigator.NO_FENNEC_MESSAGE");
         String text = entry.getDocumentation();
@@ -821,18 +821,18 @@ public abstract class NavigatorImpl implements INavigatorUI, IVoiceEventListener
         return getMessageFormatter().mes("Navigator.NO_FENNEC_NAME");
     }
 
-    private void initNVM3(INVM3Entry entry, boolean flag, boolean sayFlag) throws TreeManagerException {
+    private void initFennec(IFennecEntry entry, boolean flag, boolean sayFlag) throws TreeManagerException {
         currentEntry = entry;
-        treeManager = nvm3Mediator.newTreeManager(entry);
-        String nvm3Name = getNVM3Name(entry);
+        treeManager = fennecMediator.newTreeManager(entry);
+        String fennecName = getFennecName(entry);
         if (sayFlag) {
             if (entry == null) {
-                sayNoNVM3(flag);
+                sayNoFennec(flag);
             } else {
-                sayNVM3Name(nvm3Name, flag);
+                sayFennecName(fennecName, flag);
             }
         }
-        getNavigatorTreeView().showNVM3Name(nvm3Name);
+        getNavigatorTreeView().showFennecName(fennecName);
         setMode(IManipulator.TREE_NAVIGATION_MODE);
         try {
             treeManager.initialize();
@@ -868,8 +868,8 @@ public abstract class NavigatorImpl implements INavigatorUI, IVoiceEventListener
             speakWithFormat("Navigator.STARTNAVIGATION");
 
         try {
-            initNVM3(nvm3Mediator.getDefaultNVM3Entry(), false, sayFlag);
-            currentNVM3Idx = 1;
+            initFennec(fennecMediator.getDefaultFennecEntry(), false, sayFlag);
+            currentFennecIdx = 1;
             if (sayFlag) {
                 speakActiveItem(false, false, JumpMode.NONE);
             }
@@ -1993,7 +1993,7 @@ public abstract class NavigatorImpl implements INavigatorUI, IVoiceEventListener
     }
     
     public void forceRestart(boolean flush) {
-        selectNVM3(false, flush);
+        selectFennec(false, flush);
         
         // TODO
         MediaControlExtension.doDispose(getMediaControlHandle());
@@ -2135,7 +2135,7 @@ public abstract class NavigatorImpl implements INavigatorUI, IVoiceEventListener
             treeManager.repairFlash();
             speakWithFormat("Navigator.REPAIR_FINISHED");
             restoreLocation(getLocation());
-            selectNVM3(false, false, false);
+            selectFennec(false, false, false);
         } catch (TreeManagerException e) {
             e.printStackTrace();
         }

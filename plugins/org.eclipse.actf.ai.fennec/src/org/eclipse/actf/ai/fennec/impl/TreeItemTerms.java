@@ -139,20 +139,20 @@ public class TreeItemTerms extends DelegationTerms {
     }
 
     public boolean isBlockJumpPoint(boolean back, IEvalTarget node) {
-        if (!(node instanceof TreeItemNVM3))
+        if (!(node instanceof TreeItemFennec))
             return false;
-        TreeItemNVM3 item = (TreeItemNVM3) node;
+        TreeItemFennec item = (TreeItemFennec) node;
 
-        TreeItemNVM3 prev;
+        TreeItemFennec prev;
         if (!back) {
             if (item.getNth() > 0) {
-                prev = (TreeItemNVM3) item.getParent().getChildItems()[item.getNth() - 1];
+                prev = (TreeItemFennec) item.getParent().getChildItems()[item.getNth() - 1];
                 while (prev.hasChild()) {
                     ITreeItem[] items = prev.getChildItems();
-                    prev = (TreeItemNVM3) items[items.length - 1];
+                    prev = (TreeItemFennec) items[items.length - 1];
                 }
             } else {
-                prev = (TreeItemNVM3) item.getParent();
+                prev = (TreeItemFennec) item.getParent();
             }
         } else {
             if (item.getNth() == item.getParent().getChildItems().length - 1) {
@@ -164,12 +164,12 @@ public class TreeItemTerms extends DelegationTerms {
                     if (parent == null)
                         return false;
                 }
-                prev = (TreeItemNVM3) parent.getParent().getChildItems()[parent.getNth() + 1];
+                prev = (TreeItemFennec) parent.getParent().getChildItems()[parent.getNth() + 1];
             } else {
                 if (item.hasChild()) {
-                    prev = (TreeItemNVM3) item.getChildItems()[0];
+                    prev = (TreeItemFennec) item.getChildItems()[0];
                 } else {
-                    prev = (TreeItemNVM3) item.getParent().getChildItems()[item.getNth() + 1];
+                    prev = (TreeItemFennec) item.getParent().getChildItems()[item.getNth() + 1];
                 }
             }
         }
@@ -252,9 +252,9 @@ public class TreeItemTerms extends DelegationTerms {
         do {
             if (current == null)
                 return super.isHeadingJumpPoint(node);
-            NVM3Metadata meta = ((TreeItemNVM3) current).getMetadata();
-            if (meta instanceof NVM3GeneratedMetadata) {
-                r = ((NVM3GeneratedMetadata) meta).getHeadingLevelByMetadata(item);
+            FennecMetadata meta = ((TreeItemFennec) current).getMetadata();
+            if (meta instanceof FennecGeneratedMetadata) {
+                r = ((FennecGeneratedMetadata) meta).getHeadingLevelByMetadata(item);
                 if (r > 0)
                     return true;
                 else if (r == -1)
@@ -264,16 +264,16 @@ public class TreeItemTerms extends DelegationTerms {
                 break;
         } while (r == 0);
 
-        if (((TreeItemNVM3) item).getMetadata() == null)
+        if (((TreeItemFennec) item).getMetadata() == null)
             return false;
-        return ((TreeItemNVM3) item).getMetadata().getHeadingLevel(item) > 0;
+        return ((TreeItemFennec) item).getMetadata().getHeadingLevel(item) > 0;
     }
 
     @Override
     public boolean isConnectable(IEvalTarget node) {
-        if (!(node instanceof TreeItemNVM3))
+        if (!(node instanceof TreeItemFennec))
             return false;
-        TreeItemNVM3 item = (TreeItemNVM3) node;
+        TreeItemFennec item = (TreeItemFennec) node;
 
         if (item.hasChild())
             return false;
@@ -281,7 +281,7 @@ public class TreeItemTerms extends DelegationTerms {
         int nth = item.getNth();
         int nextNth = nth + 1;
 
-        ITreeItem parent = ((TreeItemNVM3) node).getParent();
+        ITreeItem parent = ((TreeItemFennec) node).getParent();
         if (parent == null)
             return false;
 
@@ -343,9 +343,9 @@ public class TreeItemTerms extends DelegationTerms {
 
     @Override
     public boolean startsWith(String str, boolean exact, IEvalTarget node) {
-        if (!(node instanceof TreeItemNVM3))
+        if (!(node instanceof TreeItemFennec))
             return false;
-        TreeItemNVM3 item = (TreeItemNVM3) node;
+        TreeItemFennec item = (TreeItemFennec) node;
         String uiString = item.getUIString();
 
         if (!exact) {
@@ -380,9 +380,9 @@ public class TreeItemTerms extends DelegationTerms {
     public boolean nodeLocation(Node refNode, boolean backward, IEvalTarget node) {
         if (!Vocabulary.hasContent().eval(node))
             return false;
-        if (!(node instanceof TreeItemNVM3))
+        if (!(node instanceof TreeItemFennec))
             return false;
-        TreeItemNVM3 item = (TreeItemNVM3) node;
+        TreeItemFennec item = (TreeItemFennec) node;
 
         Node targetNode = item.getNearestNode();
         if (targetNode == null) return false;

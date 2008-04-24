@@ -117,7 +117,7 @@ public class MediaControlExtension {
         if (exs == null)
             return IMediaControl.TOGGLE_FAIL;
         for (int i = 0; i < exs.length; i++) {
-            result |= exs[i].getMediaControl().toggleEnable();
+            result |= exs[i].getMediaControl().toggleEnabled();
         }
         return result;
     }

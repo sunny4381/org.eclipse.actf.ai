@@ -11,11 +11,30 @@
 
 package org.eclipse.actf.ai.fennec.treemanager;
 
-
-
+/**
+ * ITable interface defines the methods to be implemented by the table
+ * representation on the Fennec tree.
+ */
 public interface ITable {
-    ITableRow[] getRow(int idx);
-    int getColumnSize();
-    int getRowSize();
-    String getTableString();
+	/**
+	 * @param idx
+	 *            the index of the row.
+	 * @return the row of the table specified the index.
+	 */
+	ITableRow getRow(int idx);
+
+	/**
+	 * @return the number of the columns of the table.
+	 */
+	int getColumnSize();
+
+	/**
+	 * @return the number of the rows of the table.
+	 */
+	int getRowSize();
+
+	/**
+	 * @return the text information of the table.
+	 */
+	String getTableString();
 }

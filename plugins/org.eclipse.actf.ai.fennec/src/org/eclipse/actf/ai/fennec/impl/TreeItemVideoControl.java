@@ -13,7 +13,7 @@ package org.eclipse.actf.ai.fennec.impl;
 
 import java.util.ArrayList;
 
-import org.eclipse.actf.ai.fennec.INVM3Service;
+import org.eclipse.actf.ai.fennec.IFennecService;
 import org.eclipse.actf.ai.fennec.treemanager.IMediaSyncEventListener;
 import org.eclipse.actf.ai.fennec.treemanager.ITreeItem;
 import org.eclipse.actf.ai.fennec.treemanager.IVideoControl;
@@ -27,7 +27,7 @@ import org.eclipse.actf.util.vocab.Vocabulary;
 
 
 public class TreeItemVideoControl implements IVideoControl {
-    private final INVM3Service nvm3Service;
+    private final IFennecService fennecService;
     private AnalyzedResult analyzedResult;
 
     private INodeExVideo getCurrentNodeExVideo() {
@@ -35,7 +35,7 @@ public class TreeItemVideoControl implements IVideoControl {
         if (videos.length == 0) return null;
         if (videos.length == 1) return videos[0];
 
-        ITreeItem item = nvm3Service.getLastTreeItem();
+        ITreeItem item = fennecService.getLastTreeItem();
         for (int i = 0; i < videos.length; i++) {
             INodeEx node = videos[i].getReferenceNode();
             IProposition prop = Vocabulary.nodeLocation(node, true);
@@ -202,7 +202,7 @@ public class TreeItemVideoControl implements IVideoControl {
         if (videos.length == 0) return -1;
         if (videos.length == 1) return 0;
 
-        ITreeItem item = nvm3Service.getLastTreeItem();
+        ITreeItem item = fennecService.getLastTreeItem();
         for (int i = 0; i < videos.length; i++) {
             INodeEx node = videos[i].getReferenceNode();
             IProposition prop = Vocabulary.nodeLocation(node, true);
@@ -213,14 +213,14 @@ public class TreeItemVideoControl implements IVideoControl {
 
 
     public static IVideoControl newTreeItemVideoControl(AnalyzedResult ar,
-                                                        INVM3Service nvm3Service) {
-        return new TreeItemVideoControl(ar, nvm3Service);
+                                                        IFennecService fennecService) {
+        return new TreeItemVideoControl(ar, fennecService);
     }
 
     private TreeItemVideoControl(AnalyzedResult ar,
-                                 INVM3Service nvm3Service) {
+                                 IFennecService fennecService) {
         this.analyzedResult = ar;
-        this.nvm3Service = nvm3Service;
+        this.fennecService = fennecService;
     }
 
     // This ArrayList ensures strong references of currently valid listeners.

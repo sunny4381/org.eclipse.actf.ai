@@ -13,9 +13,26 @@ package org.eclipse.actf.ai.xmlstore;
 
 import java.util.Iterator;
 
+/**
+ * IXMLStore interface defines the methods to be implemented by the
+ * implementation of the storage of the XML.
+ */
 public interface IXMLStore {
-    IXMLStore specify(IXMLSelector selector);
-    void refleshAll();
+	/**
+	 * @param selector
+	 *            the selector to be used for selecting XML files from the
+	 *            storage.
+	 * @return new IXMLStore contains specified files.
+	 */
+	IXMLStore specify(IXMLSelector selector);
 
-    Iterator<IXMLInfo> getInfoIterator();
+	/**
+	 * Reload all files which is contained in the storage.
+	 */
+	void refleshAll();
+
+	/**
+	 * @return the Iterator of the XML files.
+	 */
+	Iterator<IXMLInfo> getInfoIterator();
 }

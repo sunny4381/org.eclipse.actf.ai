@@ -159,7 +159,8 @@ public class Mirror {
         return false;
     }
 
-    public Constructor findConstructor(Object[] params) {
+    @SuppressWarnings("unchecked")
+	public Constructor findConstructor(Object[] params) {
         Constructor[] cs = class1.getDeclaredConstructors();
 
         nextConstructor:

@@ -20,33 +20,32 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
+public class ADPreferencePage extends FieldEditorPreferencePage implements
+		IWorkbenchPreferencePage {
 
+	public ADPreferencePage() {
+		super(GRID);
+		setPreferenceStore(DescriptionPlugin.getDefault().getPreferenceStore());
+		setDescription(Messages.getString("AudioDescription.preference.title")); //$NON-NLS-1$
+	}
 
+	@Override
+	public void createFieldEditors() {
+		RadioGroupFieldEditor rgfe;
+		String[][] labelAndIds = TTSRegistry.getLabelAndIds();
+		addField(rgfe = new RadioGroupFieldEditor(
+				DescriptionPlugin.PREF_ENGINE,
+				Messages.getString("AudioDescription.voice.engine"), 1, labelAndIds, //$NON-NLS-1$
+				getFieldEditorParent()));
+		Composite c = rgfe.getRadioBoxControl(getFieldEditorParent());
+		for (int i = 0; i < labelAndIds.length; i++) {
+			if (labelAndIds[i][1].length() == 0) {
+				c.getChildren()[i].setEnabled(false);
+			}
+		}
+	}
 
-public class ADPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage{
+	public void init(IWorkbench workbench) {
 
-    public ADPreferencePage() {
-        super(GRID);
-        setPreferenceStore(DescriptionPlugin.getDefault().getPreferenceStore());
-        setDescription(Messages.getString("AudioDescription.preference.title")); //$NON-NLS-1$
-    }
-
-    @Override
-    public void createFieldEditors() {
-        RadioGroupFieldEditor rgfe;
-        String[][] labelAndIds = TTSRegistry.getLabelAndIds();
-        addField(rgfe = new RadioGroupFieldEditor(DescriptionPlugin.PREF_ENGINE,
-                Messages.getString("AudioDescription.voice.engine"), 1, labelAndIds, //$NON-NLS-1$
-                getFieldEditorParent()));   
-        Composite c = rgfe.getRadioBoxControl(getFieldEditorParent());
-        for(int i=0; i<labelAndIds.length; i++){
-            if(labelAndIds[i][1].length() == 0){
-                c.getChildren()[i].setEnabled(false);
-            }
-        }
-    }
-
-    public void init(IWorkbench workbench) {
-
-    }
+	}
 }

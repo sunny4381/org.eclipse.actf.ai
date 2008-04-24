@@ -13,14 +13,14 @@ package org.eclipse.actf.ai.fennec.impl;
 
 import java.io.File;
 
-import org.eclipse.actf.ai.fennec.INVM3Entry;
+import org.eclipse.actf.ai.fennec.IFennecEntry;
 import org.eclipse.actf.ai.xmlstore.IXMLInfo;
 import org.eclipse.actf.ai.xmlstore.XMLStorePlugin;
 
 
 
 
-public class NVM3EntryImpl implements INVM3Entry {
+public class FennecEntryImpl implements IFennecEntry {
     private IXMLInfo info;
 
     public String getDocumentation() {
@@ -35,7 +35,7 @@ public class NVM3EntryImpl implements INVM3Entry {
         return info;
     }
 
-    public NVM3EntryImpl(IXMLInfo info) {
+    public FennecEntryImpl(IXMLInfo info) {
         this.info = info;
     }
 

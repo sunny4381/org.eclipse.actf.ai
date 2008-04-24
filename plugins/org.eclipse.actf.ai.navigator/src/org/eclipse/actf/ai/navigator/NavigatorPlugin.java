@@ -58,27 +58,31 @@ public class NavigatorPlugin extends AbstractPreferenceUIPlugin {
         return plugin;
     }
 
-    private INavigatorUI navigatorUI;
-
-    public void setNavigatorUI(INavigatorUI navigatorUI) {
-        this.navigatorUI = navigatorUI;
-    }
-    
-
-    public INavigatorUI getNavigatorUI() {
-        return navigatorUI;
-    }
-
     private NavigatorTreeView navigatorTreeView;
+    
+	/**
+	 * The view ID of the Navigator Tree View.
+	 */
+	public static final String NAVIGATOR_TREE_VIEW_ID = "org.eclipse.actf.ai.navigator.views.NavigatorTreeView"; //$NON-NLS-1$
 
+    /**
+     * To share the instance of the Navigator Tree View in this plug-in.
+     * @param navigatorTreeView An instance of the Navigator Tree View.
+     */
     public void setNavigatorTreeView(NavigatorTreeView navigatorTreeView) {
         this.navigatorTreeView = navigatorTreeView;
     }
     
+    /**
+     * @return The shared instance of the Navigator Tree View.
+     */
     public NavigatorTreeView getNavigatorTreeView() {
         return navigatorTreeView;
     }
     
+    /**
+     * Clear the memory cache of the metadata.
+     */
     public void clearMetadataCache(){
         MetadataCacheCleanerExtension.clearCache();
     }

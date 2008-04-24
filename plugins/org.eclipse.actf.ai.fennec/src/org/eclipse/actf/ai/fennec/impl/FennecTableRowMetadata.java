@@ -8,12 +8,17 @@
  * Contributors:
  *    Hisashi MIYASHITA - initial API and implementation
  *******************************************************************************/
-package org.eclipse.actf.ai.fennec;
+package org.eclipse.actf.ai.fennec.impl;
 
-public class NVM3Exception extends Exception {
-    private static final long serialVersionUID = -4473389024467270039L;
+import org.w3c.dom.Node;
 
-    public NVM3Exception(String message, Throwable cause) {
-        super(message, cause);
-    }
+class FennecTableRowMetadata extends FennecBundleMetadata {
+
+	protected FennecTableRowMetadata(FennecServiceImpl fennecService,
+                                       FennecMode mode,
+                                       Node node,
+                                       FennecMetadata[] mds) {
+		super(fennecService, mode, node, mds);
+	}
 }
+

@@ -152,8 +152,8 @@ public class QueryImpl implements IQuery {
     //  Query Serialization.
     // --------------------------------------------------------------------------------
     
-    public static final String NVM3_NAMESPACE_URI = "http://www.ibm.com/xmlns/prod/aiBrowser/fennec";
-    public static final String NVM3_NODE_ELEMENT_NAME = "node";
+    public static final String Fennec_NAMESPACE_URI = "http://www.ibm.com/xmlns/prod/aiBrowser/fennec";
+    public static final String Fennec_NODE_ELEMENT_NAME = "node";
     
     public static Node serializeQuery(Node domTarget, Node usrParent) {
         List<Attr> attrs = calcAttrs(domTarget, usrParent);
@@ -213,7 +213,7 @@ public class QueryImpl implements IQuery {
     
     private static Node createNode(Node parent, List<Attr> attrs) {
         Document doc = parent.getOwnerDocument();
-        Node node = parent.insertBefore(doc.createElementNS(NVM3_NAMESPACE_URI, NVM3_NODE_ELEMENT_NAME), parent.getFirstChild());
+        Node node = parent.insertBefore(doc.createElementNS(Fennec_NAMESPACE_URI, Fennec_NODE_ELEMENT_NAME), parent.getFirstChild());
         NamedNodeMap map = node.getAttributes();
         for (Attr a : attrs) {
             map.setNamedItemNS(a);

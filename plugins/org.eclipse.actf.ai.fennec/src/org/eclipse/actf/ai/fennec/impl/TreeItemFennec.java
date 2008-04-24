@@ -12,7 +12,7 @@ package org.eclipse.actf.ai.fennec.impl;
 
 import java.util.List;
 
-import org.eclipse.actf.ai.fennec.NVM3Exception;
+import org.eclipse.actf.ai.fennec.FennecException;
 import org.eclipse.actf.ai.fennec.treemanager.ITreeItem;
 import org.eclipse.actf.ai.fennec.treemanager.ITreeManager;
 import org.eclipse.actf.ai.fennec.treemanager.TreeManagerException;
@@ -30,8 +30,8 @@ import org.w3c.dom.NodeList;
 
 
 // TODO I'd like to make it package-local.
-public class TreeItemNVM3 implements ITreeItem {
-    static private final TreeItemNVM3[] emptyChild = new TreeItemNVM3[0];
+public class TreeItemFennec implements ITreeItem {
+    static private final TreeItemFennec[] emptyChild = new TreeItemFennec[0];
 
     private Node baseNode;
 
@@ -39,7 +39,7 @@ public class TreeItemNVM3 implements ITreeItem {
 
     private ITreeItem[] childItems;
 
-    private NVM3Metadata metadata;
+    private FennecMetadata metadata;
 
     private boolean hasAlreadyChildRefreshed;
 
@@ -50,17 +50,17 @@ public class TreeItemNVM3 implements ITreeItem {
     // for terms
     int distance = 0;
     
-    public static TreeItemNVM3 newTreeItem(NVM3Metadata metadata, ITreeItem parent, Node baseNode) {
+    public static TreeItemFennec newTreeItem(FennecMetadata metadata, ITreeItem parent, Node baseNode) {
         if (baseNode == null) {
             // TODO
-            return new TreeItemNVM3(metadata, parent, null, new TreeItemTerms(null));
+            return new TreeItemFennec(metadata, parent, null, new TreeItemTerms(null));
         }
         if (!(baseNode instanceof IEvalTarget)) return null;
         IEvalTarget evalTarget = (IEvalTarget) baseNode;
-        return new TreeItemNVM3(metadata, parent, baseNode, new TreeItemTerms(evalTarget)); 
+        return new TreeItemFennec(metadata, parent, baseNode, new TreeItemTerms(evalTarget)); 
     }
 
-    protected TreeItemNVM3(NVM3Metadata metadata,
+    protected TreeItemFennec(FennecMetadata metadata,
                            ITreeItem parent, Node baseNode,
                            TreeItemTerms terms) {
         this.terms = terms;
@@ -90,7 +90,7 @@ public class TreeItemNVM3 implements ITreeItem {
 
     private void setParent() {
         for (int i = 0; i < childItems.length; i++) {
-            TreeItemNVM3 c = (TreeItemNVM3) childItems[i];
+            TreeItemFennec c = (TreeItemFennec) childItems[i];
             c.parent = this;
             c.nth = i;
         }
@@ -123,7 +123,7 @@ public class TreeItemNVM3 implements ITreeItem {
             newItems[i] = childItems[i];
         }
         for (j = 0; j < items.length; i++, j++) {
-            TreeItemNVM3 c = (TreeItemNVM3) items[j];
+            TreeItemFennec c = (TreeItemFennec) items[j];
             c.parent = this;
             newItems[i] = c;
         }
@@ -146,7 +146,7 @@ public class TreeItemNVM3 implements ITreeItem {
         return hasAlreadyChildRefreshed;
     }
 
-    TreeItemNVM3 expandChildItems(int trigger) throws NVM3Exception {
+    TreeItemFennec expandChildItems(int trigger) throws FennecException {
         List newChildItems = metadata.expand(this, trigger);
         setChildItems(newChildItems);
         return this;
@@ -155,34 +155,34 @@ public class TreeItemNVM3 implements ITreeItem {
     private Node getNearestNodeInternal(int idx) {
         if (baseNode != null) return baseNode;
         for (; idx < childItems.length; idx++) {
-            TreeItemNVM3 item = (TreeItemNVM3) childItems[idx];
+            TreeItemFennec item = (TreeItemFennec) childItems[idx];
             return item.getNearestNodeInternal(0);
         }
         if (parent == null) return null;
-        return ((TreeItemNVM3) parent).getNearestNodeInternal(getNth());
+        return ((TreeItemFennec) parent).getNearestNodeInternal(getNth());
     }
 
     Node getNearestNode() {
         return getNearestNodeInternal(0);
     }
 
-    private TreeItemNVM3 autoUnwrap(int trigger) throws NVM3Exception {
-        TreeItemNVM3 item = this;
+    private TreeItemFennec autoUnwrap(int trigger) throws FennecException {
+        TreeItemFennec item = this;
 
         for (;;) {
-            TreeItemNVM3 parent = (TreeItemNVM3) item.getParent();
+            TreeItemFennec parent = (TreeItemFennec) item.getParent();
             if (parent == null) {
                 item.setChildItems(emptyChild);
                 return item;
             }
             int idx = item.getNth();
-            List newSiblings = parent.metadata.expand(parent, (NVM3Mode.TRIGGER_KEEP
-                                                               | NVM3Mode.TRIGGER_UNWRAP));
+            List newSiblings = parent.metadata.expand(parent, (FennecMode.TRIGGER_KEEP
+                                                               | FennecMode.TRIGGER_UNWRAP));
             if (newSiblings != null) {
                 int newSize = newSiblings.size();
                 if (newSize > 0) {
                     if (idx >= newSize) idx = newSize - 1;
-                    item = (TreeItemNVM3) newSiblings.get(idx);
+                    item = (TreeItemFennec) newSiblings.get(idx);
 
                     item = item.expandChildItems(trigger);
                     // success. Set parent's childItems.
@@ -194,11 +194,11 @@ public class TreeItemNVM3 implements ITreeItem {
         }
     }
 
-    TreeItemNVM3 expand(int trigger) throws NVM3Exception {
-        TreeItemNVM3 parent = (TreeItemNVM3) getParent();
+    TreeItemFennec expand(int trigger) throws FennecException {
+        TreeItemFennec parent = (TreeItemFennec) getParent();
         if (parent != null) {
             int idx = getNth();
-            List newSiblings = parent.metadata.expand(parent, NVM3Mode.TRIGGER_KEEP);
+            List newSiblings = parent.metadata.expand(parent, FennecMode.TRIGGER_KEEP);
             if (newSiblings == null) {
                 return parent.autoUnwrap(trigger);
             }
@@ -209,7 +209,7 @@ public class TreeItemNVM3 implements ITreeItem {
             if (idx >= newSize) {
                 idx = newSize - 1;
             }
-            TreeItemNVM3 newTarget = (TreeItemNVM3) newSiblings.get(idx);
+            TreeItemFennec newTarget = (TreeItemFennec) newSiblings.get(idx);
             newTarget = newTarget.expandChildItems(trigger);
             // success. Set parent's childItems.
             parent.setChildItems(newSiblings);
@@ -278,7 +278,7 @@ public class TreeItemNVM3 implements ITreeItem {
         return baseNode;
     }
     
-    public NVM3Metadata getMetadata() {
+    public FennecMetadata getMetadata() {
         return metadata;
     }
 
@@ -362,16 +362,16 @@ public class TreeItemNVM3 implements ITreeItem {
         return "";
     }
 
-    public void addMetadata(TreeItemNVM3 item) {
-        if (!(this.metadata instanceof NVM3GeneratedMetadata))
+    public void addMetadata(TreeItemFennec item) {
+        if (!(this.metadata instanceof FennecGeneratedMetadata))
             return;
-        if (!(item.metadata instanceof NVM3GeneratedMetadata))
+        if (!(item.metadata instanceof FennecGeneratedMetadata))
             return;
 
-        NVM3GeneratedMetadata meta = (NVM3GeneratedMetadata) this.metadata;
-        NVM3GeneratedMetadata meta2 = (NVM3GeneratedMetadata) item.metadata;
+        FennecGeneratedMetadata meta = (FennecGeneratedMetadata) this.metadata;
+        FennecGeneratedMetadata meta2 = (FennecGeneratedMetadata) item.metadata;
 
-        this.metadata = NVM3GeneratedMetadata.generate(meta, meta2);
+        this.metadata = FennecGeneratedMetadata.generate(meta, meta2);
     }
 
     

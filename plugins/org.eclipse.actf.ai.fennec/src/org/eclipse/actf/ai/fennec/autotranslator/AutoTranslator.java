@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.actf.ai.fennec.impl.NVM3Mode;
+import org.eclipse.actf.ai.fennec.impl.FennecMode;
 import org.eclipse.actf.ai.fennec.impl.TreeItemMark;
-import org.eclipse.actf.ai.fennec.impl.TreeItemNVM3;
+import org.eclipse.actf.ai.fennec.impl.TreeItemFennec;
 import org.eclipse.actf.ai.fennec.treemanager.ITreeItem;
 import org.eclipse.actf.model.dom.dombycom.IFlashNode;
 import org.eclipse.actf.model.dom.dombycom.IImageElement;
@@ -32,7 +32,7 @@ public class AutoTranslator {
 
     private static final boolean AUTO_INDENT = true;
 
-    private static boolean canCollapse(TreeItemNVM3 item) {
+    private static boolean canCollapse(TreeItemFennec item) {
         if (true) {
             return Vocabulary.isReducible().eval(item);
         } else {
@@ -40,7 +40,7 @@ public class AutoTranslator {
                 return false;
             ITreeItem[] cc = item.getChildItems();
             for (int i = 0; i < cc.length; i++) {
-                TreeItemNVM3 item2 = (TreeItemNVM3) cc[i];
+                TreeItemFennec item2 = (TreeItemFennec) cc[i];
                 if (Vocabulary.hasContent().eval(item2))
                     return false;
             }
@@ -48,7 +48,7 @@ public class AutoTranslator {
         }
     }
 
-    private static TreeItemNVM3 simplify(TreeItemNVM3 item, TreeItemNVM3 pItem) {
+    private static TreeItemFennec simplify(TreeItemFennec item, TreeItemFennec pItem) {
         if (AUTO_COLLAPSE) {
             // pattern pItem - item(X) - child => pItem - child
             if (!Vocabulary.hasContent().eval(item)) {
@@ -57,7 +57,7 @@ public class AutoTranslator {
                     return null;
                 }
                 if (cc.length == 1) {
-                    TreeItemNVM3 item2 = (TreeItemNVM3) cc[0];
+                    TreeItemFennec item2 = (TreeItemFennec) cc[0];
                     item2.forceParent(pItem);
                     item2.addMetadata(item);
                     return item2;
@@ -67,7 +67,7 @@ public class AutoTranslator {
             // pattern item - child(X) - grandChild => item - grandChild
             ITreeItem[] childItems = item.getChildItems();
             if (childItems.length == 1) {
-                TreeItemNVM3 item2 = (TreeItemNVM3) childItems[0];
+                TreeItemFennec item2 = (TreeItemFennec) childItems[0];
                 if (!Vocabulary.hasContent().eval(item2)){
                     ITreeItem[] childItems2 = item2.getChildItems();
                     item.setChildItems(childItems2);
@@ -79,7 +79,7 @@ public class AutoTranslator {
         return item;
     }
 
-    private static void adjustLabelIndent(TreeItemNVM3 item) {
+    private static void adjustLabelIndent(TreeItemFennec item) {
         // TODO
         //        var itemCount = item._childItems.length;
         //        if( itemCount>1 ) {
@@ -119,7 +119,7 @@ public class AutoTranslator {
 
     }
 
-    private static List<ITreeItem> buildTreeItemContinued(NVM3Mode mode, TreeItemNVM3 item, INodeEx nex, int depth) {
+    private static List<ITreeItem> buildTreeItemContinued(FennecMode mode, TreeItemFennec item, INodeEx nex, int depth) {
         List<ITreeItem> childItemList = new ArrayList<ITreeItem>();
         ITreeItem lastItem = null;
         
@@ -137,7 +137,7 @@ public class AutoTranslator {
                     || (nex == null && Vocabulary.getWindowlessFlashMode() == Vocabulary.FlashMode.FLASH_DOM)) {
                 IFlashNode[] translated = fn.translate();
                 for (int i = 0; i < translated.length; i++) {
-                    TreeItemNVM3 newItem = mode.generateItem(item, translated[i]);
+                    TreeItemFennec newItem = mode.generateItem(item, translated[i]);
                     if (newItem == null) continue;
                     childItemList.add(newItem);
                 }
@@ -159,7 +159,7 @@ public class AutoTranslator {
                 for (int i = 0; i < nl.getLength(); i++) {
                     Node n = nl.item(i);
                     if (n instanceof Element) {
-                        TreeItemNVM3 newItem = mode.generateItem(item, n);
+                        TreeItemFennec newItem = mode.generateItem(item, n);
                         childItemList.add(newItem);
                     }
                 }
@@ -173,7 +173,7 @@ public class AutoTranslator {
             return childItemList;
         }
 
-        TreeItemNVM3 childItem = null;
+        TreeItemFennec childItem = null;
         NodeList nl = nex.getChildNodes();
         int len = nl.getLength();
         boolean hasContent = Vocabulary.hasContent().eval(item);
@@ -192,9 +192,9 @@ public class AutoTranslator {
                 ITreeItem[] cc = childItem.getChildItems();
                 if ((cc != null) && (cc.length > 0)) {
                     for (int j = 0; j < cc.length; j++) {
-                        if (!(cc[j] instanceof TreeItemNVM3))
+                        if (!(cc[j] instanceof TreeItemFennec))
                             continue;
-                        TreeItemNVM3 temp = (TreeItemNVM3) cc[j];
+                        TreeItemFennec temp = (TreeItemFennec) cc[j];
                         temp.addMetadata(childItem);
                     }
                     childItemList.addAll(Arrays.asList(cc));
@@ -211,7 +211,7 @@ public class AutoTranslator {
         return childItemList;
     }
 
-    private static TreeItemNVM3 buildTreeItem(NVM3Mode mode, TreeItemNVM3 pItem, Node n, int depth) {
+    private static TreeItemFennec buildTreeItem(FennecMode mode, TreeItemFennec pItem, Node n, int depth) {
         if (!(n instanceof INodeEx)) {
             return null;
         }
@@ -222,7 +222,7 @@ public class AutoTranslator {
             return null;
         }
 
-        TreeItemNVM3 item = mode.generateItem(pItem, n);
+        TreeItemFennec item = mode.generateItem(pItem, n);
         if (item == null) return null;
         buildTreeItemContinued(mode, item, nex, depth);
 
@@ -233,16 +233,16 @@ public class AutoTranslator {
         return simplify(item, pItem);
     }
 
-    public static TreeItemNVM3 translate(NVM3Mode mode, TreeItemNVM3 pItem, Node n) {
+    public static TreeItemFennec translate(FennecMode mode, TreeItemFennec pItem, Node n) {
 
         return buildTreeItem(mode, pItem, n, 1);
     }
 
-    public static TreeItemNVM3 translateContinued(NVM3Mode mode, TreeItemNVM3 item, Node n) {
+    public static TreeItemFennec translateContinued(FennecMode mode, TreeItemFennec item, Node n) {
         if (!(n instanceof INodeEx))
             return item;
         buildTreeItemContinued(mode, item, (INodeEx) n, 2);
-        // item = simplify(item, (TreeItemNVM3) item.getParent());
+        // item = simplify(item, (TreeItemFennec) item.getParent());
         return item;
     }
 }

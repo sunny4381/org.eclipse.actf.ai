@@ -13,6 +13,13 @@ package org.eclipse.actf.ai.fennec.treemanager;
 
 
 
+/**
+ * ITable interface defines the methods to be implemented by the table row
+ * representation on the Fennec tree.
+ */
 public interface ITableRow {
+    /**
+     * @return the all cells in the row.
+     */
     ITableCell[] getTableCell();
 }

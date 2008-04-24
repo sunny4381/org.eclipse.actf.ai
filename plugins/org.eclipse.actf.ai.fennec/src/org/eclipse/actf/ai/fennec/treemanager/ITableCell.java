@@ -11,18 +11,48 @@
 
 package org.eclipse.actf.ai.fennec.treemanager;
 
-
-
+/**
+ * ITableCell interface defines the methods to be implemented by the table cell
+ * representation on the Fennec tree.
+ */
 public interface ITableCell {
-    int getColumn();
-    int getRow();
-    ITreeItem getItem();
+	/**
+	 * @return the column position in the table. 
+	 */
+	int getColumn();
 
-    boolean isConnectedWithUpCell();
-    boolean isConnectedWithLeftCell();
+	/**
+	 * @return the row position in the table.
+	 */
+	int getRow();
 
-    ITreeItem getRowHeader();
-    ITreeItem getColumnHeader();
+	/**
+	 * @return the ITreeItem object corresponding to the cell.
+	 */
+	ITreeItem getItem();
 
-    boolean isHeader();
+	/**
+	 * @return whether the cell is connected with the upper cell or not.
+	 */
+	boolean isConnectedWithUpCell();
+
+	/**
+	 * @return whether the cell is connected with the left next cell or not.
+	 */
+	boolean isConnectedWithLeftCell();
+
+	/**
+	 * @return the ITreeItem object for the row header of the cell.
+	 */
+	ITreeItem getRowHeader();
+
+	/**
+	 * @return the ITreeItem object for the column header of the cell.
+	 */
+	ITreeItem getColumnHeader();
+
+	/**
+	 * @return whether the cell is a cell in the table header.
+	 */
+	boolean isHeader();
 }

@@ -12,7 +12,15 @@
 package org.eclipse.actf.ai.navigator;
 
 
+/**
+ * IManipulator interface defines the methods to be implemented by the "manipulator"
+ * of the application. For example keyboard manipulator, joy stick manipulator, and so on.
+ * IManipulator can obtain instances of IBrowserControl and INavigatorUI.
+ */
 public interface IManipulator {
+    /**
+     * This Mode class represents modes of the application.
+     */
     public static class Mode {
         public final String name;
         public final int code;
@@ -21,15 +29,56 @@ public interface IManipulator {
             this.code = code;
         }
     }
+    
+    /**
+     * The code of the tree navigation mode.
+     */
     int TREE_NAVIGATION_MODE_CODE = 0;
+    
+    /**
+     * The instance of the Mode of the tree navigation mode.
+     * This is the default mode of the application.
+     */
     Mode TREE_NAVIGATION_MODE = new Mode(Messages.getString("IManipulator.TreeNavigaion"), TREE_NAVIGATION_MODE_CODE); //$NON-NLS-1$
+    
+    /**
+     * The code of the form input mode.
+     */
     int FORM_INPUT_MODE_CODE = 1;
+    
+    /**
+     * The instance of the Mode of the form input mode.
+     * This mode is used during the users input information into HTML forms.
+     */
     Mode FORM_INPUT_MODE = new Mode(Messages.getString("IManipulator.FormInput"), FORM_INPUT_MODE_CODE); //$NON-NLS-1$
+    
+    /**
+     * The code of the key hook disabled mode.
+     */
     int KEYHOOK_DISABLED_MODE_CODE = 2;
+    
+    /**
+     * The instance of the Mode of the key hook disabled mode.
+     * This mode is used during a dialog is shown.
+     */
     Mode KEYHOOK_DISABLED_MODE = new Mode(Messages.getString("IManipulator.Input"), KEYHOOK_DISABLED_MODE_CODE); //$NON-NLS-1$
 
+    /**
+     * @param browserControl The instance of the IBrowserControl to be controlled by the manipulator.
+     */
     void setBrowserControl(IBrowserControl browserControl);
+    /**
+     * @param navigatorUI The instance of the INavigatorUI to be controlled by the manipulator.
+     */
     void setNavigator(INavigatorUI navigatorUI);
+    
+    /**
+     * @param mode The mode to be set
+     */
     void setMode(Mode mode);
+    
+    /**
+     *  It will be called when the manipulator is disposed.
+     */
     void dispose();
 }

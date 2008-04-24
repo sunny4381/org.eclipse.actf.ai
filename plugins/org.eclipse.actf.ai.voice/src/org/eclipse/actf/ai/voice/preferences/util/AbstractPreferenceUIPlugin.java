@@ -21,45 +21,52 @@ import org.osgi.framework.BundleContext;
 /**
  * AbstractPreferenceUIPlugin is used in plug-ins which provides ITTSEngine
  */
-public abstract class AbstractPreferenceUIPlugin extends AbstractUIPlugin implements IPropertyChangeListener {
+public abstract class AbstractPreferenceUIPlugin extends AbstractUIPlugin
+		implements IPropertyChangeListener {
 
 	private List<IPropertyChangeListener> listeners;
-	
-    /* (non-Javadoc)
-     * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
-     */
-    public void propertyChange(PropertyChangeEvent event) {
-		for( int i=0; i<listeners.size(); i++ ) {
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+	 */
+	public void propertyChange(PropertyChangeEvent event) {
+		for (int i = 0; i < listeners.size(); i++) {
 			listeners.get(i).propertyChange(event);
 		}
 	}
 
-    /**
-     * Add property change listener to the preference store.
-     * @param listener
-     */
-    public void addPropertyChangeListener(IPropertyChangeListener listener) {
-    	if( null == listeners) {
-    		listeners = new ArrayList<IPropertyChangeListener>();
-    		getPreferenceStore().addPropertyChangeListener(this);
-    	}
-    	listeners.add(listener);
-    }
-    
-    /**
-     * Remove property change listener from the preference store.
-     * @param listener
-     */
-    public void removePropertyChangeListener(IPropertyChangeListener listener) {
-    	listeners.remove(listener);
-    }
+	/**
+	 * Add property change listener to the preference store.
+	 * 
+	 * @param listener
+	 */
+	public void addPropertyChangeListener(IPropertyChangeListener listener) {
+		if (null == listeners) {
+			listeners = new ArrayList<IPropertyChangeListener>();
+			getPreferenceStore().addPropertyChangeListener(this);
+		}
+		listeners.add(listener);
+	}
 
-	/* (non-Javadoc)
+	/**
+	 * Remove property change listener from the preference store.
+	 * 
+	 * @param listener
+	 */
+	public void removePropertyChangeListener(IPropertyChangeListener listener) {
+		listeners.remove(listener);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
 		super.stop(context);
-    	listeners = null;
-    	getPreferenceStore().removePropertyChangeListener(this);
+		listeners = null;
+		getPreferenceStore().removePropertyChangeListener(this);
 	}
 }

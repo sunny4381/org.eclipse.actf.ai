@@ -20,12 +20,14 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Group;
 
 /**
- * GroupFieldEditorVoicePreferencePage is a template of the preference page of TTS engine plug-ins.
+ * GroupFieldEditorVoicePreferencePage is a template of the preference page of
+ * TTS engine plug-ins.
  */
-public class GroupFieldEditorVoicePreferencePage extends FieldEditorPreferencePage {
+public class GroupFieldEditorVoicePreferencePage extends
+		FieldEditorPreferencePage {
 
 	private List<Group> groups = new ArrayList<Group>();
-	
+
 	protected GroupFieldEditorVoicePreferencePage() {
 		super(GRID);
 	}
@@ -34,8 +36,8 @@ public class GroupFieldEditorVoicePreferencePage extends FieldEditorPreferencePa
 	}
 
 	protected Group createFieldGroup(String name) {
-		Group group = new Group(getFieldEditorParent(),SWT.NONE);
-		if( null != name ) {
+		Group group = new Group(getFieldEditorParent(), SWT.NONE);
+		if (null != name) {
 			group.setText(name);
 		}
 		GridLayout layout = new GridLayout();
@@ -45,18 +47,18 @@ public class GroupFieldEditorVoicePreferencePage extends FieldEditorPreferencePa
 		groups.add(group);
 		return group;
 	}
-	
+
 	protected void adjustGridLayout() {
 		super.adjustGridLayout();
-		int numColumns = ((GridLayout)getFieldEditorParent().getLayout()).numColumns;
-		for( int i=0; i< groups.size(); i++ ) {
+		int numColumns = ((GridLayout) getFieldEditorParent().getLayout()).numColumns;
+		for (int i = 0; i < groups.size(); i++) {
 			Group group = groups.get(i);
-			GridLayout layout = (GridLayout)group.getLayout();
-			GridData data = (GridData)group.getLayoutData(); 
+			GridLayout layout = (GridLayout) group.getLayout();
+			GridData data = (GridData) group.getLayoutData();
 			layout.numColumns = numColumns;
 			layout.marginWidth = 5;
 			layout.marginHeight = 5;
-	        data.horizontalSpan = numColumns;
+			data.horizontalSpan = numColumns;
 		}
 	}
 }

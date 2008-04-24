@@ -21,7 +21,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
-
 /**
  * ComboButtonFieldEditor has a combobox with a button.
  */
@@ -52,7 +51,9 @@ public class ComboButtonFieldEditor extends ComboFieldEditor {
 		testButton.setLayoutData(gd);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.actf.ai.voice.preferences.ComboFieldEditor#getNumberOfControls()
 	 */
 	public int getNumberOfControls() {
@@ -86,7 +87,8 @@ public class ComboButtonFieldEditor extends ComboFieldEditor {
 	}
 
 	/**
-	 * @param text The text of the button.
+	 * @param text
+	 *            the text of the button.
 	 */
 	public void setTestButtonText(String text) {
 		assert text != null;
@@ -95,8 +97,11 @@ public class ComboButtonFieldEditor extends ComboFieldEditor {
 			testButton.setText(text);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.actf.ai.voice.preferences.ComboFieldEditor#setEnabled(boolean, org.eclipse.swt.widgets.Composite)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.actf.ai.voice.preferences.ComboFieldEditor#setEnabled(boolean,
+	 *      org.eclipse.swt.widgets.Composite)
 	 */
 	public void setEnabled(boolean enabled, Composite parent) {
 		super.setEnabled(enabled, parent);

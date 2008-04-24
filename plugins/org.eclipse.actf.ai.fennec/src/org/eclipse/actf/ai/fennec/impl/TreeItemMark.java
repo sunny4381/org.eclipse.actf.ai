@@ -13,7 +13,7 @@ package org.eclipse.actf.ai.fennec.impl;
 
 import java.util.List;
 
-import org.eclipse.actf.ai.fennec.NVM3Exception;
+import org.eclipse.actf.ai.fennec.FennecException;
 import org.eclipse.actf.ai.fennec.treemanager.ITreeItem;
 import org.eclipse.actf.util.vocab.AbstractTerms;
 import org.eclipse.actf.util.vocab.IEvalTarget;
@@ -21,7 +21,7 @@ import org.eclipse.actf.util.vocab.IEvalTarget;
 
 
 
-public class TreeItemMark extends TreeItemNVM3 {
+public class TreeItemMark extends TreeItemFennec {
     private static class TreeItemMarkTerms extends TreeItemTerms {
         @Override
         public boolean hasContent(IEvalTarget target) {
@@ -81,7 +81,7 @@ public class TreeItemMark extends TreeItemNVM3 {
     }
     
     @Override
-    TreeItemNVM3 expandChildItems(int trigger) throws NVM3Exception {
+    TreeItemFennec expandChildItems(int trigger) throws FennecException {
         setChildItems((List) null);
         return this;
     }

@@ -11,19 +11,19 @@
 
 package org.eclipse.actf.ai.audio.description.util;
 
-
 public class TimeFormatUtil {
 
-    public static String getTimeString(double time){
-        int mi, se, ms;
-        int intTime = (int)(time*100);
-        
-        ms = intTime%100;
-        intTime /= 100;
-        se = intTime%60;
-        intTime /= 60;
-        mi = intTime;
-        
-        return (mi<10?"0":"")+mi+":"+(se<10?"0":"")+se+"."+(ms<10?"0":"")+ms;
-    }
+	public static String getTimeString(double time) {
+		int mi, se, ms;
+		int intTime = (int) (time * 100);
+
+		ms = intTime % 100;
+		intTime /= 100;
+		se = intTime % 60;
+		intTime /= 60;
+		mi = intTime;
+
+		return (mi < 10 ? "0" : "") + mi + ":" + (se < 10 ? "0" : "") + se
+				+ "." + (ms < 10 ? "0" : "") + ms;
+	}
 }

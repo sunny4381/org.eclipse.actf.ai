@@ -13,13 +13,13 @@ package org.eclipse.actf.ai.fennec.impl;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.actf.ai.fennec.NVM3Exception;
+import org.eclipse.actf.ai.fennec.FennecException;
 import org.eclipse.actf.ai.fennec.treemanager.ITreeItem;
 import org.eclipse.actf.ai.query.IQuery;
 import org.w3c.dom.NodeList;
 
 
-class NVM3SimpleMetadata extends NVM3Metadata {
+class FennecSimpleMetadata extends FennecMetadata {
     static public final int TYPE_ALT_TEXT = 1;
     static public final int TYPE_DESCRIPTION = 2;
     static public final int TYPE_HEADER = 3;
@@ -61,36 +61,36 @@ class NVM3SimpleMetadata extends NVM3Metadata {
         return "";
     }
 
-    static NVM3SimpleMetadata newHeader(NVM3ServiceImpl nvm3Service,
-                                        IQuery q, NVM3Mode mode, short level) {
-        NVM3SimpleMetadata md = new NVM3SimpleMetadata(nvm3Service, q, mode);
+    static FennecSimpleMetadata newHeader(FennecServiceImpl fennecService,
+                                        IQuery q, FennecMode mode, short level) {
+        FennecSimpleMetadata md = new FennecSimpleMetadata(fennecService, q, mode);
         md.type = TYPE_HEADER;
         md.headingLevel = level;
         return md;
     }
 
-    static NVM3SimpleMetadata newAltText(NVM3ServiceImpl nvm3Service,
-                                         IQuery q, NVM3Mode mode, List stringFormat) {
-        NVM3SimpleMetadata md = new NVM3SimpleMetadata(nvm3Service, q, mode);
+    static FennecSimpleMetadata newAltText(FennecServiceImpl fennecService,
+                                         IQuery q, FennecMode mode, List stringFormat) {
+        FennecSimpleMetadata md = new FennecSimpleMetadata(fennecService, q, mode);
         md.type = TYPE_ALT_TEXT;
         md.stringFormat = stringFormat;
         return md;
     }
 
-    static NVM3SimpleMetadata newDescription(NVM3ServiceImpl nvm3Service,
-                                             NVM3Mode mode, IQuery q, List stringFormat) {
-        NVM3SimpleMetadata md = new NVM3SimpleMetadata(nvm3Service, q, mode);
+    static FennecSimpleMetadata newDescription(FennecServiceImpl fennecService,
+                                             FennecMode mode, IQuery q, List stringFormat) {
+        FennecSimpleMetadata md = new FennecSimpleMetadata(fennecService, q, mode);
         md.type = TYPE_DESCRIPTION;
         md.stringFormat = stringFormat;
         return md;
     }
 
-    private NVM3SimpleMetadata(NVM3ServiceImpl nvm3Service,
-                               IQuery q, NVM3Mode mode) {
-        super(nvm3Service, q, mode);
+    private FennecSimpleMetadata(FennecServiceImpl fennecService,
+                               IQuery q, FennecMode mode) {
+        super(fennecService, q, mode);
     }
 
-    List expand(TreeItemNVM3 pItem, int trigger) throws NVM3Exception {
+    List expand(TreeItemFennec pItem, int trigger) throws FennecException {
         return null;
     }
 }

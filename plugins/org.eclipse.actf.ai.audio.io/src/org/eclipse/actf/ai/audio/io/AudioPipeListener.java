@@ -11,20 +11,23 @@
 
 package org.eclipse.actf.ai.audio.io;
 
-
 /**
  * The listener interface for receiving pipe events.
  */
 public interface AudioPipeListener {
-    /**
-     * Invoke when the audio stream is finished.
-     * @param pipe The IAudioPipe instance which raises this event.
-     */
-    void finished(IAudioPipe pipe);
-    
-    /**
-     * Invoke when the play back is stopped.
-     * @param pipe The IAudioPipe instance which raises this event.
-     */
-    void stopped(IAudioPipe pipe);
+	/**
+	 * Invoke when the audio stream is finished.
+	 * 
+	 * @param pipe
+	 *            the IAudioPipe instance which raises this event.
+	 */
+	void finished(IAudioPipe pipe);
+
+	/**
+	 * Invoke when the play back is stopped.
+	 * 
+	 * @param pipe
+	 *            the IAudioPipe instance which raises this event.
+	 */
+	void stopped(IAudioPipe pipe);
 }

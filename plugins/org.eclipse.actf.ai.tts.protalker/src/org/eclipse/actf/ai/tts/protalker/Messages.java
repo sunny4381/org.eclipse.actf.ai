@@ -14,30 +14,29 @@ package org.eclipse.actf.ai.tts.protalker;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-
-
-
 /**
  * This provides the resource string.
  */
 public class Messages {
-    private static final String BUNDLE_NAME = "messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "messages"; //$NON-NLS-1$
 
-    private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
+	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle
+			.getBundle(BUNDLE_NAME);
 
-    private Messages() {
-    }
+	private Messages() {
+	}
 
-    /**
-     * @param key The name of the resource string.
-     * @return The string specified the key.
-     */
-    public static String getString(String key) {
-        // TODO Auto-generated method stub
-        try {
-            return RESOURCE_BUNDLE.getString(key);
-        } catch (MissingResourceException e) {
-            return '!' + key + '!';
-        }
-    }
+	/**
+	 * @param key
+	 *            the name of the resource string.
+	 * @return the string specified the key.
+	 */
+	public static String getString(String key) {
+		// TODO Auto-generated method stub
+		try {
+			return RESOURCE_BUNDLE.getString(key);
+		} catch (MissingResourceException e) {
+			return '!' + key + '!';
+		}
+	}
 }

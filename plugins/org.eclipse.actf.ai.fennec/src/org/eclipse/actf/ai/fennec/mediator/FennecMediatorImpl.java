@@ -14,12 +14,12 @@ package org.eclipse.actf.ai.fennec.mediator;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.eclipse.actf.ai.fennec.INVM3Entry;
-import org.eclipse.actf.ai.fennec.INVM3Mediator;
-import org.eclipse.actf.ai.fennec.INVM3Service;
-import org.eclipse.actf.ai.fennec.NVM3ServiceFactory;
-import org.eclipse.actf.ai.fennec.impl.NVM3DOMReader;
-import org.eclipse.actf.ai.fennec.impl.NVM3EntryImpl;
+import org.eclipse.actf.ai.fennec.IFennecEntry;
+import org.eclipse.actf.ai.fennec.IFennecMediator;
+import org.eclipse.actf.ai.fennec.IFennecService;
+import org.eclipse.actf.ai.fennec.FennecServiceFactory;
+import org.eclipse.actf.ai.fennec.impl.FennecDOMReader;
+import org.eclipse.actf.ai.fennec.impl.FennecEntryImpl;
 import org.eclipse.actf.ai.fennec.treemanager.ITreeManager;
 import org.eclipse.actf.ai.fennec.treemanager.TreeManagerFactory;
 import org.eclipse.actf.ai.xmlstore.IXMLInfo;
@@ -33,60 +33,60 @@ import org.eclipse.actf.model.dom.dombycom.IDocumentEx;
 
 
 
-public class NVM3MediatorImpl implements INVM3Mediator {
+public class FennecMediatorImpl implements IFennecMediator {
     private final IWebBrowserACTF webBrowser;
 
-    public ITreeManager newTreeManager(INVM3Entry entry) {
+    public ITreeManager newTreeManager(IFennecEntry entry) {
         IDocumentEx doc = (IDocumentEx) webBrowser.getLiveDocument();
 
-        INVM3Service nvm3Service;
+        IFennecService fennecService;
         if (entry != null) {
             try {
-                nvm3Service = NVM3ServiceFactory.newNVM3Service(entry, doc);
+                fennecService = FennecServiceFactory.newFennecService(entry, doc);
             } catch (Exception e) {
-                nvm3Service = NVM3ServiceFactory.newNVM3ServiceWithDefaultMetadata(doc);
+                fennecService = FennecServiceFactory.newFennecServiceWithDefaultMetadata(doc);
             }
         } else {
-            nvm3Service = NVM3ServiceFactory.newNVM3ServiceWithDefaultMetadata(doc);
+            fennecService = FennecServiceFactory.newFennecServiceWithDefaultMetadata(doc);
         }
-        return TreeManagerFactory.newITreeManager(nvm3Service);
+        return TreeManagerFactory.newITreeManager(fennecService);
     }
 
-    private IXMLStore getNVM3Store(String url) {
+    private IXMLStore getFennecStore(String url) {
         IXMLStoreService ss = XMLStorePlugin.getDefault().getXMLStoreService();
-        IXMLSelector selector = ss.getSelectorWithDocElem(NVM3DOMReader.NVM3_DOCUMENT_ELEMENT_NAME,
-                                                          NVM3DOMReader.NVM3_NAMESPACE_URI);
+        IXMLSelector selector = ss.getSelectorWithDocElem(FennecDOMReader.Fennec_DOCUMENT_ELEMENT_NAME,
+                                                          FennecDOMReader.Fennec_NAMESPACE_URI);
         IXMLStore store = ss.getRootStore();
         store = store.specify(selector);
         if (store == null) return null;
-        selector = ss.getSelectorWithIRI(url);
+        selector = ss.getSelectorWithURI(url);
         return store.specify(selector);
     }
 
-    public INVM3Entry getDefaultNVM3Entry() {
+    public IFennecEntry getDefaultFennecEntry() {
         String url = webBrowser.getURL();
-        IXMLStore store = getNVM3Store(url);
+        IXMLStore store = getFennecStore(url);
         if (store == null) return null;
         Iterator<IXMLInfo> it = store.getInfoIterator();
         if (it == null) return null;
         if (!it.hasNext()) return null;
         IXMLInfo info = it.next();
-        return new NVM3EntryImpl(info);
+        return new FennecEntryImpl(info);
     }
 
-    public INVM3Entry[] getNVM3Entries() {
+    public IFennecEntry[] getFennecEntries() {
         String url = webBrowser.getURL();
-        IXMLStore store = getNVM3Store(url);
+        IXMLStore store = getFennecStore(url);
         if (store == null) return null;
         Iterator<IXMLInfo> it = store.getInfoIterator();
         if (it == null) return null;
-        ArrayList<NVM3EntryImpl> entries = new ArrayList<NVM3EntryImpl>();
+        ArrayList<FennecEntryImpl> entries = new ArrayList<FennecEntryImpl>();
         while (it.hasNext()) {
             IXMLInfo info = it.next();
             if (info == null) continue;
-            entries.add(new NVM3EntryImpl(info));
+            entries.add(new FennecEntryImpl(info));
         }
-        INVM3Entry[] ea = new INVM3Entry[entries.size()];
+        IFennecEntry[] ea = new IFennecEntry[entries.size()];
         ea = entries.toArray(ea);
         return ea;
     }
@@ -95,7 +95,7 @@ public class NVM3MediatorImpl implements INVM3Mediator {
         // this.dombycom.release();
     }
 
-    public NVM3MediatorImpl(IWebBrowserACTF webBrowser) {
+    public FennecMediatorImpl(IWebBrowserACTF webBrowser) {
         this.webBrowser = webBrowser;
     }
 }

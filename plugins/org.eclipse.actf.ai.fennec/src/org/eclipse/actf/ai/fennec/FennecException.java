@@ -10,14 +10,19 @@
  *******************************************************************************/
 package org.eclipse.actf.ai.fennec;
 
-public class NVM3InterruptedException extends NVM3Exception {
-    private static final long serialVersionUID = 503781748413609768L;
+/**
+ * FennecException is the super class of the exception on processing Fennec
+ * metadata. The message text provide a further description of the problem.
+ */
+public class FennecException extends Exception {
+	private static final long serialVersionUID = -4473389024467270039L;
 
-    public NVM3InterruptedException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public NVM3InterruptedException(String message) {
-        super(message, null);
-    }
+	/**
+	 * @param message
+	 * @param cause
+	 * @see Exception#Exception(String, Throwable)
+	 */
+	public FennecException(String message, Throwable cause) {
+		super(message, cause);
+	}
 }

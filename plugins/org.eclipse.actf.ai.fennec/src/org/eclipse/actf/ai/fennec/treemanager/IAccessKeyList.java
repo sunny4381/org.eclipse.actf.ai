@@ -11,9 +11,28 @@
 
 package org.eclipse.actf.ai.fennec.treemanager;
 
-
+/**
+ * IAccessKeyList interface defines methods to be implemented by the collection
+ * of the access keys in a document.
+ */
 public interface IAccessKeyList {
-    int size();
-    char getAccessKeyAt(int index);
-    String getUIStringAt(int index);
+	/**
+	 * @return the size of the collection.
+	 */
+	int size();
+
+	/**
+	 * @param index
+	 *            the index of the access key.
+	 * @return the code of the access key specified by the index.
+	 */
+	char getAccessKeyAt(int index);
+
+	/**
+	 * @param index
+	 *            the index of the access key.
+	 * @return the text information of the element on which the access key is
+	 *         declared.
+	 */
+	String getUIStringAt(int index);
 }

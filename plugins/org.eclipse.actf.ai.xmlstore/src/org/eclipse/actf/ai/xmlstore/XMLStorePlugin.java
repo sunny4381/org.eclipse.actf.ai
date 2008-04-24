@@ -22,73 +22,97 @@ import org.eclipse.core.runtime.Plugin;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
+/**
+ * The activator class controls the plug-in life cycle
+ */
 public class XMLStorePlugin extends Plugin {
 
-    // The plug-in ID
-    public static final String PLUGIN_ID = "org.eclipse.actf.ai.xmlstore";
+	// The plug-in ID
+	public static final String PLUGIN_ID = "org.eclipse.actf.ai.xmlstore";
 
-    // The shared instance
-    private static XMLStorePlugin plugin;
-	
-    /**
-     * The constructor
-     */
-    public XMLStorePlugin() {
-        plugin = this;
-    }
+	// The shared instance
+	private static XMLStorePlugin plugin;
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.core.runtime.Plugins#start(org.osgi.framework.BundleContext)
-     */
-    @Override
-    public void start(BundleContext context) throws Exception {
-        super.start(context);
-        initialize();
-    }
+	/**
+	 * The constructor
+	 */
+	public XMLStorePlugin() {
+		plugin = this;
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.core.runtime.Plugin#stop(org.osgi.framework.BundleContext)
-     */
-    @Override
-    public void stop(BundleContext context) throws Exception {
-        plugin = null;
-        super.stop(context);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.core.runtime.Plugins#start(org.osgi.framework.BundleContext)
+	 */
+	@Override
+	public void start(BundleContext context) throws Exception {
+		super.start(context);
+		initialize();
+	}
 
-    /**
-     * Returns the shared instance
-     *
-     * @return the shared instance
-     */
-    public static XMLStorePlugin getDefault() {
-        return plugin;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.core.runtime.Plugin#stop(org.osgi.framework.BundleContext)
+	 */
+	@Override
+	public void stop(BundleContext context) throws Exception {
+		plugin = null;
+		super.stop(context);
+	}
 
-    
-    public File getLocalDir(String sub) {
-        return new File(getLocalDir(), sub);
-    }
+	/**
+	 * Returns the shared instance
+	 * 
+	 * @return the shared instance
+	 */
+	public static XMLStorePlugin getDefault() {
+		return plugin;
+	}
 
-    private File getLocalDir() {
-        Bundle bundle = getBundle();
-        IPath stateLocationPath = Platform.getStateLocation(bundle);
-        return stateLocationPath.toFile();
-    }
-    
-    private static final String[] XML_EXT = new String[]{".xml", ".fnc"};
-    
-    private void initialize() {
-        XMLStoreServiceImpl.getInstance().setUserStore(new UserXMLStore(getLocalDir(UserXMLStore.TEMP_DIR_NAME), XML_EXT));
-        XMLStoreServiceImpl.getInstance().addStore(new XMLStoreLocal(getLocalDir(XMLStoreLocal.SYSTEM_DIR_NAME), XML_EXT));
-    }
-    
-    public void addSystemStore(File location) {
-        XMLStoreServiceImpl.getInstance().addStore(new XMLStoreLocal(location, XML_EXT));
-    }
+	/**
+	 * @param subDirectory
+	 *            the sub directory to be read.
+	 * @return the instance of the File which is the sub directory of the
+	 *         default user directory of the application.
+	 */
+	public File getLocalDir(String subDirectory) {
+		return new File(getLocalDir(), subDirectory);
+	}
 
-    public IXMLStoreService getXMLStoreService(){
-        return XMLStoreServiceImpl.getInstance();
-    }
+	private File getLocalDir() {
+		Bundle bundle = getBundle();
+		IPath stateLocationPath = Platform.getStateLocation(bundle);
+		return stateLocationPath.toFile();
+	}
+
+	private static final String[] XML_EXT = new String[] { ".xml", ".fnc" };
+
+	private void initialize() {
+		XMLStoreServiceImpl.getInstance().setUserStore(
+				new UserXMLStore(getLocalDir(UserXMLStore.TEMP_DIR_NAME),
+						XML_EXT));
+		XMLStoreServiceImpl.getInstance().addStore(
+				new XMLStoreLocal(getLocalDir(XMLStoreLocal.SYSTEM_DIR_NAME),
+						XML_EXT));
+	}
+
+	/**
+	 * The settings of the application should be contained in the system store.
+	 * 
+	 * @param location
+	 *            the location to be added for searching XML files.
+	 */
+	public void addSystemStore(File location) {
+		XMLStoreServiceImpl.getInstance().addStore(
+				new XMLStoreLocal(location, XML_EXT));
+	}
+
+	/**
+	 * @return the singleton instance of the IXMLStoreService.
+	 */
+	public IXMLStoreService getXMLStoreService() {
+		return XMLStoreServiceImpl.getInstance();
+	}
 }

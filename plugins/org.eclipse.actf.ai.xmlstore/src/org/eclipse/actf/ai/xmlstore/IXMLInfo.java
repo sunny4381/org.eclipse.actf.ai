@@ -15,15 +15,48 @@ import org.w3c.dom.Node;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
+/**
+ * IXMLInfo represents a metadata or config XML file, which contains &lt;meta&gt;
+ * information.
+ */
 public interface IXMLInfo {
-    Node getRootNode() throws XMLStoreException;
-    
-    void setContentHandler(ContentHandler h);
-    void startSAX() throws XMLStoreException, SAXException;
-    void reset() throws XMLStoreException;
+	/**
+	 * @return the document element of the XML file.
+	 * @throws XMLStoreException
+	 */
+	Node getRootNode() throws XMLStoreException;
 
-    String getDocumentation();
-    boolean isUserEntry();
-    int getPriority();
-    
+	/**
+	 * @param handler the content handler to be used for parsing.
+	 */
+	void setContentHandler(ContentHandler handler);
+
+	/**
+	 * Starts SAX parsing using the content handler specified by {@link #setContentHandler(ContentHandler)}
+	 * @throws XMLStoreException
+	 * @throws SAXException
+	 */
+	void startSAX() throws XMLStoreException, SAXException;
+
+	/**
+	 * Reset the SAX parsing.
+	 * @throws XMLStoreException
+	 */
+	void reset() throws XMLStoreException;
+
+	/**
+	 * @return the documentation text declared in the &lt;meta&gt; information.
+	 */
+	String getDocumentation();
+
+	/**
+	 * @return whether the XML file is for user annotation or not.
+	 */
+	boolean isUserEntry();
+
+	/**
+	 * @return the priority value declared in the &lt;meta&gt; information.
+	 */
+	int getPriority();
+
 }

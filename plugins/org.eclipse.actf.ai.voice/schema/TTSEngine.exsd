@@ -6,7 +6,10 @@
          <meta.schema plugin="org.eclipse.actf.ai.voice" id="TTSEngine" name="TTS Engine"/>
       </appInfo>
       <documentation>
-         [Enter description of this extension point.]
+         You can extend the voice function of ACTF to implement ITTSEngine interface. Voice plug-in manages voice engines through the ITTSEngine interface.
+If the voice engine have some preference then, the category name of the voice preference page &quot;org.eclipse.actf.ai.voice.preferences.VoicePreferencePage&quot; should be used.
+
+
       </documentation>
    </annotation>
 
@@ -66,6 +69,9 @@
                <documentation>
                   
                </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.actf.ai.tts.ITTSEngine"/>
+               </appInfo>
             </annotation>
          </attribute>
          <attribute name="description" type="string">
@@ -112,7 +118,23 @@
          <meta.section type="examples"/>
       </appInfo>
       <documentation>
-         [Enter extension point usage example here.]
+         The following is a example of description.
+&quot;class&quot; is a implementation of the ITTSEngine interface.
+&quot;default&quot; means the default voice engine to be used.
+&quot;Description&quot; and &quot;name&quot; are used in the preference page.
+&quot;id&quot; is used to create a instance of the voice engine.
+&quot;priority&quot; is used to sort voice engines (descending order).
+ 
+   &lt;extension
+         point=&quot;org.eclipse.actf.ai.voice.TTSEngine&quot;&gt;
+         &lt;engine
+               class=&quot;org.eclipse.actf.ai.tts.sapi.engine.SapiVoice&quot;
+               default=&quot;true&quot;
+               description=&quot;TTS Engine for MS SAPI 5.x&quot;
+               id=&quot;org.eclipse.actf.ai.tts.sapi.engine.SapiVoice&quot;
+               name=&quot;SAPI 5 TTS&quot;
+               priority=&quot;100&quot;/&gt;
+   &lt;/extension&gt;
       </documentation>
    </annotation>
 
@@ -121,7 +143,7 @@
          <meta.section type="apiInfo"/>
       </appInfo>
       <documentation>
-         [Enter API information here.]
+         See ITTSEngine interface.
       </documentation>
    </annotation>
 

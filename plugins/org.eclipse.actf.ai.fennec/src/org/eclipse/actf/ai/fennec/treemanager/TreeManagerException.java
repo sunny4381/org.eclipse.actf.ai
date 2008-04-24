@@ -10,22 +10,40 @@
  *******************************************************************************/
 package org.eclipse.actf.ai.fennec.treemanager;
 
+/**
+ * TreeManagerException is thrown when the operation in ITreeManager is failed.
+ */
 public class TreeManagerException extends Exception {
-    private static final long serialVersionUID = -715217633494025285L;
-    
-    private final int status;
+	private static final long serialVersionUID = -715217633494025285L;
 
-    public int getStatus() {
-        return status;
-    }
-    
-    public TreeManagerException(int status, String message, Throwable cause) {
-        super(message, cause);
-        this.status = status;
-    }
+	private final int status;
 
-    public TreeManagerException(int status, String message) {
-        super(message);
-        this.status = status;
-    }
+	/**
+	 * @return the status code of the exception.
+	 */
+	public int getStatus() {
+		return status;
+	}
+
+	/**
+	 * @param status
+	 *            the status code of the exception.
+	 * @param message
+	 * @param cause
+	 * @see Exception#Exception(String, Throwable)
+	 */
+	public TreeManagerException(int status, String message, Throwable cause) {
+		super(message, cause);
+		this.status = status;
+	}
+
+	/**
+	 * @param status
+	 * @param message
+	 * @see Exception#Exception(String)
+	 */
+	public TreeManagerException(int status, String message) {
+		super(message);
+		this.status = status;
+	}
 }

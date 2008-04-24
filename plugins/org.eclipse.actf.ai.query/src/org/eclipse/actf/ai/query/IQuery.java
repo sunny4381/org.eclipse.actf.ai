@@ -14,19 +14,19 @@ package org.eclipse.actf.ai.query;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-
 /**
- * This represents a query object. 
+ * This represents a query object.
  */
 public interface IQuery {
-    /**
-     * @param base The base node of the query.
-     * @return The NodeList gathered by the query.
-     */
-    NodeList query(Node base);
-    
-    /**
-     * @return Whether the query has target attribute.
-     */
-    boolean hasTarget();
+	/**
+	 * @param base
+	 *            the base node of the query.
+	 * @return the NodeList gathered by the query.
+	 */
+	NodeList query(Node base);
+
+	/**
+	 * @return whether the query has target attribute.
+	 */
+	boolean hasTarget();
 }

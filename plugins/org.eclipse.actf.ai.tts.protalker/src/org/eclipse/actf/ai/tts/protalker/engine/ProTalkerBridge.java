@@ -28,337 +28,351 @@ import org.eclipse.swt.ole.win32.Variant;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-
 /**
  * ProTalker COM wrapper
  */
 public class ProTalkerBridge implements OleListener {
-    public static final int VOICE_MALE = 0;
+	public static final int VOICE_MALE = 0;
 
-    public static final int VOICE_FEMALE = 1;
+	public static final int VOICE_FEMALE = 1;
 
-    private static final String SpeakWebText = "SpeakWebText";
+	private static final String SpeakWebText = "SpeakWebText";
 
-    private static final String AboutDlg = "AboutDlg";
+	private static final String AboutDlg = "AboutDlg";
 
-    private static final String GeneralDlg = "GeneralDlg";
+	private static final String GeneralDlg = "GeneralDlg";
 
-    private static final String Pause = "Pause";
+	private static final String Pause = "Pause";
 
-    private static final String Start = "Start";
+	private static final String Start = "Start";
 
-    private static final String Resume = "Resume";
+	private static final String Resume = "Resume";
 
-    private static final String Reset = "Reset";
+	private static final String Reset = "Reset";
 
-    private static final String Speak = "Speak";
+	private static final String Speak = "Speak";
 
-    private static final String SendText = "SendText";
+	private static final String SendText = "SendText";
 
-    private static final String AboutBox = "AboutBox";
+	private static final String AboutBox = "AboutBox";
 
-    private static final String Gender = "Gender";
+	private static final String Gender = "Gender";
 
-    private static final String Age = "Age";
+	private static final String Age = "Age";
 
-    private static final String ModeGuid = "ModeGuid";
+	private static final String ModeGuid = "ModeGuid";
 
-    private static final String Speed = "Speed";
+	private static final String Speed = "Speed";
 
-    private static final String Pitch = "Pitch";
+	private static final String Pitch = "Pitch";
 
-    private static final String Volume = "Volume";
+	private static final String Volume = "Volume";
 
-    private static final String UseButton = "UseButton";
+	private static final String UseButton = "UseButton";
 
-    private OleControlSite site = null;
+	private OleControlSite site = null;
 
-    private OleAutomation auto = null;
+	private OleAutomation auto = null;
 
-    private OleFrame frame = null;
+	private OleFrame frame = null;
 
-    private Vector<IVoiceEventListener> indexListener = new Vector<IVoiceEventListener>();
-    
-    ProTalkerBridge(Display display) {
-        Shell parent = new Shell();
-        parent.setLayout(new FillLayout());
-        frame = new OleFrame(parent, SWT.NONE);
-        try {
-            site = new OleControlSite(frame, SWT.NONE, "PTSVR.PtSvrCtrl.1");
-        } catch (SWTException e) {
-            site = null;
-            return;
-        }
-        auto = new OleAutomation(site);
-        site.doVerb(OLE.OLEIVERB_SHOW);
-        for (int i = 0; i < 10; i++) {
-            site.addEventListener(i, this);
-        }
-        setVoice(VOICE_MALE);
-    }
+	private Vector<IVoiceEventListener> indexListener = new Vector<IVoiceEventListener>();
 
-    private Variant getProperty(String name) {
-        int id = auto.getIDsOfNames(new String[] { name })[0];
-        return auto.getProperty(id);
-    }
+	ProTalkerBridge(Display display) {
+		Shell parent = new Shell();
+		parent.setLayout(new FillLayout());
+		frame = new OleFrame(parent, SWT.NONE);
+		try {
+			site = new OleControlSite(frame, SWT.NONE, "PTSVR.PtSvrCtrl.1");
+		} catch (SWTException e) {
+			site = null;
+			return;
+		}
+		auto = new OleAutomation(site);
+		site.doVerb(OLE.OLEIVERB_SHOW);
+		for (int i = 0; i < 10; i++) {
+			site.addEventListener(i, this);
+		}
+		setVoice(VOICE_MALE);
+	}
 
-    private void setProperty(String name, Variant value) {
-        int id = auto.getIDsOfNames(new String[] { name })[0];
-        auto.setProperty(id, value);
-    }
+	private Variant getProperty(String name) {
+		int id = auto.getIDsOfNames(new String[] { name })[0];
+		return auto.getProperty(id);
+	}
 
-    private int getInt(String name) {
-        return getProperty(name).getInt();
-    }
+	private void setProperty(String name, Variant value) {
+		int id = auto.getIDsOfNames(new String[] { name })[0];
+		auto.setProperty(id, value);
+	}
 
-    private void setInt(String name, int value) {
-        setProperty(name, new Variant(value));
-    }
+	private int getInt(String name) {
+		return getProperty(name).getInt();
+	}
 
-    private String getString(String name) {
-        return getProperty(name).getString();
-    }
+	private void setInt(String name, int value) {
+		setProperty(name, new Variant(value));
+	}
 
-    private void setString(String name, String value) {
-        setProperty(name, new Variant(value));
-    }
+	private String getString(String name) {
+		return getProperty(name).getString();
+	}
 
-    private boolean getBoolean(String name) {
-        return getProperty(name).getBoolean();
-    }
+	private void setString(String name, String value) {
+		setProperty(name, new Variant(value));
+	}
 
-    private void setBoolean(String name, boolean value) {
-        setProperty(name, new Variant(value));
-    }
+	private boolean getBoolean(String name) {
+		return getProperty(name).getBoolean();
+	}
 
-    private void invoke(String name) {
-        invoke(name, new Variant[0]);
-    }
+	private void setBoolean(String name, boolean value) {
+		setProperty(name, new Variant(value));
+	}
 
-    private void invoke(String name, final Variant[] arg) {
-        final int id = auto.getIDsOfNames(new String[] { name })[0];
-        auto.invoke(id, arg);
-    }
+	private void invoke(String name) {
+		invoke(name, new Variant[0]);
+	}
 
-    // properties
-    /**
-     * @return The gender type of this engine.
-     */
-    public int getGender() {
-        return getInt(Gender);
-    }
+	private void invoke(String name, final Variant[] arg) {
+		final int id = auto.getIDsOfNames(new String[] { name })[0];
+		auto.invoke(id, arg);
+	}
 
-    /**
-     * @return The age property of this engine.
-     */
-    public int getAge() {
-        return getInt(Age);
-    }
+	// properties
+	/**
+	 * @return the gender type of this engine.
+	 */
+	public int getGender() {
+		return getInt(Gender);
+	}
 
-    /**
-     * @return The guid of the current mode.
-     */
-    public String getModeGuid() {
-        return getString(ModeGuid);
-    }
+	/**
+	 * @return the age property of this engine.
+	 */
+	public int getAge() {
+		return getInt(Age);
+	}
 
-    /**
-     * @param guid The guid to be set.
-     */
-    public void setModeGuid(String guid) {
-        setString(ModeGuid, guid);
-    }
+	/**
+	 * @return the guid of the current mode.
+	 */
+	public String getModeGuid() {
+		return getString(ModeGuid);
+	}
 
-    /**
-     * @return The speed property of this engine.
-     */
-    public int getSpeed() {
-        return getInt(Speed);
-    }
+	/**
+	 * @param guid
+	 *            the guid to be set.
+	 */
+	public void setModeGuid(String guid) {
+		setString(ModeGuid, guid);
+	}
 
-    /**
-     * Set the speed of this engine in the scale of this engine.
-     * @param value The speed property to be set.
-     */
-    public void setSpeed(int value) {
-        setInt(Speed, value);
-    }
+	/**
+	 * @return the speed property of this engine.
+	 */
+	public int getSpeed() {
+		return getInt(Speed);
+	}
 
-    /**
-     * @return The pitch property of this engine.
-     */
-    public int getPitch() {
-        return getInt(Pitch);
-    }
+	/**
+	 * Set the speed of this engine in the scale of this engine.
+	 * 
+	 * @param value
+	 *            the speed property to be set.
+	 */
+	public void setSpeed(int value) {
+		setInt(Speed, value);
+	}
 
-    /**
-     * @param value The pitch property to be set.
-     */
-    public void setPitch(int value) {
-        setInt(Pitch, value);
-    }
+	/**
+	 * @return the pitch property of this engine.
+	 */
+	public int getPitch() {
+		return getInt(Pitch);
+	}
 
-    /**
-     * @return The volume property of this engine.
-     */
-    public int getVolume() {
-        return getInt(Volume);
-    }
+	/**
+	 * @param value
+	 *            the pitch property to be set.
+	 */
+	public void setPitch(int value) {
+		setInt(Pitch, value);
+	}
 
-    /**
-     * @param value The volume property to be set.
-     */
-    public void setVolume(int value) {
-        setInt(Volume, value);
-    }
+	/**
+	 * @return the volume property of this engine.
+	 */
+	public int getVolume() {
+		return getInt(Volume);
+	}
 
-    /**
-     * @return Whether the GUI button is used or not.
-     */
-    public boolean getUseButton() {
-        return getBoolean(UseButton);
-    }
+	/**
+	 * @param value
+	 *            the volume property to be set.
+	 */
+	public void setVolume(int value) {
+		setInt(Volume, value);
+	}
 
-    /**
-     * @param value The using button flag to be set.
-     */
-    public void setUseButton(boolean value) {
-        setBoolean(UseButton, value);
-    }
-    
-    // methods
-    /**
-     * Invoke SpeakWebText method of this engine.
-     */
-    public void speakWebText() {
-        invoke(SpeakWebText);
-    }
+	/**
+	 * @return whether the GUI button is used or not.
+	 */
+	public boolean getUseButton() {
+		return getBoolean(UseButton);
+	}
 
-    /**
-     * Shows the about dialog.
-     */
-    public void aboutDlg() {
-        invoke(AboutDlg);
-    }
+	/**
+	 * @param value
+	 *            the using button flag to be set.
+	 */
+	public void setUseButton(boolean value) {
+		setBoolean(UseButton, value);
+	}
 
-    /**
-     * Shows the dialog of property settings.
-     */
-    public void generalDlg() {
-        invoke(GeneralDlg);
-    }
+	// methods
+	/**
+	 * Invoke SpeakWebText method of this engine.
+	 */
+	public void speakWebText() {
+		invoke(SpeakWebText);
+	}
 
-    /**
-     * Pause the speech.
-     */
-    public void pause() {
-        invoke(Pause);
-    }
+	/**
+	 * Shows the about dialog.
+	 */
+	public void aboutDlg() {
+		invoke(AboutDlg);
+	}
 
-    /**
-     * Start to speak.
-     */
-    public void start() {
-        invoke(Start);
-    }
+	/**
+	 * Shows the dialog of property settings.
+	 */
+	public void generalDlg() {
+		invoke(GeneralDlg);
+	}
 
-    /**
-     * Resume to speak.
-     */
-    public void resume() {
-        invoke(Resume);
-    }
+	/**
+	 * Pause the speech.
+	 */
+	public void pause() {
+		invoke(Pause);
+	}
 
-    /**
-     * Reset the state of this voice engine.
-     */
-    public void reset() {
-    	// It doesn't work well by invoking Reset method once.
-        invoke(Reset);
-        invoke(Speak, new Variant[] { new Variant(" ") });
-        invoke(Reset);
-        invoke(Speak, new Variant[] { new Variant(" ") });
-    }
+	/**
+	 * Start to speak.
+	 */
+	public void start() {
+		invoke(Start);
+	}
 
-    /**
-     * @param text The text to be spoken.
-     */
-    public void sendText(String text) {
-        invoke(SendText, new Variant[] { new Variant(text) });
-    }
+	/**
+	 * Resume to speak.
+	 */
+	public void resume() {
+		invoke(Resume);
+	}
 
-    /**
-     * Shows the about box.
-     */
-    public void aboutBox() {
-        invoke(AboutBox);
-    }
+	/**
+	 * Reset the state of this voice engine.
+	 */
+	public void reset() {
+		// It doesn't work well by invoking Reset method once.
+		invoke(Reset);
+		invoke(Speak, new Variant[] { new Variant(" ") });
+		invoke(Reset);
+		invoke(Speak, new Variant[] { new Variant(" ") });
+	}
 
-    /**
-     * @param text The text to be spoken.
-     * @param flags The flag of the voice engine behavior.
-     * @param index The index mark to be set. The index will be returned with voice event.
-     * @see ITTSEngine#TTSFLAG_DEFAULT
-     * @see ITTSEngine#TTSFLAG_FLUSH
-     */
-    public void speak(String text, int flags, int index) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("\\Mrk=");
-        sb.append(index);
-        sb.append("\\");
-        sb.append(text);
-        sb.append("\\Mrk=-1\\");
+	/**
+	 * @param text
+	 *            the text to be spoken.
+	 */
+	public void sendText(String text) {
+		invoke(SendText, new Variant[] { new Variant(text) });
+	}
 
-        if (flags == ITTSEngine.TTSFLAG_DEFAULT) {
-            invoke(Speak, new Variant[] { new Variant(sb.toString()) });
-        } else if (flags == ITTSEngine.TTSFLAG_FLUSH) {
-            reset();
-            invoke(Speak, new Variant[] { new Variant(sb.toString()) });
-        }
-    }
+	/**
+	 * Shows the about box.
+	 */
+	public void aboutBox() {
+		invoke(AboutBox);
+	}
 
-    /* (non-Javadoc)
-     * @see org.eclipse.swt.ole.win32.OleListener#handleEvent(org.eclipse.swt.ole.win32.OleEvent)
-     */
-    public void handleEvent(OleEvent event) {
-        if (event.type == 3) { // Bookmark
-        	for (Enumeration<IVoiceEventListener> e = indexListener.elements(); e.hasMoreElements(); ) {
-        		e.nextElement().indexReceived(event.arguments[0].getInt());
-        	}
-        }
-    }
+	/**
+	 * @param text
+	 *            the text to be spoken.
+	 * @param flags
+	 *            the flag of the voice engine behavior.
+	 * @param index
+	 *            the index mark to be set. The index will be returned with
+	 *            voice event.
+	 * @see ITTSEngine#TTSFLAG_DEFAULT
+	 * @see ITTSEngine#TTSFLAG_FLUSH
+	 */
+	public void speak(String text, int flags, int index) {
+		StringBuffer sb = new StringBuffer();
+		sb.append("\\Mrk=");
+		sb.append(index);
+		sb.append("\\");
+		sb.append(text);
+		sb.append("\\Mrk=-1\\");
 
-    /**
-     * @param listener
-     */
-    public void addIndexListener(IVoiceEventListener listener) {
-        indexListener.add(listener);
-    }
+		if (flags == ITTSEngine.TTSFLAG_DEFAULT) {
+			invoke(Speak, new Variant[] { new Variant(sb.toString()) });
+		} else if (flags == ITTSEngine.TTSFLAG_FLUSH) {
+			reset();
+			invoke(Speak, new Variant[] { new Variant(sb.toString()) });
+		}
+	}
 
-    /**
-     * @param listener
-     */
-    public void removeIndexListener(IVoiceEventListener listener) {
-        indexListener.remove(listener);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.swt.ole.win32.OleListener#handleEvent(org.eclipse.swt.ole.win32.OleEvent)
+	 */
+	public void handleEvent(OleEvent event) {
+		if (event.type == 3) { // Bookmark
+			for (Enumeration<IVoiceEventListener> e = indexListener.elements(); e
+					.hasMoreElements();) {
+				e.nextElement().indexReceived(event.arguments[0].getInt());
+			}
+		}
+	}
 
-    /**
-     * @param type The voice type of this engine.
-     * @see #VOICE_MALE
-     * @see #VOICE_FEMALE
-     */
-    public void setVoice(int type) {
-        if (type == VOICE_MALE) {
-            setModeGuid("{904AAB60-5D94-11D0-830A-444553540000}");
-        } else if (type == VOICE_FEMALE) {
-            setModeGuid("{904AAB61-5D94-11d0-830A-444553540000}");
-        }
-    }
+	/**
+	 * @param listener
+	 */
+	public void addIndexListener(IVoiceEventListener listener) {
+		indexListener.add(listener);
+	}
 
-    /**
-     * @return Whether this object can be used or not.
-     */
-    public boolean isAvailable() {
-        return auto != null;
-    }
+	/**
+	 * @param listener
+	 */
+	public void removeIndexListener(IVoiceEventListener listener) {
+		indexListener.remove(listener);
+	}
+
+	/**
+	 * @param type
+	 *            the voice type of this engine.
+	 * @see #VOICE_MALE
+	 * @see #VOICE_FEMALE
+	 */
+	public void setVoice(int type) {
+		if (type == VOICE_MALE) {
+			setModeGuid("{904AAB60-5D94-11D0-830A-444553540000}");
+		} else if (type == VOICE_FEMALE) {
+			setModeGuid("{904AAB61-5D94-11d0-830A-444553540000}");
+		}
+	}
+
+	/**
+	 * @return whether this object can be used or not.
+	 */
+	public boolean isAvailable() {
+		return auto != null;
+	}
 }

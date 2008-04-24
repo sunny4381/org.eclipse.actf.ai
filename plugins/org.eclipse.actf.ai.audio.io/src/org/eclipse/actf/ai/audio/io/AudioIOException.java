@@ -11,22 +11,21 @@
 
 package org.eclipse.actf.ai.audio.io;
 
-
 /**
- * This represents an exception caused by the reason about this utilities.
+ * AudioIOException is thrown when some exception occurs in this utilities.
  */
-public class AudioIOException extends Exception{
+public class AudioIOException extends Exception {
 
-    /**
-     * @param string The message of the exception.
-     */
-    public AudioIOException(String string) {
-        super(string);
-    }
+	/**
+	 * @param string
+	 *            the further message of the exception.
+	 * @param cause
+	 * 			  the reason of the exception.
+	 */
+	public AudioIOException(String string, Throwable cause) {
+		super(string, cause);
+	}
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
 }

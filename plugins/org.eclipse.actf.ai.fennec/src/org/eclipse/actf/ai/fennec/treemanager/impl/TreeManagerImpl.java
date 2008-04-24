@@ -12,9 +12,9 @@ package org.eclipse.actf.ai.fennec.treemanager.impl;
 
 import java.util.ArrayList;
 
-import org.eclipse.actf.ai.fennec.INVM3Service;
-import org.eclipse.actf.ai.fennec.NVM3Exception;
-import org.eclipse.actf.ai.fennec.NVM3InterruptedException;
+import org.eclipse.actf.ai.fennec.IFennecService;
+import org.eclipse.actf.ai.fennec.FennecException;
+import org.eclipse.actf.ai.fennec.FennecInterruptedException;
 import org.eclipse.actf.ai.fennec.treemanager.IAccessKeyList;
 import org.eclipse.actf.ai.fennec.treemanager.ILocation;
 import org.eclipse.actf.ai.fennec.treemanager.ISoundControl;
@@ -32,10 +32,10 @@ import org.eclipse.actf.util.vocab.Vocabulary;
  * The main plugin class to be used in the desktop.
  */
 public class TreeManagerImpl implements ITreeManager {
-    private INVM3Service nvm3Service;
+    private IFennecService fennecService;
 
-    public TreeManagerImpl(INVM3Service nvm3Service) {
-        this.nvm3Service = nvm3Service;
+    public TreeManagerImpl(IFennecService fennecService) {
+        this.fennecService = fennecService;
     }
 
     public int getLevel() throws TreeManagerException {
@@ -53,7 +53,7 @@ public class TreeManagerImpl implements ITreeManager {
     }
 
     public ITreeItem getActiveItem() throws TreeManagerException {
-        return nvm3Service.getLastTreeItem();
+        return fennecService.getLastTreeItem();
     }
 
     public ITreeItem[] getSiblings() throws TreeManagerException {
@@ -69,39 +69,39 @@ public class TreeManagerImpl implements ITreeManager {
         return parent.getChildItems();
     }
 
-    private void initNVM3Service() throws TreeManagerException {
-        if (nvm3Service.getStatus() == INVM3Service.NORMAL)
+    private void initFennecService() throws TreeManagerException {
+        if (fennecService.getStatus() == IFennecService.NORMAL)
             return;
         try {
-            nvm3Service.initialize();
-        } catch (NVM3InterruptedException e) {
+            fennecService.initialize();
+        } catch (FennecInterruptedException e) {
             throw new TreeManagerInterruptedException(ITreeManager.UNDONE, e.getMessage(), e);
-        } catch (NVM3Exception e) {
+        } catch (FennecException e) {
             throw new TreeManagerException(ITreeManager.ERROR, e.getMessage(), e);
         }
     }
 
     public int initialize() throws TreeManagerException {
-        initNVM3Service();
+        initFennecService();
         return ITreeManager.NOACTION;
     }
 
     private int moveUpdate(ITreeItem target, boolean update) throws TreeManagerException {
         try {
-            return nvm3Service.moveUpdate(target, update);
-        } catch (NVM3InterruptedException e) {
+            return fennecService.moveUpdate(target, update);
+        } catch (FennecInterruptedException e) {
             throw new TreeManagerInterruptedException(ITreeManager.UNDONE, "Failed to update by move.", e);
-        } catch (NVM3Exception e) {
+        } catch (FennecException e) {
             throw new TreeManagerException(ITreeManager.ERROR, "Failed to update by move.", e);
         }
     }
 
     private int clickUpdate(ITreeItem target) throws TreeManagerException {
         try {
-            return nvm3Service.clickUpdate(target);
-        } catch (NVM3InterruptedException e) {
+            return fennecService.clickUpdate(target);
+        } catch (FennecInterruptedException e) {
             throw new TreeManagerInterruptedException(ITreeManager.UNDONE, "Failed to update by click.", e);
-        } catch (NVM3Exception e) {
+        } catch (FennecException e) {
             throw new TreeManagerException(ITreeManager.ERROR, "Failed to update by click.", e);
         }
     }
@@ -116,12 +116,12 @@ public class TreeManagerImpl implements ITreeManager {
     }
 
     public int stay() throws TreeManagerException {
-        initNVM3Service();
+        initFennecService();
         return getActiveItem().stay();
     }
 
     public int click(boolean doClick) throws TreeManagerException {
-        initNVM3Service();
+        initFennecService();
         ITreeItem item = getActiveItem();
         if (doClick)
             item.doClick();
@@ -129,7 +129,7 @@ public class TreeManagerImpl implements ITreeManager {
     }
 
     public int gotoParent() throws TreeManagerException {
-        initNVM3Service();
+        initFennecService();
         ITreeItem parent = getActiveItem().getParent();
         if (parent != null) {
             int st = moveUpdate(parent, true);
@@ -141,7 +141,7 @@ public class TreeManagerImpl implements ITreeManager {
     }
 
     public int gotoFirstChild() throws TreeManagerException {
-        initNVM3Service();
+        initFennecService();
         ITreeItem active = getActiveItem();
         ITreeItem[] childItems = active.getChildItems();
         if (childItems.length == 0)
@@ -153,7 +153,7 @@ public class TreeManagerImpl implements ITreeManager {
     }
 
     private int gotoLastChild() throws TreeManagerException {
-        initNVM3Service();
+        initFennecService();
         ITreeItem active = getActiveItem();
         ITreeItem[] childItems = active.getChildItems();
         if (childItems.length == 0)
@@ -165,7 +165,7 @@ public class TreeManagerImpl implements ITreeManager {
     }
 
     private int gotoSiblingIndex(int idx) throws TreeManagerException {
-        initNVM3Service();
+        initFennecService();
         ITreeItem active = getActiveItem();
         ITreeItem[] siblingItems = getSiblings();
         if ((idx < 0) || (siblingItems.length <= idx) || (active.equals(siblingItems[idx])))
@@ -175,7 +175,7 @@ public class TreeManagerImpl implements ITreeManager {
     }
 
     private int getActiveIndex() throws TreeManagerException {
-        initNVM3Service();
+        initFennecService();
         return getActiveItem().getNth();
     }
 
@@ -184,7 +184,7 @@ public class TreeManagerImpl implements ITreeManager {
     }
 
     public int gotoEndOfSiblings() throws TreeManagerException {
-        initNVM3Service();
+        initFennecService();
         ITreeItem[] siblingItems = getSiblings();
         int st = moveUpdate(siblingItems[siblingItems.length - 1], true);
         return st | ITreeManager.MOVED;
@@ -285,7 +285,7 @@ public class TreeManagerImpl implements ITreeManager {
                 if (proposition.eval(item)) {
                     rc |= ITreeManager.FOUND;
                 } else {
-                    rc = nvm3Service.searchBackward(proposition);
+                    rc = fennecService.searchBackward(proposition);
                 }
             } else {
                 // Likewise.
@@ -294,7 +294,7 @@ public class TreeManagerImpl implements ITreeManager {
                 if (proposition.eval(item)) {
                     rc |= ITreeManager.FOUND;
                 } else {
-                    rc = nvm3Service.searchForward(proposition);
+                    rc = fennecService.searchForward(proposition);
                 }
             }
             if ((rc & ITreeManager.FOUND) == 0) {
@@ -319,9 +319,9 @@ public class TreeManagerImpl implements ITreeManager {
                 rc |= ITreeManager.LEVEL_CHANGED;
             }
             return rc;
-        } catch (NVM3InterruptedException e) {
+        } catch (FennecInterruptedException e) {
             throw new TreeManagerInterruptedException(ITreeManager.UNDONE, "Failed to search.", e);
-        } catch (NVM3Exception e) {
+        } catch (FennecException e) {
             throw new TreeManagerException(ITreeManager.ERROR, "Failed to search.", e);
         }
     }
@@ -440,7 +440,7 @@ public class TreeManagerImpl implements ITreeManager {
     }
 
     public int traverse(boolean back) throws TreeManagerException {
-        initNVM3Service();
+        initFennecService();
         ITreeItem orig = getActiveItem();
         ITreeItem current = orig;
         int level = getLevel();
@@ -481,7 +481,7 @@ public class TreeManagerImpl implements ITreeManager {
     }
 
     public String[] getActiveStrings() throws TreeManagerException {
-        initNVM3Service();
+        initFennecService();
         ArrayList al = new ArrayList();
         ITreeItem[] siblings = getSiblings();
         for (int i = getActiveIndex(); i < siblings.length; i++) {
@@ -528,7 +528,7 @@ public class TreeManagerImpl implements ITreeManager {
     }
 
     public ITreeItem getCurrentRootItem() throws TreeManagerException {
-        initNVM3Service();
+        initFennecService();
         ITreeItem parent, current;
         current = getActiveItem();
         while (true) {
@@ -541,62 +541,62 @@ public class TreeManagerImpl implements ITreeManager {
     }
 
     public ISoundControl getSoundControl() throws TreeManagerException {
-        initNVM3Service();
-        return nvm3Service.getSoundControl();
+        initFennecService();
+        return fennecService.getSoundControl();
     }
 
     public IVideoControl getVideoControl() throws TreeManagerException {
-        initNVM3Service();
-        return nvm3Service.getVideoControl();
+        initFennecService();
+        return fennecService.getVideoControl();
     }
 
     public IAccessKeyList getAccessKeyList() throws TreeManagerException {
-        initNVM3Service();
-        return nvm3Service.getAccessKeyList();
+        initFennecService();
+        return fennecService.getAccessKeyList();
     }
 
     public int analyze() throws TreeManagerException {
-        initNVM3Service();
+        initFennecService();
         try {
-            return nvm3Service.analyze();
-        } catch (NVM3Exception e) {
+            return fennecService.analyze();
+        } catch (FennecException e) {
             throw new TreeManagerException(ITreeManager.ERROR, "Failed to analyze", e);
         }
     }
 
     public ILocation getCurrentLocation() throws TreeManagerException {
-        initNVM3Service();
+        initFennecService();
         return new LocationImpl(getActivePos());
     }
 
     public int moveToLocation(ILocation location) throws TreeManagerException {
-        initNVM3Service();
+        initFennecService();
         LocationImpl loc = (LocationImpl) location;
         int[] pos = loc.getPos();
         return setActivePos(pos);
     }
 
     public ITreeItem expandWholeTree() throws TreeManagerException {
-        initNVM3Service();
+        initFennecService();
         try {
-            return nvm3Service.expandWholeTree();
-        } catch (NVM3Exception e) {
+            return fennecService.expandWholeTree();
+        } catch (FennecException e) {
             throw new TreeManagerException(ITreeManager.ERROR, "Failed to expand the whole tree", e);
         }
     }
 
     public int skipToAnchor(String target) throws TreeManagerException {
-        initNVM3Service();
+        initFennecService();
         try {
-            return nvm3Service.skipToAnchor(target);
-        } catch (NVM3Exception e) {
+            return fennecService.skipToAnchor(target);
+        } catch (FennecException e) {
             throw new TreeManagerException(ITreeManager.ERROR, "Failed to find the target in the anchors", e);
         }
     }
     
     public void repairFlash() throws TreeManagerException {
-        initNVM3Service();
-        IFlashNode[] node = nvm3Service.getFlashTopNodes();
+        initFennecService();
+        IFlashNode[] node = fennecService.getFlashTopNodes();
         for (int i = 0; i < node.length; i++) {
             node[i].repairFlash();
         }

@@ -15,19 +15,11 @@ import org.eclipse.actf.ai.query.IQuery;
 import org.eclipse.actf.model.dom.dombycom.INodeEx;
 
 
-class NVM3TableMetadata extends NVM3BundleMetadata {
-    private final NVM3TableRowMetadata[] rowMds;
-
-    public int getRowSize() {
-        return rowMds.length;
-    }
-
-    public NVM3TableRowMetadata getRow(int idx) {
-        return rowMds[idx];
-    }
+class FennecGroupMetadata extends FennecBundleMetadata {
     
     public String getAltText(ITreeItem item) {
         String r = super.getAltText(item);
+        if (r == null) return null;
         if (r.length() > 0) return r;
         // If not specified, extract some string from the node.
         return NodeUtil.extractString(item);
@@ -44,12 +36,10 @@ class NVM3TableMetadata extends NVM3BundleMetadata {
         return 0;
     }
 
-    NVM3TableMetadata(NVM3ServiceImpl nvm3Service,
-                      IQuery q, NVM3Mode mode,
-                      NVM3Metadata[] childMds,
-                      NVM3TableRowMetadata[] rowMds) {
-        super(nvm3Service, q, mode, childMds);
-        this.rowMds = rowMds;
+    FennecGroupMetadata(FennecServiceImpl fennecService,
+                      IQuery q, FennecMode mode,
+                      FennecMetadata[] childMds) {
+        super(fennecService, q, mode, childMds);
     }
 
 }

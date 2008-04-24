@@ -257,7 +257,7 @@ public class NavigatorImplEx extends NavigatorImpl {
     }
 
     private void refresh() throws TreeManagerException {
-        selectUserNVM3();
+        selectUserFennec();
     }
     
     public void removeUserInfo() {

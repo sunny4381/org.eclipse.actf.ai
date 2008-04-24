@@ -97,7 +97,7 @@ public class ScreenReaderExtension {
         ScreenReaderExtension[] exs = getExtensions();
         if (exs == null) return;
         for (int i = 0; i < exs.length; i++) {
-            exs[i].getScreenReaderControl().takeBackControl(browser);
+            exs[i].getScreenReaderControl().takeBackControl();
         }
     }
 

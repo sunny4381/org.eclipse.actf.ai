@@ -10,12 +10,22 @@
  *******************************************************************************/
 package org.eclipse.actf.ai.fennec.treemanager;
 
-import org.eclipse.actf.ai.fennec.INVM3Service;
+import org.eclipse.actf.ai.fennec.IFennecService;
 import org.eclipse.actf.ai.fennec.treemanager.impl.TreeManagerImpl;
 
-
+/**
+ * The factory class for ITreeManager.
+ */
 public class TreeManagerFactory {
-    public static ITreeManager newITreeManager(INVM3Service nvm3Service) {
-        return new TreeManagerImpl(nvm3Service);
-    }
+	/**
+	 * It creates a new instance of ITreeManager from an IFennecService.
+	 * 
+	 * @param fennecService
+	 *            the instance of the IFennecService to be used in the tree
+	 *            manager.
+	 * @return new instance of the ITreeManager.
+	 */
+	public static ITreeManager newITreeManager(IFennecService fennecService) {
+		return new TreeManagerImpl(fennecService);
+	}
 }

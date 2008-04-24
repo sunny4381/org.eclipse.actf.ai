@@ -11,9 +11,24 @@
 
 package org.eclipse.actf.ai.xmlstore;
 
+/**
+ * IXMLSelector interface defines the methods to get information for selecting
+ * XML files from the IXMLStore.
+ */
 public interface IXMLSelector {
-    String getDocumentElementName();
-    String getDocumentElementNS();
+	/**
+	 * @return the name of the XML document element.
+	 */
+	String getDocumentElementName();
 
-    String getURI();
+	/**
+	 * @return the namespace of the XML document element.
+	 */
+	String getDocumentElementNS();
+
+	/**
+	 * @return the URI to be matched with the pattern declaration in the
+	 *         metadata file.
+	 */
+	String getURI();
 }
