@@ -18,10 +18,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import org.eclipse.actf.ai.key.keyhook.win32.IKeyHook;
-import org.eclipse.actf.ai.key.keyhook.win32.IKeyHookListener;
-import org.eclipse.actf.ai.key.keyhook.win32.ISendEvent;
-import org.eclipse.actf.ai.key.keyhook.win32.KeyHookWin32Plugin;
 import org.eclipse.actf.ai.key.keyui.Messages;
 import org.eclipse.actf.ai.key.keyui.impl.KeyUIImpl.KC.Type;
 import org.eclipse.actf.ai.navigator.IBrowserControl;
@@ -34,6 +30,10 @@ import org.eclipse.actf.ai.xmlstore.IXMLStore;
 import org.eclipse.actf.ai.xmlstore.IXMLStoreService;
 import org.eclipse.actf.ai.xmlstore.XMLStoreException;
 import org.eclipse.actf.ai.xmlstore.XMLStorePlugin;
+import org.eclipse.actf.util.win32.comclutch.ComPlugin;
+import org.eclipse.actf.util.win32.keyhook.IKeyHook;
+import org.eclipse.actf.util.win32.keyhook.IKeyHookListener;
+import org.eclipse.actf.util.win32.keyhook.ISendEvent;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.Separator;
@@ -86,8 +86,8 @@ public class KeyUIImpl implements IKeyHookListener, IManipulator {
     }
 
     public void initialize() {
-        keyHook = KeyHookWin32Plugin.getDefault().newKeyHook(this);
-        sendEvent = KeyHookWin32Plugin.getDefault().newSendEvent();
+        keyHook = ComPlugin.getDefault().newKeyHook(this);
+        sendEvent = ComPlugin.getDefault().newSendEvent();
 
         IXMLStoreService xmlStoreService = XMLStorePlugin.getDefault().getXMLStoreService();
         IXMLSelector selector = xmlStoreService.getSelectorWithDocElem("UserPreferences", PREFERENCES_NS);

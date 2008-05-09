@@ -14,7 +14,7 @@ package org.eclipse.actf.ai.query.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.actf.model.dom.dombycom.IMSAANode;
+import org.eclipse.actf.model.dom.dombycom.IFlashMSAANode;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -36,12 +36,12 @@ public class MSAAQueryImpl {
 
     public List<Node> query(Node base) {
         if (ids == null) return null;
-        if (!(base instanceof IMSAANode)) return null;
-        IMSAANode mn = (IMSAANode) base;
+        if (!(base instanceof IFlashMSAANode)) return null;
+        IFlashMSAANode mn = (IFlashMSAANode) base;
 
         List<Node> r = new ArrayList<Node>();
         for (int i = 0; i < ids.length; i++) {
-            IMSAANode n = mn.searchByID(ids[i]);
+            IFlashMSAANode n = mn.searchByID(ids[i]);
             if (n != null) r.add(n);
         }
         return r;
@@ -57,10 +57,10 @@ public class MSAAQueryImpl {
     }
     
     static Attr serializeQuery(Node domNode, Node usrNode) {
-        if (!(domNode instanceof IMSAANode))
+        if (!(domNode instanceof IFlashMSAANode))
             return null;
         Document doc = usrNode.getOwnerDocument();
-        String target = ((IMSAANode)domNode).getID();
+        String target = ((IFlashMSAANode)domNode).getID();
         if (target != null && target.length() > 0) {
             Attr attr = doc.createAttributeNS(MSAA_QUERY_NS, "msq:idrefs");
             attr.setNodeValue(target);

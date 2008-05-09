@@ -6,8 +6,8 @@ Bundle-Version: 0.0.1
 Bundle-Activator: org.eclipse.actf.ai.key.keyui.KeyUIPlugin
 Bundle-Vendor: Eclipse.org
 Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.actf.ai.key.keyhook.win32,
  org.eclipse.actf.ai.xmlstore,
  org.eclipse.ui,
- org.eclipse.actf.ai.navigator
+ org.eclipse.actf.ai.navigator,
+ org.eclipse.actf.util.comclutch.win32
 Eclipse-LazyStart: true

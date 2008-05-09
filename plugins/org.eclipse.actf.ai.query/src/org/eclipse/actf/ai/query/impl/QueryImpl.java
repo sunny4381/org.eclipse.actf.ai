@@ -17,7 +17,7 @@ import java.util.List;
 
 import org.eclipse.actf.ai.query.IQuery;
 import org.eclipse.actf.model.dom.dombycom.IFlashNode;
-import org.eclipse.actf.model.dom.dombycom.IMSAANode;
+import org.eclipse.actf.model.dom.dombycom.IFlashMSAANode;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -173,8 +173,8 @@ public class QueryImpl implements IQuery {
         if (domTarget instanceof IFlashNode) {
             xmlNode = ((IFlashNode) domTarget).getBaseNode();
             flashAttr = FlashQueryImpl.serializeQuery(domTarget, usrParent);
-        } else if (domTarget instanceof IMSAANode) {
-            xmlNode = ((IMSAANode) domTarget).getBaseNode();
+        } else if (domTarget instanceof IFlashMSAANode) {
+            xmlNode = ((IFlashMSAANode) domTarget).getBaseNode();
             flashAttr = MSAAQueryImpl.serializeQuery(domTarget, usrParent);
         } else {
             xmlNode = domTarget;
