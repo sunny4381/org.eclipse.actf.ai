@@ -26,7 +26,7 @@ import org.eclipse.actf.ai.navigator.userinfo.impl.LandmarkMaker;
 import org.eclipse.actf.ai.navigator.userinfo.impl.MetaDataModifier;
 import org.eclipse.actf.ai.navigator.util.ContentShortener;
 import org.eclipse.actf.ai.xmlstore.XMLStoreException;
-import org.eclipse.actf.model.IWebBrowserACTF;
+import org.eclipse.actf.model.ui.editor.browser.IWebBrowserACTF;
 import org.eclipse.actf.util.ui.PlatformUIUtil;
 import org.eclipse.actf.util.vocab.Vocabulary;
 import org.eclipse.jface.dialogs.InputDialog;

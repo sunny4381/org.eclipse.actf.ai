@@ -14,7 +14,7 @@ package org.eclipse.actf.ai.screenreader.jaws;
 import org.eclipse.actf.ai.navigator.IScreenReaderControl;
 import org.eclipse.actf.ai.tts.ITTSEngine;
 import org.eclipse.actf.ai.voice.IVoiceEventListener;
-import org.eclipse.actf.model.IWebBrowserACTF;
+import org.eclipse.actf.model.ui.editor.browser.IWebBrowserACTF;
 
 /**
  * The implementation of ITTSEngine to use JAWS as voice engine.

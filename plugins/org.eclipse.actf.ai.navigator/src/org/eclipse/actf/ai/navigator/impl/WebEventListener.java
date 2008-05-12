@@ -14,16 +14,17 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
 
-import org.eclipse.actf.ai.fennec.IFennecMediator;
 import org.eclipse.actf.ai.fennec.FennecPlugin;
+import org.eclipse.actf.ai.fennec.IFennecMediator;
 import org.eclipse.actf.ai.fennec.treemanager.ILocation;
 import org.eclipse.actf.ai.navigator.broker.RequestBroker;
 import org.eclipse.actf.ai.navigator.extension.ManipulatorExtension;
 import org.eclipse.actf.ai.navigator.extension.MediaControlExtension;
 import org.eclipse.actf.ai.navigator.extension.ScreenReaderExtension;
-import org.eclipse.actf.model.IModelServiceHolder;
-import org.eclipse.actf.model.IWebBrowserACTF;
-import org.eclipse.actf.model.events.IWebBrowserACTFEventListener;
+import org.eclipse.actf.model.ui.IModelServiceHolder;
+import org.eclipse.actf.model.ui.editor.browser.IWebBrowserACTF;
+import org.eclipse.actf.model.ui.editor.browser.IWebBrowserACTFEventListener;
+import org.eclipse.actf.model.ui.editor.browser.IWebBrowserACTF.WebBrowserNavigationEventListnerHolder;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
@@ -103,7 +104,7 @@ public class WebEventListener implements IWebBrowserACTFEventListener {
         this.browserStateMap = new HashMap<IWebBrowserACTF, BrowserState>();
         this.tripJournal = new TripJournal();
         this.browserControl = new BrowserControlImpl(this, this.tripJournal);
-        IWebBrowserACTF.WebBrowserNavigationEventListnerHolder.LISTENER = this.browserControl;
+        WebBrowserNavigationEventListnerHolder.LISTENER = this.browserControl;
         ManipulatorExtension.setBrowserControl(this.browserControl);
 
         requestBroker = new RequestBroker(this);

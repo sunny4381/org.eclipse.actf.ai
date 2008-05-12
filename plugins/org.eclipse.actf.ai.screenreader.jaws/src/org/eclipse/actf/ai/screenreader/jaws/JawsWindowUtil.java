@@ -12,7 +12,7 @@
 package org.eclipse.actf.ai.screenreader.jaws;
 
 import org.eclipse.actf.ai.voice.IVoiceEventListener;
-import org.eclipse.actf.model.IWebBrowserACTF;
+import org.eclipse.actf.model.ui.editor.browser.IWebBrowserACTF;
 
 /**
  * JawsWindowUtil is an utility to control JAWS behavior. The strategy of this

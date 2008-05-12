@@ -12,7 +12,7 @@
 package org.eclipse.actf.ai.fennec;
 
 import org.eclipse.actf.ai.fennec.mediator.FennecMediatorImpl;
-import org.eclipse.actf.model.IWebBrowserACTF;
+import org.eclipse.actf.model.ui.editor.browser.IWebBrowserACTF;
 import org.eclipse.core.runtime.Plugin;
 import org.osgi.framework.BundleContext;
 

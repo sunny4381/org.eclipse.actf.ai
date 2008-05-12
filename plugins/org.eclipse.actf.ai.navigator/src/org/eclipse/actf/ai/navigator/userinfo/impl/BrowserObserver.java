@@ -11,7 +11,7 @@
 
 package org.eclipse.actf.ai.navigator.userinfo.impl;
 
-import org.eclipse.actf.model.IWebBrowserACTF;
+import org.eclipse.actf.model.ui.editor.browser.IWebBrowserACTF;
 
 
 

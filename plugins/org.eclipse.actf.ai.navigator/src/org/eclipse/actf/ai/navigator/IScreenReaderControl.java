@@ -11,7 +11,6 @@
 
 package org.eclipse.actf.ai.navigator;
 
-import org.eclipse.actf.model.IWebBrowserACTF;
 
 
 

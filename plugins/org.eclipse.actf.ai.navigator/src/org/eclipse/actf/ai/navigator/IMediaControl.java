@@ -14,7 +14,7 @@ package org.eclipse.actf.ai.navigator;
 import org.eclipse.actf.ai.fennec.treemanager.ISoundControl;
 import org.eclipse.actf.ai.fennec.treemanager.IVideoControl;
 import org.eclipse.actf.ai.voice.IVoice;
-import org.eclipse.actf.model.IWebBrowserACTF;
+import org.eclipse.actf.model.ui.editor.browser.IWebBrowserACTF;
 
 
 /**

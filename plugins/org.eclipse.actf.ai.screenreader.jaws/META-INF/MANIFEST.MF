@@ -9,5 +9,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.actf.common,
  org.eclipse.actf.ai.navigator,
- org.eclipse.actf.ai.voice
+ org.eclipse.actf.ai.voice,
+ org.eclipse.actf.model.ui
 Eclipse-LazyStart: true

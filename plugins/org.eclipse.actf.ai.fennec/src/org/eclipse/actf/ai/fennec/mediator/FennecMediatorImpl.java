@@ -27,8 +27,8 @@ import org.eclipse.actf.ai.xmlstore.IXMLSelector;
 import org.eclipse.actf.ai.xmlstore.IXMLStore;
 import org.eclipse.actf.ai.xmlstore.IXMLStoreService;
 import org.eclipse.actf.ai.xmlstore.XMLStorePlugin;
-import org.eclipse.actf.model.IWebBrowserACTF;
 import org.eclipse.actf.model.dom.dombycom.IDocumentEx;
+import org.eclipse.actf.model.ui.editor.browser.IWebBrowserACTF;
 
 
 
