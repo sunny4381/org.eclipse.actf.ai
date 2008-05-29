@@ -20,7 +20,7 @@ import org.eclipse.actf.ai.fennec.treemanager.IVideoControl;
 import org.eclipse.actf.model.dom.dombycom.AnalyzedResult;
 import org.eclipse.actf.model.dom.dombycom.INodeEx;
 import org.eclipse.actf.model.dom.dombycom.INodeExVideo;
-import org.eclipse.actf.util.timer.WeakSyncTimer;
+import org.eclipse.actf.ui.util.timer.WeakSyncTimer;
 import org.eclipse.actf.util.vocab.IProposition;
 import org.eclipse.actf.util.vocab.Vocabulary;
 

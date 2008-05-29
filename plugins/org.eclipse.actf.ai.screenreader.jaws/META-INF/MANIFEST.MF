@@ -7,7 +7,7 @@ Bundle-Activator: org.eclipse.actf.ai.screenreader.jaws.JawsPlugin
 Bundle-Vendor: Eclipse.org
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.eclipse.actf.common,
+ org.eclipse.actf.core,
  org.eclipse.actf.ai.navigator,
  org.eclipse.actf.ai.voice,
  org.eclipse.actf.model.ui

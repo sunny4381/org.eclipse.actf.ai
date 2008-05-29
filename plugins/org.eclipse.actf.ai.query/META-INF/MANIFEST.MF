@@ -8,6 +8,6 @@ Bundle-Vendor: Eclipse.org
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.actf.model.dom.dombycom,
  org.eclipse.actf.util.vocab,
- org.eclipse.actf.common
+ org.eclipse.actf.core
 Eclipse-LazyStart: true
 Export-Package: org.eclipse.actf.ai.query

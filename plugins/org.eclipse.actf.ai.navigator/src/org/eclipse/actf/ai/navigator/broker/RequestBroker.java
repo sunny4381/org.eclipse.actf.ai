@@ -16,7 +16,7 @@ import org.eclipse.actf.ai.fennec.treemanager.ITreeManager;
 import org.eclipse.actf.ai.navigator.impl.NavigatorImpl;
 import org.eclipse.actf.ai.navigator.impl.WebEventListener;
 import org.eclipse.actf.model.ui.editor.browser.IWebBrowserACTF;
-import org.eclipse.actf.util.timer.Yield;
+import org.eclipse.actf.ui.util.timer.Yield;
 
 
 public class RequestBroker {

@@ -8,7 +8,7 @@ Bundle-Vendor: Eclipse.org
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
- org.eclipse.actf.common,
+ org.eclipse.actf.core,
  org.eclipse.actf.ai.fennec,
  org.eclipse.actf.util.vocab,
  org.eclipse.actf.model.ui,

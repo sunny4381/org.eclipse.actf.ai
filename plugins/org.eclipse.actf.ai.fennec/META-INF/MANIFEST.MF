@@ -7,12 +7,13 @@ Bundle-Activator: org.eclipse.actf.ai.fennec.FennecPlugin
 Bundle-Vendor: Eclipse.org
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.actf.util.vocab,
- org.eclipse.actf.common,
+ org.eclipse.actf.core,
  org.eclipse.actf.model.ui,
  org.eclipse.actf.model.dom.dombycom,
  org.eclipse.actf.ai.query,
  org.eclipse.actf.ai.xmlstore,
- org.eclipse.swt
+ org.eclipse.swt,
+ org.eclipse.actf.ui
 Eclipse-LazyStart: true
 Export-Package: org.eclipse.actf.ai.fennec,
  org.eclipse.actf.ai.fennec.treemanager

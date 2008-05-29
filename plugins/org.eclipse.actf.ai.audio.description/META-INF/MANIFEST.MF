@@ -12,7 +12,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.actf.ai.navigator,
  org.eclipse.actf.ai.voice,
  org.eclipse.actf.ai.xmlstore,
- org.eclipse.actf.common,
+ org.eclipse.actf.core,
+ org.eclipse.actf.ui,
  org.eclipse.actf.model.ui
 Eclipse-LazyStart: true
 Export-Package: org.eclipse.actf.ai.audio.description

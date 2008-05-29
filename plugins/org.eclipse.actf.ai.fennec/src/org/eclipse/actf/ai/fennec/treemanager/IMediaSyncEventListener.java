@@ -11,7 +11,7 @@
 
 package org.eclipse.actf.ai.fennec.treemanager;
 
-import org.eclipse.actf.util.timer.SyncEventListener;
+import org.eclipse.actf.ui.util.timer.SyncEventListener;
 
 /**
  * IMediaSyncEventListener is the place holder of the implementation of
