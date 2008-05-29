@@ -47,6 +47,7 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
+            category="org.eclipse.actf.ui.preferences.RootPreferencePage"
             class="org.eclipse.actf.ai.audio.description.preferences.ADPreferencePage"
             id="org.eclipse.actf.ai.audio.description.preferences.ADPreferencePage"
             name="%AudioDescription.preference.name"/>

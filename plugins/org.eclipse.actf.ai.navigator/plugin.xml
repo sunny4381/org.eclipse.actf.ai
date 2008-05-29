@@ -22,6 +22,7 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
+            category="org.eclipse.actf.ui.preferences.RootPreferencePage"
             class="org.eclipse.actf.ai.navigator.preferences.UserInfoPreferencePage"
             id="org.eclipse.actf.ai.navigator.preferences.UserInfoPreferencePage"
             name="%UserAnnotation"/>

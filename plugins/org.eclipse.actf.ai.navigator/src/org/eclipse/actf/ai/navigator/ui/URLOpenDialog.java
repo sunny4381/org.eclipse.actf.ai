@@ -11,7 +11,7 @@
 package org.eclipse.actf.ai.navigator.ui;
 
 import org.eclipse.actf.ai.navigator.Messages;
-import org.eclipse.actf.util.ui.IDialogConstants;
+import org.eclipse.actf.ui.util.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;

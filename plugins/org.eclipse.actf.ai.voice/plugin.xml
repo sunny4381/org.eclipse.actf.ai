@@ -6,6 +6,7 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
+            category="org.eclipse.actf.ui.preferences.RootPreferencePage"
             class="org.eclipse.actf.ai.voice.preferences.VoicePreferencePage"
             id="org.eclipse.actf.ai.voice.preferences.VoicePreferencePage"
             name="%VoicePreferencePage.name"/>
