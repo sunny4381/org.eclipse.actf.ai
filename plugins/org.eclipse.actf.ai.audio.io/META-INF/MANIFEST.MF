@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Eclipse ACTF Audio IO Plug-in (Incubation)
 Bundle-SymbolicName: org.eclipse.actf.ai.audio.io
-Bundle-Version: 0.0.1
+Bundle-Version: 0.0.1.qualifier
 Bundle-Activator: org.eclipse.actf.ai.audio.io.Activator
 Bundle-Vendor: Eclipse.org
 Require-Bundle: org.eclipse.ui,
