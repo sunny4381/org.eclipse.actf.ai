@@ -178,7 +178,7 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.actf.util.comclutch.win32"
+         id="org.eclipse.actf.util.win32.comclutch"
          download-size="0"
          install-size="0"
          version="0.0.0"
