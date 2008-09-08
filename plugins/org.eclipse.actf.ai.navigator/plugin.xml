@@ -8,6 +8,7 @@
    <extension
          point="org.eclipse.ui.views">
       <view
+            category="org.eclipse.actf.ai.ui.views"
             class="org.eclipse.actf.ai.navigator.views.NavigatorTreeView"
             icon="icons/treex16.gif"
             id="org.eclipse.actf.ai.navigator.views.NavigatorTreeView"
