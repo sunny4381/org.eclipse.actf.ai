@@ -232,7 +232,7 @@ public class WebEventListener implements IWebBrowserACTFEventListener {
         bs.navigator.progressChange(progress, progressMax);
     }
 
-    public void myDocumentComplete(IWebBrowserACTF webBrowser) {
+    public void rootDocumentComplete(IWebBrowserACTF webBrowser) {
         if (EVENT_DEBUG) System.out.println("myDocumentComplete " + webBrowser);
         BrowserState bs = getBrowserState(webBrowser);
         
@@ -304,7 +304,7 @@ public class WebEventListener implements IWebBrowserACTFEventListener {
         }
     }
 
-    public void myRefresh(IWebBrowserACTF webBrowser) {
+    public void refreshStart(IWebBrowserACTF webBrowser) {
         if (EVENT_DEBUG) System.out.println("myRefresh " + webBrowser);
         BrowserState bs = getBrowserState(webBrowser);
         bs.resetState();
@@ -312,7 +312,7 @@ public class WebEventListener implements IWebBrowserACTFEventListener {
         bs.navigator.beforeNavigation(webBrowser.getURL());
     }
 
-    public void myRefreshComplete(IWebBrowserACTF webBrowser) {
+    public void refreshComplete(IWebBrowserACTF webBrowser) {
         if (EVENT_DEBUG) System.out.println("Refresh Complete " + webBrowser);
         BrowserState bs = getBrowserState(webBrowser);
         bs.navigator.restoreLocation(bs.savedLocationForMyRefresh);
