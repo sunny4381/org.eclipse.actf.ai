@@ -15,10 +15,9 @@
             name="%NavigationTreeView.name"/>
    </extension>
    <extension
-         point="org.eclipse.actf.model.ui.editors.ie.WebBrowserEventListener">
+         point="org.eclipse.actf.model.ui.webBrowserEventListener">
       <listener
-            class="org.eclipse.actf.ai.navigator.impl.WebEventListener"
-            id="org.eclipse.actf.ai.navigator.impl.WebEventListener"/>
+            class="org.eclipse.actf.ai.navigator.impl.WebEventListener"/>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
