@@ -10,8 +10,8 @@
  *******************************************************************************/
 package org.eclipse.actf.ai.navigator.preferences;
 
-import org.eclipse.actf.ai.navigator.Messages;
-import org.eclipse.actf.ai.navigator.NavigatorPlugin;
+import org.eclipse.actf.ai.internal.navigator.Messages;
+import org.eclipse.actf.ai.internal.navigator.NavigatorPlugin;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;

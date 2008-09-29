@@ -12,7 +12,7 @@
 package org.eclipse.actf.ai.navigator.impl;
 
 import org.eclipse.actf.ai.fennec.treemanager.ITreeItem;
-import org.eclipse.actf.ai.navigator.Messages;
+import org.eclipse.actf.ai.internal.navigator.Messages;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;

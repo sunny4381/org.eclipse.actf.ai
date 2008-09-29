@@ -11,8 +11,8 @@
 
 package org.eclipse.actf.ai.audio.description.preferences;
 
-import org.eclipse.actf.ai.audio.description.DescriptionPlugin;
-import org.eclipse.actf.ai.audio.description.Messages;
+import org.eclipse.actf.ai.internal.audio.description.DescriptionPlugin;
+import org.eclipse.actf.ai.internal.audio.description.Messages;
 import org.eclipse.actf.ai.tts.TTSRegistry;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;

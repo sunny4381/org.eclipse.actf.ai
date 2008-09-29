@@ -10,7 +10,7 @@
  *******************************************************************************/
 package org.eclipse.actf.ai.navigator.preferences;
 
-import org.eclipse.actf.ai.navigator.NavigatorPlugin;
+import org.eclipse.actf.ai.internal.navigator.NavigatorPlugin;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 

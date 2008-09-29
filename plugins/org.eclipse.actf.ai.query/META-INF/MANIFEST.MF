@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Eclipse ACTF Query Plug-in (Incubation)
 Bundle-SymbolicName: org.eclipse.actf.ai.query
 Bundle-Version: 0.0.1.qualifier
-Bundle-Activator: org.eclipse.actf.ai.query.QueryPlugin
+Bundle-Activator: org.eclipse.actf.ai.internal.query.QueryPlugin
 Bundle-Vendor: Eclipse.org
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.actf.model.dom.dombycom,

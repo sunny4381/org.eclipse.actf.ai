@@ -11,6 +11,8 @@
 
 package org.eclipse.actf.ai.navigator;
 
+import org.eclipse.actf.ai.internal.navigator.Messages;
+
 
 /**
  * IManipulator interface defines the methods to be implemented by the "manipulator"

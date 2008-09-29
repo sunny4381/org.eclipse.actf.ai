@@ -23,13 +23,13 @@ import org.eclipse.actf.ai.key.keyui.impl.KeyUIImpl.KC.Type;
 import org.eclipse.actf.ai.navigator.IBrowserControl;
 import org.eclipse.actf.ai.navigator.IManipulator;
 import org.eclipse.actf.ai.navigator.INavigatorUI;
-import org.eclipse.actf.ai.navigator.NavigatorPlugin;
+import org.eclipse.actf.ai.navigator.ui.NavigatorUIUtil;
 import org.eclipse.actf.ai.xmlstore.IXMLInfo;
 import org.eclipse.actf.ai.xmlstore.IXMLSelector;
 import org.eclipse.actf.ai.xmlstore.IXMLStore;
 import org.eclipse.actf.ai.xmlstore.IXMLStoreService;
 import org.eclipse.actf.ai.xmlstore.XMLStoreException;
-import org.eclipse.actf.ai.xmlstore.XMLStorePlugin;
+import org.eclipse.actf.ai.xmlstore.XMLStoreServiceUtil;
 import org.eclipse.actf.util.win32.comclutch.ComPlugin;
 import org.eclipse.actf.util.win32.keyhook.IKeyHook;
 import org.eclipse.actf.util.win32.keyhook.IKeyHookListener;
@@ -89,7 +89,7 @@ public class KeyUIImpl implements IKeyHookListener, IManipulator {
         keyHook = ComPlugin.getDefault().newKeyHook(this);
         sendEvent = ComPlugin.getDefault().newSendEvent();
 
-        IXMLStoreService xmlStoreService = XMLStorePlugin.getDefault().getXMLStoreService();
+        IXMLStoreService xmlStoreService = XMLStoreServiceUtil.getXMLStoreService();
         IXMLSelector selector = xmlStoreService.getSelectorWithDocElem("UserPreferences", PREFERENCES_NS);
         IXMLStore rootStore = xmlStoreService.getRootStore();
         IXMLStore specifiedStroe = rootStore.specify(selector);
@@ -198,7 +198,7 @@ public class KeyUIImpl implements IKeyHookListener, IManipulator {
             return;
         String name = command.getLocalName();
 
-        IMenuManager menu = NavigatorPlugin.menuManager;
+        IMenuManager menu = NavigatorUIUtil.menuManager;
         IMenuManager menu2 = menu.findMenuUsingPath(menuName);
 
         if ("separator".equals(name)) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 IBM Corporation and Others
+ * Copyright (c) 2007, 2008 IBM Corporation and Others
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -9,10 +9,11 @@
  *    Hisashi MIYASHITA - initial API and implementation
  *******************************************************************************/
 
-package org.eclipse.actf.ai.xmlstore;
+package org.eclipse.actf.ai.internal.xmlstore;
 
 import java.io.File;
 
+import org.eclipse.actf.ai.xmlstore.XMLStoreServiceUtil;
 import org.eclipse.actf.ai.xmlstore.local.UserXMLStore;
 import org.eclipse.actf.ai.xmlstore.local.XMLStoreLocal;
 import org.eclipse.actf.ai.xmlstore.spi.XMLStoreServiceImpl;
@@ -87,32 +88,12 @@ public class XMLStorePlugin extends Plugin {
 		return stateLocationPath.toFile();
 	}
 
-	private static final String[] XML_EXT = new String[] { ".xml", ".fnc" };
-
 	private void initialize() {
 		XMLStoreServiceImpl.getInstance().setUserStore(
 				new UserXMLStore(getLocalDir(UserXMLStore.TEMP_DIR_NAME),
-						XML_EXT));
+						XMLStoreServiceUtil.XML_EXT));
 		XMLStoreServiceImpl.getInstance().addStore(
 				new XMLStoreLocal(getLocalDir(XMLStoreLocal.SYSTEM_DIR_NAME),
-						XML_EXT));
-	}
-
-	/**
-	 * The settings of the application should be contained in the system store.
-	 * 
-	 * @param location
-	 *            the location to be added for searching XML files.
-	 */
-	public void addSystemStore(File location) {
-		XMLStoreServiceImpl.getInstance().addStore(
-				new XMLStoreLocal(location, XML_EXT));
-	}
-
-	/**
-	 * @return the singleton instance of the IXMLStoreService.
-	 */
-	public IXMLStoreService getXMLStoreService() {
-		return XMLStoreServiceImpl.getInstance();
+						XMLStoreServiceUtil.XML_EXT));
 	}
 }

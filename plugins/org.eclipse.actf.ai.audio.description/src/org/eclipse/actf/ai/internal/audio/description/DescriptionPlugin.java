@@ -8,12 +8,13 @@
  * Contributors:
  *    Daisuke SATO - initial API and implementation
  *******************************************************************************/
-package org.eclipse.actf.ai.audio.description;
+package org.eclipse.actf.ai.internal.audio.description;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Locale;
 
+import org.eclipse.actf.ai.audio.description.IMetadataProvider;
 import org.eclipse.actf.ai.audio.description.impl.MetadataManager;
 import org.eclipse.actf.ai.audio.description.impl.MetadataProviderImpl;
 import org.eclipse.actf.ai.audio.description.views.DescriptionView;
@@ -25,7 +26,7 @@ import org.eclipse.actf.ai.xmlstore.IXMLInfo;
 import org.eclipse.actf.ai.xmlstore.IXMLSelector;
 import org.eclipse.actf.ai.xmlstore.IXMLStore;
 import org.eclipse.actf.ai.xmlstore.IXMLStoreService;
-import org.eclipse.actf.ai.xmlstore.XMLStorePlugin;
+import org.eclipse.actf.ai.xmlstore.XMLStoreServiceUtil;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
@@ -80,11 +81,11 @@ public class DescriptionPlugin extends AbstractUIPluginForTTS implements
 	 * @param url
 	 *            The URL string which determines audio description files in the
 	 *            XMLStore
-	 * @see org.eclipse.actf.ai.xmlstore.XMLStorePlugin#getXMLStoreService
+	 * @see org.eclipse.actf.ai.xmlstore.XMLStoreServiceUtil#getXMLStoreService
 	 * @return metadata information
 	 */
 	public IMetadataProvider getMetadata(String url) {
-		IXMLStoreService service = XMLStorePlugin.getDefault()
+		IXMLStoreService service = XMLStoreServiceUtil
 				.getXMLStoreService();
 		IXMLStore store = service.getRootStore();
 		IXMLSelector selector1 = service.getSelectorWithDocElem("puits",

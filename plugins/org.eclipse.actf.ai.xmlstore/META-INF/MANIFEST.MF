@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Eclipse ACTF XML store Plug-in (Incubation)
 Bundle-SymbolicName: org.eclipse.actf.ai.xmlstore
 Bundle-Version: 0.0.1.qualifier
-Bundle-Activator: org.eclipse.actf.ai.xmlstore.XMLStorePlugin
+Bundle-Activator: org.eclipse.actf.ai.internal.xmlstore.XMLStorePlugin
 Bundle-Vendor: Eclipse.org
 Require-Bundle: org.eclipse.core.runtime
 Eclipse-LazyStart: true

@@ -14,10 +14,10 @@ package org.eclipse.actf.ai.navigator.extension;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.actf.ai.internal.navigator.NavigatorPlugin;
 import org.eclipse.actf.ai.navigator.IBrowserControl;
 import org.eclipse.actf.ai.navigator.IManipulator;
 import org.eclipse.actf.ai.navigator.INavigatorUI;
-import org.eclipse.actf.ai.navigator.NavigatorPlugin;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.Platform;

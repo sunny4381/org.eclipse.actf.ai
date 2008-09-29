@@ -14,7 +14,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
 
-import org.eclipse.actf.ai.fennec.FennecPlugin;
+import org.eclipse.actf.ai.fennec.FennecMediatorFactory;
 import org.eclipse.actf.ai.fennec.IFennecMediator;
 import org.eclipse.actf.ai.fennec.treemanager.ILocation;
 import org.eclipse.actf.ai.navigator.broker.RequestBroker;
@@ -31,314 +31,338 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
-
 public class WebEventListener implements IWebBrowserACTFEventListener {
 
-    private static final String ABOUT_BLANK_URL = "about:blank";
+	private static final String ABOUT_BLANK_URL = "about:blank";
 
-    private FennecPlugin getFennecPlugin() {
-        return FennecPlugin.getDefault();
-    }
+	// --------------------------------------------------------------------------------
+	// Browser State: It keeps the state of the browser by receiving Web Browser
+	// Events. In overall, we should encapsulate the stateful information around
+	// the browser
+	// into this class.
+	// --------------------------------------------------------------------------------
+	public class BrowserState {
+		public static final int STATE_NONE = -1;
 
-    // --------------------------------------------------------------------------------
-    //  Browser State: It keeps the state of the browser by receiving Web Browser
-    //  Events.  In overall, we should encapsulate the stateful information around the browser
-    //  into this class.
-    // --------------------------------------------------------------------------------
-    public class BrowserState {
-        public static final int STATE_NONE = -1;
+		public static final int STATE_UNINIT = 0;
 
-        public static final int STATE_UNINIT = 0;
+		public static final int STATE_PROGRESS = 1;
 
-        public static final int STATE_PROGRESS = 1;
+		public static final int STATE_NAVIGATECOMPLETED = 3;
 
-        public static final int STATE_NAVIGATECOMPLETED = 3;
+		public static final int STATE_STARTED = 10;
 
-        public static final int STATE_STARTED = 10;
+		boolean shouldRecord;
+		boolean initFlag;
+		ILocation savedLocation;
+		ILocation savedLocationForMyRefresh;
 
-        boolean shouldRecord;
-        boolean initFlag;
-        ILocation savedLocation;
-        ILocation savedLocationForMyRefresh;
+		NavigatorImpl navigator;
 
-        NavigatorImpl navigator;
+		public NavigatorImpl getNavigator() {
+			return navigator;
+		}
 
-        public NavigatorImpl getNavigator() {
-            return navigator;
-        }
+		int state;
 
-        int state;
+		public int getState() {
+			return state;
+		}
 
+		void resetState() {
+			this.state = STATE_UNINIT;
+		}
 
-        public int getState() {
-            return state;
-        }
+		void setNoState() {
+			this.state = STATE_NONE;
+		}
 
-        void resetState() {
-            this.state = STATE_UNINIT;
-        }
+		void forwardState(int newst) {
+			if (this.state < newst)
+				this.state = newst;
+		}
 
-        void setNoState() {
-            this.state = STATE_NONE;
-        }
+		BrowserState(IWebBrowserACTF webBrowser) {
+			this.navigator = new NavigatorImplEx(WebEventListener.this,
+					webBrowser, 30, 1000);
+			this.state = STATE_NONE;
+		}
+	}
 
-        void forwardState(int newst) {
-            if (this.state < newst) this.state = newst;
-        }
+	private HashMap<IWebBrowserACTF, BrowserState> browserStateMap;
 
-        BrowserState(IWebBrowserACTF webBrowser) {
-            this.navigator = new NavigatorImplEx(WebEventListener.this, webBrowser, 30, 1000);
-            this.state = STATE_NONE;
-        }
-    }
+	private RequestBroker requestBroker;
 
-    private HashMap<IWebBrowserACTF, BrowserState> browserStateMap;
+	private final TripJournal tripJournal;
 
-    private RequestBroker requestBroker;
-    
-    private final TripJournal tripJournal;
+	private final BrowserControlImpl browserControl;
 
-    private final BrowserControlImpl browserControl;
+	public WebEventListener() {
+		this.browserStateMap = new HashMap<IWebBrowserACTF, BrowserState>();
+		this.tripJournal = new TripJournal();
+		this.browserControl = new BrowserControlImpl(this, this.tripJournal);
+		WebBrowserNavigationEventListnerHolder.LISTENER = this.browserControl;
+		ManipulatorExtension.setBrowserControl(this.browserControl);
 
-    public WebEventListener() {
-        this.browserStateMap = new HashMap<IWebBrowserACTF, BrowserState>();
-        this.tripJournal = new TripJournal();
-        this.browserControl = new BrowserControlImpl(this, this.tripJournal);
-        WebBrowserNavigationEventListnerHolder.LISTENER = this.browserControl;
-        ManipulatorExtension.setBrowserControl(this.browserControl);
+		requestBroker = new RequestBroker(this);
+	}
 
-        requestBroker = new RequestBroker(this);
-    }
-    
-    public synchronized BrowserState getBrowserState(IWebBrowserACTF webBrowser) {
-        BrowserState bs = browserStateMap.get(webBrowser);
-        if (bs == null) {
-            bs = new BrowserState(webBrowser);
-            browserStateMap.put(webBrowser, bs);
-        }
-        return bs;
-    }
+	public synchronized BrowserState getBrowserState(IWebBrowserACTF webBrowser) {
+		BrowserState bs = browserStateMap.get(webBrowser);
+		if (bs == null) {
+			bs = new BrowserState(webBrowser);
+			browserStateMap.put(webBrowser, bs);
+		}
+		return bs;
+	}
 
-    public void forceRestart(IWebBrowserACTF webBrowser) {
-        startNavigation(webBrowser, false);
-    }
+	public void forceRestart(IWebBrowserACTF webBrowser) {
+		startNavigation(webBrowser, false);
+	}
 
-    public NavigatorImpl getFocused() {
-        IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-        IWorkbenchPage page = window.getActivePage();
-        IEditorPart editor = page.getActiveEditor();
+	public NavigatorImpl getFocused() {
+		IWorkbenchWindow window = PlatformUI.getWorkbench()
+				.getActiveWorkbenchWindow();
+		IWorkbenchPage page = window.getActivePage();
+		IEditorPart editor = page.getActiveEditor();
 
-        if (editor == null) return null;
-        IModelServiceHolder modelServiceHolder = (IModelServiceHolder) editor;
-        IWebBrowserACTF wb = (IWebBrowserACTF) modelServiceHolder.getModelService();
-        BrowserState bs = browserStateMap.get(wb);
-        if (bs == null) return null;
+		if (editor == null)
+			return null;
+		IModelServiceHolder modelServiceHolder = (IModelServiceHolder) editor;
+		IWebBrowserACTF wb = (IWebBrowserACTF) modelServiceHolder
+				.getModelService();
+		BrowserState bs = browserStateMap.get(wb);
+		if (bs == null)
+			return null;
 
-        return bs.getNavigator();
-    }
+		return bs.getNavigator();
+	}
 
-    // --------------------------------------------------------------------------------
-    //  Event Handlers
-    // --------------------------------------------------------------------------------
-    
-    private static final boolean EVENT_DEBUG = false;
-    
-    private void startNavigation(IWebBrowserACTF webBrowser) {
-        startNavigation(webBrowser, false);
-    }
+	// --------------------------------------------------------------------------------
+	// Event Handlers
+	// --------------------------------------------------------------------------------
 
-    private void startNavigation(IWebBrowserACTF webBrowser, boolean isRefresh) {
-        tripJournal.tripEnd();
-        BrowserState bs = getBrowserState(webBrowser);
-        if (bs.state >= BrowserState.STATE_STARTED)
-            return;
-        
-        if (EVENT_DEBUG) System.err.println(webBrowser.getURL() + ", isRefresh=" + isRefresh + ", " + webBrowser);
-        
-        if (bs.state == BrowserState.STATE_STARTED) {
-            MediaControlExtension.doDispose(bs.navigator.getMediaControlHandle());
-        }
-        MediaControlExtension.start(bs.navigator.getMediaControlHandle());
+	private static final boolean EVENT_DEBUG = false;
 
-        IFennecMediator mediator = getFennecPlugin().newFennecMediator(webBrowser);
-        bs.navigator.setFennecMediator(mediator);
-        bs.navigator.startNavigation(webBrowser, !isRefresh);
-        requestBroker.setNavigator(bs.navigator, webBrowser);
+	private void startNavigation(IWebBrowserACTF webBrowser) {
+		startNavigation(webBrowser, false);
+	}
 
-        bs.forwardState(BrowserState.STATE_STARTED);
-        requestBroker.newPageReady();
-    }
+	private void startNavigation(IWebBrowserACTF webBrowser, boolean isRefresh) {
+		tripJournal.tripEnd();
+		BrowserState bs = getBrowserState(webBrowser);
+		if (bs.state >= BrowserState.STATE_STARTED)
+			return;
 
-    private static final String FILE_SCHEME_SUFFIX = "file:///";
-    private String unifyURLFileScheme(String url) {
-        if (url.startsWith(FILE_SCHEME_SUFFIX)) {
-            url = url.substring(FILE_SCHEME_SUFFIX.length());
-            try {
-                url = URLDecoder.decode(url, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            return url.replace('/', '\\');
-        }
-        return url;
-    }
+		if (EVENT_DEBUG)
+			System.err.println(webBrowser.getURL() + ", isRefresh=" + isRefresh
+					+ ", " + webBrowser);
 
-    private boolean urlEquals(String url1, String url2) {
-        if ((url1 == null) || (url2 == null)) return false;
-        return unifyURLFileScheme(url1).equals(unifyURLFileScheme(url2));
-    }
+		if (bs.state == BrowserState.STATE_STARTED) {
+			MediaControlExtension.doDispose(bs.navigator
+					.getMediaControlHandle());
+		}
+		MediaControlExtension.start(bs.navigator.getMediaControlHandle());
 
-    public void navigateComplete(IWebBrowserACTF webBrowser, String url) { 
-        if (EVENT_DEBUG) System.out.println("navigateComplete " + url + ", "
-                                            + webBrowser.getURL() + " | " + webBrowser);
-        
-        if (!urlEquals(url, webBrowser.getURL())) return;
+		IFennecMediator mediator = FennecMediatorFactory
+				.newFennecMediator(webBrowser);
+		bs.navigator.setFennecMediator(mediator);
+		bs.navigator.startNavigation(webBrowser, !isRefresh);
+		requestBroker.setNavigator(bs.navigator, webBrowser);
 
-        BrowserState bs = getBrowserState(webBrowser);
-        if ((bs.shouldRecord)
-            && (bs.state < BrowserState.STATE_NAVIGATECOMPLETED)) {
-            tripJournal.recordJournal(bs.navigator,
-                                      bs.savedLocation,
-                                      webBrowser.getURL(),
-                                      bs.initFlag);
-        }
-        bs.forwardState(BrowserState.STATE_NAVIGATECOMPLETED);
-        bs.navigator.navigateComplete();
-    }
+		bs.forwardState(BrowserState.STATE_STARTED);
+		requestBroker.newPageReady();
+	}
 
-    public void titleChange(IWebBrowserACTF webBrowser, String title) {
-        if (EVENT_DEBUG) System.out.println("titleChange " + title + ", "+ webBrowser);
+	private static final String FILE_SCHEME_SUFFIX = "file:///";
 
-        IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-        IWorkbenchPage page = window.getActivePage();
+	private String unifyURLFileScheme(String url) {
+		if (url.startsWith(FILE_SCHEME_SUFFIX)) {
+			url = url.substring(FILE_SCHEME_SUFFIX.length());
+			try {
+				url = URLDecoder.decode(url, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+			return url.replace('/', '\\');
+		}
+		return url;
+	}
 
-        IEditorPart editor = page.getActiveEditor();
-        if (editor instanceof IModelServiceHolder) {
-            if (webBrowser != ((IModelServiceHolder) editor).getModelService()) {
-                return;
-            }
-        }
+	private boolean urlEquals(String url1, String url2) {
+		if ((url1 == null) || (url2 == null))
+			return false;
+		return unifyURLFileScheme(url1).equals(unifyURLFileScheme(url2));
+	}
 
-        setWindowTitle(title);
-    }
+	public void navigateComplete(IWebBrowserACTF webBrowser, String url) {
+		if (EVENT_DEBUG)
+			System.out.println("navigateComplete " + url + ", "
+					+ webBrowser.getURL() + " | " + webBrowser);
 
-    public void dispose() {
-    }
+		if (!urlEquals(url, webBrowser.getURL()))
+			return;
 
-    public void progressChange(IWebBrowserACTF webBrowser, int progress, int progressMax) {
-        if (EVENT_DEBUG) System.out.println("progressChange progress=" + progress + ", progressMax=" + progressMax + ", " + webBrowser);
-        BrowserState bs = getBrowserState(webBrowser);
-        bs.forwardState(BrowserState.STATE_PROGRESS);
-        bs.navigator.progressChange(progress, progressMax);
-    }
+		BrowserState bs = getBrowserState(webBrowser);
+		if ((bs.shouldRecord)
+				&& (bs.state < BrowserState.STATE_NAVIGATECOMPLETED)) {
+			tripJournal.recordJournal(bs.navigator, bs.savedLocation,
+					webBrowser.getURL(), bs.initFlag);
+		}
+		bs.forwardState(BrowserState.STATE_NAVIGATECOMPLETED);
+		bs.navigator.navigateComplete();
+	}
 
-    public void rootDocumentComplete(IWebBrowserACTF webBrowser) {
-        if (EVENT_DEBUG) System.out.println("myDocumentComplete " + webBrowser);
-        BrowserState bs = getBrowserState(webBrowser);
-        
-        if (!(ABOUT_BLANK_URL.equals(webBrowser.getURL()))) {
-            bs.navigator.speakTab(false);
-            startNavigation(webBrowser);
-        } else {
-            bs.setNoState();
-        }
-    }
+	public void titleChange(IWebBrowserACTF webBrowser, String title) {
+		if (EVENT_DEBUG)
+			System.out.println("titleChange " + title + ", " + webBrowser);
 
-    public void focusChange(IWebBrowserACTF webBrowser) {
-        if (EVENT_DEBUG) System.out.println("focusChange " + webBrowser);
-        BrowserState bs = getBrowserState(webBrowser);
-        ManipulatorExtension.setNavigator(bs.navigator);
-        requestBroker.setNavigator(bs.navigator, webBrowser);
-        MediaControlExtension.start(bs.navigator.getMediaControlHandle());
-        setWindowTitle();
-    }
+		IWorkbenchWindow window = PlatformUI.getWorkbench()
+				.getActiveWorkbenchWindow();
+		IWorkbenchPage page = window.getActivePage();
 
-    private void setWindowTitle(String title) {
-        String productName = Platform.getProduct().getName();
-        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().setText(title + " - " + productName);
-    }
+		IEditorPart editor = page.getActiveEditor();
+		if (editor instanceof IModelServiceHolder) {
+			if (webBrowser != ((IModelServiceHolder) editor).getModelService()) {
+				return;
+			}
+		}
 
-    private void setWindowTitle() {
-        IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-        IWorkbenchPage page = window.getActivePage();
-        String title = page.getActiveEditor().getTitle();
-        setWindowTitle(title);
-    }
+		setWindowTitle(title);
+	}
 
-    public void beforeNavigate(IWebBrowserACTF webBrowser,
-                               String url,
-                               String targetFrameName,
-                               boolean isInNavigation) {
-        if (EVENT_DEBUG) System.out.println("beforeNavigate " + url + ", " + targetFrameName + ", isInNavigation=" + isInNavigation);
-        BrowserState bs = getBrowserState(webBrowser);
-        //if (isInNavigation) {
-        if (!url.startsWith("javascript")) {
-            if (!(ABOUT_BLANK_URL.equals(url))) {
-                if (bs.state == BrowserState.STATE_NONE) {
-                    bs.initFlag = true;
-                } else {
-                    bs.initFlag = false;
-                }
-                bs.shouldRecord = true;
-                bs.savedLocation = bs.navigator.getLocation();
-            } else {
-                bs.shouldRecord = false;
-            }
-            bs.resetState();
-            bs.navigator.beforeNavigation(webBrowser.getURL());
-        } else {
-            bs.shouldRecord = false;
-        }
-        ScreenReaderExtension.takeBackControl(webBrowser);
-    }
+	public void dispose() {
+	}
 
-    public void browserDisposed(IWebBrowserACTF webBrowser, String title) {
-        if (EVENT_DEBUG) System.out.println("browserDisposed " + title);
-        BrowserState bs = getBrowserState(webBrowser);
-        bs.navigator.speakCloseTab(title);
+	public void progressChange(IWebBrowserACTF webBrowser, int progress,
+			int progressMax) {
+		if (EVENT_DEBUG)
+			System.out.println("progressChange progress=" + progress
+					+ ", progressMax=" + progressMax + ", " + webBrowser);
+		BrowserState bs = getBrowserState(webBrowser);
+		bs.forwardState(BrowserState.STATE_PROGRESS);
+		bs.navigator.progressChange(progress, progressMax);
+	}
 
-        IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-        IWorkbenchPage page = window.getActivePage();
-        if ((page == null) || (page.getActiveEditor() == null)) {
-            setWindowTitle("No Tab");
-        }
-    }
+	public void rootDocumentComplete(IWebBrowserACTF webBrowser) {
+		if (EVENT_DEBUG)
+			System.out.println("myDocumentComplete " + webBrowser);
+		BrowserState bs = getBrowserState(webBrowser);
 
-    public void refreshStart(IWebBrowserACTF webBrowser) {
-        if (EVENT_DEBUG) System.out.println("myRefresh " + webBrowser);
-        BrowserState bs = getBrowserState(webBrowser);
-        bs.resetState();
-        bs.savedLocationForMyRefresh = bs.navigator.getLocation();
-        bs.navigator.beforeNavigation(webBrowser.getURL());
-    }
+		if (!(ABOUT_BLANK_URL.equals(webBrowser.getURL()))) {
+			bs.navigator.speakTab(false);
+			startNavigation(webBrowser);
+		} else {
+			bs.setNoState();
+		}
+	}
 
-    public void refreshComplete(IWebBrowserACTF webBrowser) {
-        if (EVENT_DEBUG) System.out.println("Refresh Complete " + webBrowser);
-        BrowserState bs = getBrowserState(webBrowser);
-        bs.navigator.restoreLocation(bs.savedLocationForMyRefresh);
-        startNavigation(webBrowser, true);
-    }
+	public void focusChange(IWebBrowserACTF webBrowser) {
+		if (EVENT_DEBUG)
+			System.out.println("focusChange " + webBrowser);
+		BrowserState bs = getBrowserState(webBrowser);
+		ManipulatorExtension.setNavigator(bs.navigator);
+		requestBroker.setNavigator(bs.navigator, webBrowser);
+		MediaControlExtension.start(bs.navigator.getMediaControlHandle());
+		setWindowTitle();
+	}
 
-    public void navigateStop(IWebBrowserACTF webBrowser) {
-        if (EVENT_DEBUG) System.out.println("navigateStop " + webBrowser);
-    }
+	private void setWindowTitle(String title) {
+		String productName = Platform.getProduct().getName();
+		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell()
+				.setText(title + " - " + productName);
+	}
 
-    public void focusGainedOfAddressText(IWebBrowserACTF webBrowser) {
-        if (EVENT_DEBUG) System.out.println("focusGainedOfAddressText " + webBrowser);
-        BrowserState bs = getBrowserState(webBrowser);
-        bs.navigator.enterBrowserAddress();
-    }
+	private void setWindowTitle() {
+		IWorkbenchWindow window = PlatformUI.getWorkbench()
+				.getActiveWorkbenchWindow();
+		IWorkbenchPage page = window.getActivePage();
+		String title = page.getActiveEditor().getTitle();
+		setWindowTitle(title);
+	}
 
-    public void focusLostOfAddressText(IWebBrowserACTF webBrowser) {
-        if (EVENT_DEBUG) System.out.println("focusLostOfAddressText " + webBrowser);
-        BrowserState bs = getBrowserState(webBrowser);
-        bs.navigator.exitFormMode();
-    }
+	public void beforeNavigate(IWebBrowserACTF webBrowser, String url,
+			String targetFrameName, boolean isInNavigation) {
+		if (EVENT_DEBUG)
+			System.out.println("beforeNavigate " + url + ", " + targetFrameName
+					+ ", isInNavigation=" + isInNavigation);
+		BrowserState bs = getBrowserState(webBrowser);
+		// if (isInNavigation) {
+		if (!url.startsWith("javascript")) {
+			if (!(ABOUT_BLANK_URL.equals(url))) {
+				if (bs.state == BrowserState.STATE_NONE) {
+					bs.initFlag = true;
+				} else {
+					bs.initFlag = false;
+				}
+				bs.shouldRecord = true;
+				bs.savedLocation = bs.navigator.getLocation();
+			} else {
+				bs.shouldRecord = false;
+			}
+			bs.resetState();
+			bs.navigator.beforeNavigation(webBrowser.getURL());
+		} else {
+			bs.shouldRecord = false;
+		}
+		ScreenReaderExtension.takeBackControl(webBrowser);
+	}
 
-    public void newWindow(IWebBrowserACTF webBrowser) {
-        if (EVENT_DEBUG) System.out.println("newWindow " + webBrowser);
-        BrowserState bs = getBrowserState(webBrowser);
-        bs.navigator.speakOpenTab();
-    }
+	public void browserDisposed(IWebBrowserACTF webBrowser, String title) {
+		if (EVENT_DEBUG)
+			System.out.println("browserDisposed " + title);
+		BrowserState bs = getBrowserState(webBrowser);
+		bs.navigator.speakCloseTab(title);
+
+		IWorkbenchWindow window = PlatformUI.getWorkbench()
+				.getActiveWorkbenchWindow();
+		IWorkbenchPage page = window.getActivePage();
+		if ((page == null) || (page.getActiveEditor() == null)) {
+			setWindowTitle("No Tab");
+		}
+	}
+
+	public void refreshStart(IWebBrowserACTF webBrowser) {
+		if (EVENT_DEBUG)
+			System.out.println("myRefresh " + webBrowser);
+		BrowserState bs = getBrowserState(webBrowser);
+		bs.resetState();
+		bs.savedLocationForMyRefresh = bs.navigator.getLocation();
+		bs.navigator.beforeNavigation(webBrowser.getURL());
+	}
+
+	public void refreshComplete(IWebBrowserACTF webBrowser) {
+		if (EVENT_DEBUG)
+			System.out.println("Refresh Complete " + webBrowser);
+		BrowserState bs = getBrowserState(webBrowser);
+		bs.navigator.restoreLocation(bs.savedLocationForMyRefresh);
+		startNavigation(webBrowser, true);
+	}
+
+	public void navigateStop(IWebBrowserACTF webBrowser) {
+		if (EVENT_DEBUG)
+			System.out.println("navigateStop " + webBrowser);
+	}
+
+	public void focusGainedOfAddressText(IWebBrowserACTF webBrowser) {
+		if (EVENT_DEBUG)
+			System.out.println("focusGainedOfAddressText " + webBrowser);
+		BrowserState bs = getBrowserState(webBrowser);
+		bs.navigator.enterBrowserAddress();
+	}
+
+	public void focusLostOfAddressText(IWebBrowserACTF webBrowser) {
+		if (EVENT_DEBUG)
+			System.out.println("focusLostOfAddressText " + webBrowser);
+		BrowserState bs = getBrowserState(webBrowser);
+		bs.navigator.exitFormMode();
+	}
+
+	public void newWindow(IWebBrowserACTF webBrowser) {
+		if (EVENT_DEBUG)
+			System.out.println("newWindow " + webBrowser);
+		BrowserState bs = getBrowserState(webBrowser);
+		bs.navigator.speakOpenTab();
+	}
 
 }

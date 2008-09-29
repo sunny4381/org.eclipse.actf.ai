@@ -14,8 +14,8 @@ package org.eclipse.actf.ai.navigator.extension;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.actf.ai.internal.navigator.NavigatorPlugin;
 import org.eclipse.actf.ai.navigator.IScreenReaderControl;
-import org.eclipse.actf.ai.navigator.NavigatorPlugin;
 import org.eclipse.actf.model.ui.editor.browser.IWebBrowserACTF;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;

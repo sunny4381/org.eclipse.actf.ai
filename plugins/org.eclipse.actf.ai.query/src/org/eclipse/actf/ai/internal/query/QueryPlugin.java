@@ -9,25 +9,23 @@
  *    Hisashi MIYASHITA - initial API and implementation
  *******************************************************************************/
 
-package org.eclipse.actf.ai.fennec;
+package org.eclipse.actf.ai.internal.query;
 
-import org.eclipse.actf.ai.fennec.mediator.FennecMediatorImpl;
-import org.eclipse.actf.model.ui.editor.browser.IWebBrowserACTF;
 import org.eclipse.core.runtime.Plugin;
 import org.osgi.framework.BundleContext;
 
 /**
- * The activator class controls the plug-in life cycle
+ * The main plugin class to be used in the desktop.
  */
-public class FennecPlugin extends Plugin {
+public class QueryPlugin extends Plugin {
 
 	// The shared instance.
-	private static FennecPlugin plugin;
+	private static QueryPlugin plugin;
 
 	/**
 	 * The constructor.
 	 */
-	public FennecPlugin() {
+	public QueryPlugin() {
 		plugin = this;
 	}
 
@@ -51,19 +49,8 @@ public class FennecPlugin extends Plugin {
 	/**
 	 * Returns the shared instance.
 	 */
-	public static FennecPlugin getDefault() {
+	public static QueryPlugin getDefault() {
 		return plugin;
-	}
-
-	/**
-	 * This is the factory method to create a instance of IFennecMediator
-	 * 
-	 * @param webBrowser
-	 *            An instance of {@link IWebBrowserACTF} to mediate.
-	 * @return New instance of IFennecMediator.
-	 */
-	public IFennecMediator newFennecMediator(IWebBrowserACTF webBrowser) {
-		return new FennecMediatorImpl(webBrowser);
 	}
 
 }

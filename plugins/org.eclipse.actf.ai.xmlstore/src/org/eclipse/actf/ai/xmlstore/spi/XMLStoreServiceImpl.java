@@ -21,13 +21,13 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import org.eclipse.actf.ai.internal.xmlstore.XMLStorePlugin;
 import org.eclipse.actf.ai.xmlstore.IXMLEditableInfo;
 import org.eclipse.actf.ai.xmlstore.IXMLInfo;
 import org.eclipse.actf.ai.xmlstore.IXMLSelector;
 import org.eclipse.actf.ai.xmlstore.IXMLStore;
 import org.eclipse.actf.ai.xmlstore.IXMLStoreService;
 import org.eclipse.actf.ai.xmlstore.XMLStoreException;
-import org.eclipse.actf.ai.xmlstore.XMLStorePlugin;
 import org.eclipse.actf.ai.xmlstore.local.UserXMLStore;
 import org.eclipse.actf.ai.xmlstore.local.XMLStoreLocal;
 

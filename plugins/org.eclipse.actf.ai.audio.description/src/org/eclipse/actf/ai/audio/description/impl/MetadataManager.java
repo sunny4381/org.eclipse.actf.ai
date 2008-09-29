@@ -11,11 +11,11 @@
 
 package org.eclipse.actf.ai.audio.description.impl;
 
-import org.eclipse.actf.ai.audio.description.DescriptionPlugin;
 import org.eclipse.actf.ai.audio.description.IMetadata;
 import org.eclipse.actf.ai.audio.description.IMetadataProvider;
 import org.eclipse.actf.ai.fennec.treemanager.ISoundControl;
 import org.eclipse.actf.ai.fennec.treemanager.IVideoControl;
+import org.eclipse.actf.ai.internal.audio.description.DescriptionPlugin;
 import org.eclipse.actf.ai.navigator.IMediaControl.IHandle;
 
 public class MetadataManager {

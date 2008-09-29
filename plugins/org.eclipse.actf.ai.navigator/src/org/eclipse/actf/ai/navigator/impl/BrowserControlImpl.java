@@ -16,9 +16,9 @@ import java.io.File;
 import org.eclipse.actf.ai.navigator.IBrowserControl;
 import org.eclipse.actf.ai.navigator.IManipulator;
 import org.eclipse.actf.ai.navigator.extension.ManipulatorExtension;
-import org.eclipse.actf.ai.navigator.ui.URLOpenDialog;
+import org.eclipse.actf.ai.navigator.util.URLOpenDialog;
 import org.eclipse.actf.ai.navigator.voice.VoiceManager;
-import org.eclipse.actf.ai.xmlstore.XMLStorePlugin;
+import org.eclipse.actf.ai.xmlstore.XMLStoreServiceUtil;
 import org.eclipse.actf.model.ui.editor.browser.IWebBrowserACTF;
 import org.eclipse.actf.model.ui.editor.browser.IWebBrowserNavigationEventListener;
 import org.eclipse.actf.model.ui.editor.browser.WebBrowserNavigationEvent;
@@ -94,7 +94,7 @@ public class BrowserControlImpl implements IBrowserControl, IWebBrowserNavigatio
                 if (!ret)
                     return;
             }
-            if (XMLStorePlugin.getDefault().getXMLStoreService().exportAllAnnotations(dest)) {
+            if (XMLStoreServiceUtil.getXMLStoreService().exportAllAnnotations(dest)) {
                 voiceManager.speakWithFormat("Navigator.EXPORT_IS_SUCCEEDED", true, true);
             } else {
                 voiceManager.speakWithFormat("Navigator.EXPORT_IS_FAILED", true, true);
@@ -114,8 +114,8 @@ public class BrowserControlImpl implements IBrowserControl, IWebBrowserNavigatio
         if (path != null) {
             File src = new File(path);
 
-            boolean r = XMLStorePlugin.getDefault().getXMLStoreService().importMetadata(src);
-            XMLStorePlugin.getDefault().getXMLStoreService().getRootStore().refleshAll();
+            boolean r = XMLStoreServiceUtil.getXMLStoreService().importMetadata(src);
+            XMLStoreServiceUtil.getXMLStoreService().getRootStore().refleshAll();
             NavigatorImpl navigator = webEventListener.getFocused();
             if (navigator != null)
                 navigator.forceRestart();

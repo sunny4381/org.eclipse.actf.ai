@@ -12,8 +12,8 @@ package org.eclipse.actf.ai.navigator.impl;
 
 import org.eclipse.actf.ai.fennec.treemanager.ITreeItem;
 import org.eclipse.actf.ai.fennec.treemanager.TreeManagerException;
+import org.eclipse.actf.ai.internal.navigator.NavigatorPlugin;
 import org.eclipse.actf.ai.navigator.IManipulator;
-import org.eclipse.actf.ai.navigator.NavigatorPlugin;
 import org.eclipse.actf.ai.navigator.preferences.UserInfoPreferenceConstants;
 import org.eclipse.actf.ai.navigator.userinfo.IMetaDataModifier;
 import org.eclipse.actf.ai.navigator.userinfo.IUserInfoGenerator;

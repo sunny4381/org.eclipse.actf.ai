@@ -24,7 +24,7 @@ import org.eclipse.actf.ai.xmlstore.IXMLSelector;
 import org.eclipse.actf.ai.xmlstore.IXMLStore;
 import org.eclipse.actf.ai.xmlstore.IXMLStoreService;
 import org.eclipse.actf.ai.xmlstore.XMLStoreException;
-import org.eclipse.actf.ai.xmlstore.XMLStorePlugin;
+import org.eclipse.actf.ai.xmlstore.XMLStoreServiceUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -84,7 +84,7 @@ public class MetaDataModifier implements IUserInfoConstants, IMetaDataModifier {
     }
     
     private IXMLEditableInfo getUserInfo() throws XMLStoreException {
-        IXMLStoreService service = XMLStorePlugin.getDefault().getXMLStoreService();
+        IXMLStoreService service = XMLStoreServiceUtil.getXMLStoreService();
         IXMLEditableInfo info = getStoredUserInfo(service);
         if (info != null) {
             return info;
@@ -126,7 +126,7 @@ public class MetaDataModifier implements IUserInfoConstants, IMetaDataModifier {
     }
     
     public boolean remove() throws XMLStoreException {
-        IXMLStoreService service = XMLStorePlugin.getDefault().getXMLStoreService();
+        IXMLStoreService service = XMLStoreServiceUtil.getXMLStoreService();
         IXMLEditableInfo info = getStoredUserInfo(service);
 
         if (info == null) {

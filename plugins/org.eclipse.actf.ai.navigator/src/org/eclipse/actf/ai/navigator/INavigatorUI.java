@@ -112,16 +112,6 @@ public interface INavigatorUI {
     void treeBottom();
 
     /**
-     * @deprecated
-     * @see #traverseUp()
-     */
-    void traverseNodeUp();
-    /**
-     * @deprecated
-     * @see #traverseDown()
-     */
-    void traverseNodeDown();
-    /**
      * Move the current position to the next node which can be read.
      * The traverse is executed in depth first strategy.
      */

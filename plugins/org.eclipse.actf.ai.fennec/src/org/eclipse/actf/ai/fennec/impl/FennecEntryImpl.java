@@ -15,7 +15,7 @@ import java.io.File;
 
 import org.eclipse.actf.ai.fennec.IFennecEntry;
 import org.eclipse.actf.ai.xmlstore.IXMLInfo;
-import org.eclipse.actf.ai.xmlstore.XMLStorePlugin;
+import org.eclipse.actf.ai.xmlstore.XMLStoreServiceUtil;
 
 
 
@@ -40,6 +40,6 @@ public class FennecEntryImpl implements IFennecEntry {
     }
 
     public boolean export(File dest) {
-        return XMLStorePlugin.getDefault().getXMLStoreService().exportMetadata(info, dest);
+        return XMLStoreServiceUtil.getXMLStoreService().exportMetadata(info, dest);
     }
 }

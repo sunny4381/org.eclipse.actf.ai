@@ -9,7 +9,7 @@
  *    Daisuke SATO - initial API and implementation
  *******************************************************************************/
 
-package org.eclipse.actf.ai.navigator;
+package org.eclipse.actf.ai.internal.navigator;
 
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;

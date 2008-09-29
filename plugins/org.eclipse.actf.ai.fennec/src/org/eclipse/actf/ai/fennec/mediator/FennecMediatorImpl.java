@@ -26,7 +26,7 @@ import org.eclipse.actf.ai.xmlstore.IXMLInfo;
 import org.eclipse.actf.ai.xmlstore.IXMLSelector;
 import org.eclipse.actf.ai.xmlstore.IXMLStore;
 import org.eclipse.actf.ai.xmlstore.IXMLStoreService;
-import org.eclipse.actf.ai.xmlstore.XMLStorePlugin;
+import org.eclipse.actf.ai.xmlstore.XMLStoreServiceUtil;
 import org.eclipse.actf.model.dom.dombycom.IDocumentEx;
 import org.eclipse.actf.model.ui.editor.browser.IWebBrowserACTF;
 
@@ -53,7 +53,7 @@ public class FennecMediatorImpl implements IFennecMediator {
     }
 
     private IXMLStore getFennecStore(String url) {
-        IXMLStoreService ss = XMLStorePlugin.getDefault().getXMLStoreService();
+        IXMLStoreService ss = XMLStoreServiceUtil.getXMLStoreService();
         IXMLSelector selector = ss.getSelectorWithDocElem(FennecDOMReader.Fennec_DOCUMENT_ELEMENT_NAME,
                                                           FennecDOMReader.Fennec_NAMESPACE_URI);
         IXMLStore store = ss.getRootStore();

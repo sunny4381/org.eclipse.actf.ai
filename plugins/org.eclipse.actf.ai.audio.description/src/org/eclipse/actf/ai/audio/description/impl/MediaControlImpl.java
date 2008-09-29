@@ -13,9 +13,9 @@ package org.eclipse.actf.ai.audio.description.impl;
 
 import java.util.HashMap;
 
-import org.eclipse.actf.ai.audio.description.DescriptionPlugin;
 import org.eclipse.actf.ai.audio.description.IMetadataProvider;
-import org.eclipse.actf.ai.audio.description.Messages;
+import org.eclipse.actf.ai.internal.audio.description.DescriptionPlugin;
+import org.eclipse.actf.ai.internal.audio.description.Messages;
 import org.eclipse.actf.ai.navigator.IMediaControl;
 
 public class MediaControlImpl implements IMediaControl {

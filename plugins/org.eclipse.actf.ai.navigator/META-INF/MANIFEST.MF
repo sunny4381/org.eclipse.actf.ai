@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Eclipse ACTF Navigator Plug-in (Incubation)
 Bundle-SymbolicName: org.eclipse.actf.ai.navigator;singleton:=true
 Bundle-Version: 0.0.1.qualifier
-Bundle-Activator: org.eclipse.actf.ai.navigator.NavigatorPlugin
+Bundle-Activator: org.eclipse.actf.ai.internal.navigator.NavigatorPlugin
 Bundle-Vendor: Eclipse.org
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.runtime,

@@ -11,9 +11,9 @@
 
 package org.eclipse.actf.ai.audio.description.views;
 
-import org.eclipse.actf.ai.audio.description.DescriptionPlugin;
-import org.eclipse.actf.ai.audio.description.Messages;
 import org.eclipse.actf.ai.audio.description.impl.MetadataContentProvider;
+import org.eclipse.actf.ai.internal.audio.description.DescriptionPlugin;
+import org.eclipse.actf.ai.internal.audio.description.Messages;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;

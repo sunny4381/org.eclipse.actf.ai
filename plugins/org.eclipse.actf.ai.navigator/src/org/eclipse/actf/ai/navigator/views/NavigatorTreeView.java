@@ -11,10 +11,11 @@
 package org.eclipse.actf.ai.navigator.views;
 
 import org.eclipse.actf.ai.fennec.treemanager.ITreeItem;
+import org.eclipse.actf.ai.internal.navigator.Messages;
+import org.eclipse.actf.ai.internal.navigator.NavigatorPlugin;
 import org.eclipse.actf.ai.navigator.IManipulator;
-import org.eclipse.actf.ai.navigator.Messages;
-import org.eclipse.actf.ai.navigator.NavigatorPlugin;
 import org.eclipse.actf.ai.navigator.ui.ModeContribution;
+import org.eclipse.actf.ai.navigator.ui.NavigatorUIUtil;
 import org.eclipse.actf.util.vocab.Vocabulary;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -258,20 +259,20 @@ public class NavigatorTreeView extends ViewPart {
 
     public boolean isShown() {
         IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-        IViewPart part = page.findView(NavigatorPlugin.NAVIGATOR_TREE_VIEW_ID);
+        IViewPart part = page.findView(NavigatorUIUtil.NAVIGATOR_TREE_VIEW_ID);
         return part != null;
     }
 
     public boolean toggleViewShowing() {
         IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-        IViewPart part = page.findView(NavigatorPlugin.NAVIGATOR_TREE_VIEW_ID);
+        IViewPart part = page.findView(NavigatorUIUtil.NAVIGATOR_TREE_VIEW_ID);
 
         if (part != null) {
             page.hideView(part);
             return false;
         } else {
             try {
-                page.showView(NavigatorPlugin.NAVIGATOR_TREE_VIEW_ID);
+                page.showView(NavigatorUIUtil.NAVIGATOR_TREE_VIEW_ID);
                 return true;
             } catch (PartInitException e) {
                 e.printStackTrace();
