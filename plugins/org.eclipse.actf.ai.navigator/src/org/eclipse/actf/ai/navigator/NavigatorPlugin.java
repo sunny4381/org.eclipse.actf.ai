@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 IBM Corporation and Others
+ * Copyright (c) 2007, 2008 IBM Corporation and Others
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,7 +12,7 @@ package org.eclipse.actf.ai.navigator;
 
 import org.eclipse.actf.ai.navigator.extension.MetadataCacheCleanerExtension;
 import org.eclipse.actf.ai.navigator.views.NavigatorTreeView;
-import org.eclipse.actf.ai.voice.preferences.util.AbstractPreferenceUIPlugin;
+import org.eclipse.actf.ai.tts.AbstractUIPluginForTTS;
 import org.eclipse.jface.action.IMenuManager;
 import org.osgi.framework.BundleContext;
 
@@ -20,7 +20,7 @@ import org.osgi.framework.BundleContext;
 /**
  * The main plugin class to be used in the desktop.
  */
-public class NavigatorPlugin extends AbstractPreferenceUIPlugin {
+public class NavigatorPlugin extends AbstractUIPluginForTTS {
 
     public static final String ID = "org.eclipse.actf.ai.navigator";
     //The shared instance.

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 IBM Corporation and Others
+ * Copyright (c) 2007, 2008 IBM Corporation and Others
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -9,7 +9,7 @@
  *    Takashi ITOH - initial API and implementation
  *******************************************************************************/
 
-package org.eclipse.actf.ai.voice;
+package org.eclipse.actf.ai.voice.internal;
 
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;

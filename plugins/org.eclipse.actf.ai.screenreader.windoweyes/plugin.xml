@@ -5,7 +5,6 @@
          point="org.eclipse.actf.ai.voice.TTSEngine">
       <engine
             class="org.eclipse.actf.ai.screenreader.windoweyes.engine.GWSpeak"
-            description="Window-Eyes TTS"
             id="org.eclipse.actf.ai.screenreader.windoweyes.engine.GWSpeak"
             name="Window-Eyes"
             priority="999"/>

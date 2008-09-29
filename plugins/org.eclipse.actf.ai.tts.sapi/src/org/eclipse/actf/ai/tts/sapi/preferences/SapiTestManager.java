@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 IBM Corporation and Others
+ * Copyright (c) 2007, 2008 IBM Corporation and Others
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -19,7 +19,7 @@ import org.eclipse.actf.ai.tts.sapi.SAPIPlugin;
 import org.eclipse.actf.ai.tts.sapi.engine.SapiVoice;
 import org.eclipse.actf.ai.tts.sapi.engine.SpObjectToken;
 import org.eclipse.actf.ai.tts.sapi.engine.SpeechObjectTokens;
-import org.eclipse.actf.ai.voice.VoicePlugin;
+import org.eclipse.actf.ai.voice.VoiceUtil;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.ole.win32.Variant;
 
@@ -143,7 +143,7 @@ public class SapiTestManager {
                 sapiVoice.setAudioOutputName(audioOutputName);
             }
         }
-        sapiVoice.setSpeed(VoicePlugin.getDefault().getDefaultSpeed());
+        sapiVoice.setSpeed(VoiceUtil.getDefaultSpeed());
         sapiVoice.speak(SAMPLE_TEXT, ITTSEngine.TTSFLAG_FLUSH, -1);
     }
 }

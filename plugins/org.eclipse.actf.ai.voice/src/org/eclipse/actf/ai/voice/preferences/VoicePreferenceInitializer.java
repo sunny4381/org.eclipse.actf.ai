@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 IBM Corporation and Others
+ * Copyright (c) 2007, 2008 IBM Corporation and Others
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,7 +12,7 @@ package org.eclipse.actf.ai.voice.preferences;
 
 import org.eclipse.actf.ai.tts.TTSRegistry;
 import org.eclipse.actf.ai.voice.IVoice;
-import org.eclipse.actf.ai.voice.VoicePlugin;
+import org.eclipse.actf.ai.voice.internal.VoicePlugin;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 

@@ -5,7 +5,6 @@
          point="org.eclipse.actf.ai.voice.TTSEngine">
          <engine
                class="org.eclipse.actf.ai.tts.protalker.engine.ProTalker"
-               description="ProTalker"
                id="org.eclipse.actf.ai.tts.protalker.engine.ProTalker"
                name="ProTalker"
                priority="200"/>

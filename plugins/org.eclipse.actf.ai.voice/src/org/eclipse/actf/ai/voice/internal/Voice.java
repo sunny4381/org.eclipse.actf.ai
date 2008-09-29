@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 IBM Corporation and Others
+ * Copyright (c) 2007, 2008 IBM Corporation and Others
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,7 +14,7 @@ import org.eclipse.actf.ai.tts.ITTSEngine;
 import org.eclipse.actf.ai.tts.TTSRegistry;
 import org.eclipse.actf.ai.voice.IVoice;
 import org.eclipse.actf.ai.voice.IVoiceEventListener;
-import org.eclipse.actf.ai.voice.VoicePlugin;
+import org.eclipse.actf.ai.voice.VoiceUtil;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
@@ -107,7 +107,7 @@ public class Voice implements IVoice, IPropertyChangeListener {
 	 * Set the settings to the default speed of the TTS engine. 
 	 */
 	public void setSpeed() {
-		setSpeed(VoicePlugin.getDefault().getDefaultSpeed());
+		setSpeed(VoiceUtil.getDefaultSpeed());
 	}
     
 	/* (non-Javadoc)

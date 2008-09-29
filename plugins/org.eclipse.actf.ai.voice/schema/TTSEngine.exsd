@@ -8,8 +8,6 @@
       <documentation>
          You can extend the voice function of ACTF to implement ITTSEngine interface. Voice plug-in manages voice engines through the ITTSEngine interface.
 If the voice engine have some preference then, the category name of the voice preference page &quot;org.eclipse.actf.ai.voice.preferences.VoicePreferencePage&quot; should be used.
-
-
       </documentation>
    </annotation>
 
@@ -50,14 +48,14 @@ If the voice engine have some preference then, the category name of the voice pr
          <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  a unique name that will be used to identify this TTS engine
                </documentation>
             </annotation>
          </attribute>
          <attribute name="name" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  a name that will be used in the UI for this TTS Engine
                </documentation>
                <appInfo>
                   <meta.attribute translatable="true"/>
@@ -67,37 +65,17 @@ If the voice engine have some preference then, the category name of the voice pr
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  a name of a class that implements &lt;samp&gt;org.eclipse.actf.ai.tts.ITTSEngine&lt;/samp&gt;.
                </documentation>
                <appInfo>
                   <meta.attribute kind="java" basedOn=":org.eclipse.actf.ai.tts.ITTSEngine"/>
                </appInfo>
             </annotation>
          </attribute>
-         <attribute name="description" type="string">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-               <appInfo>
-                  <meta.attribute translatable="true"/>
-               </appInfo>
-            </annotation>
-         </attribute>
-         <attribute name="default" type="boolean">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-               <appInfo>
-                  <meta.attribute deprecated="true"/>
-               </appInfo>
-            </annotation>
-         </attribute>
          <attribute name="priority" type="string" use="default" value="0">
             <annotation>
                <documentation>
-                  
+                  an integer value to specify the priority of this TTS. The TTS engine that has highest priority is used as default.
                </documentation>
             </annotation>
          </attribute>
@@ -109,7 +87,7 @@ If the voice engine have some preference then, the category name of the voice pr
          <meta.section type="since"/>
       </appInfo>
       <documentation>
-         [Enter the first release in which this extension point appears.]
+         
       </documentation>
    </annotation>
 
@@ -143,7 +121,7 @@ If the voice engine have some preference then, the category name of the voice pr
          <meta.section type="apiInfo"/>
       </appInfo>
       <documentation>
-         See ITTSEngine interface.
+         See &lt;samp&gt;ITTSEngine&lt;/samp&gt; interface.
       </documentation>
    </annotation>
 
@@ -152,7 +130,14 @@ If the voice engine have some preference then, the category name of the voice pr
          <meta.section type="implementation"/>
       </appInfo>
       <documentation>
-         [Enter information about supplied implementation of this extension point.]
+         ACTF provides several implementations of this extension point.
+&lt;ul&gt;
+ &lt;li&gt; &lt;samp&gt;org.eclipse.actf.ai.tts.sapi&lt;/samp&gt; : for SAPI TTS&lt;/li&gt;
+ &lt;li&gt; &lt;samp&gt;org.eclipse.actf.ai.tts.protalker&lt;/samp&gt; : for IBM Protalker&lt;/li&gt;
+ &lt;li&gt; &lt;samp&gt;org.eclipse.actf.ai.screenreader.jaws&lt;/samp&gt; : for JAWS&lt;/li&gt;
+ &lt;li&gt; &lt;samp&gt;org.eclipse.actf.ai.screenreader.windoweyes&lt;/samp&gt; : for WindowEyes&lt;/li&gt;
+&lt;/ul&gt;
+If you include these plugins, the ITTSEngine implementations will be automatically registerd to this extension.
       </documentation>
    </annotation>
 
@@ -161,7 +146,7 @@ If the voice engine have some preference then, the category name of the voice pr
          <meta.section type="copyright"/>
       </appInfo>
       <documentation>
-         Copyright (c) 2007 IBM Corporation and others.&lt;br&gt;
+         Copyright (c) 2007, 2008 IBM Corporation and others.&lt;br&gt;
 All rights reserved. This program and the accompanying materials are made
 available under the terms of the Eclipse Public License v1.0 which accompanies
 this distribution, and is available at &lt;a 

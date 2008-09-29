@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 IBM Corporation and Others
+ * Copyright (c) 2007, 2008 IBM Corporation and Others
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,10 +8,10 @@
  * Contributors:
  *    Takashi ITOH - initial API and implementation
  *******************************************************************************/
-package org.eclipse.actf.ai.voice;
+package org.eclipse.actf.ai.voice.internal;
 
-import org.eclipse.actf.ai.voice.internal.Voice;
-import org.eclipse.actf.ai.voice.preferences.util.AbstractPreferenceUIPlugin;
+import org.eclipse.actf.ai.tts.AbstractUIPluginForTTS;
+import org.eclipse.actf.ai.voice.IVoice;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -19,7 +19,7 @@ import org.osgi.framework.BundleContext;
 /**
  * The main plugin class to be used in the desktop.
  */
-public class VoicePlugin extends AbstractPreferenceUIPlugin {
+public class VoicePlugin extends AbstractUIPluginForTTS {
 
 	// The shared instance.
 	private static VoicePlugin plugin;
@@ -77,11 +77,4 @@ public class VoicePlugin extends AbstractPreferenceUIPlugin {
 				"org.eclipse.actf.ai.voice", path); //$NON-NLS-1$
 	}
 
-	/**
-	 * @return The default speed of the TTS engine which is saved in the
-	 *         preference.
-	 */
-	public int getDefaultSpeed() {
-		return getPreferenceStore().getInt(IVoice.PREF_SPEED);
-	}
 }

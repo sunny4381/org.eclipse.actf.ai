@@ -5,8 +5,6 @@
          point="org.eclipse.actf.ai.voice.TTSEngine">
          <engine
                class="org.eclipse.actf.ai.tts.sapi.engine.SapiVoice"
-               default="true"
-               description="TTS Engine for MS SAPI 5.x"
                id="org.eclipse.actf.ai.tts.sapi.engine.SapiVoice"
                name="SAPI 5 TTS"
                priority="100"/>

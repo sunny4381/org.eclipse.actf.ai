@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 IBM Corporation and Others
+ * Copyright (c) 2007, 2008 IBM Corporation and Others
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -54,7 +54,7 @@ public class SapiPreferencePage extends GroupFieldEditorVoicePreferencePage
         comp.setLayoutData(gd);
         
         Button testButton = new Button(comp,SWT.NONE);
-        testButton.setText(org.eclipse.actf.ai.voice.Messages.getString("voice.test"));
+        testButton.setText(Messages.getString("tts.sapi.test"));
         testButton.addSelectionListener(new SelectionAdapter(){
             public void widgetSelected(SelectionEvent e) {
                 int voiceIndex = voiceEditor.getComboControl().getSelectionIndex();

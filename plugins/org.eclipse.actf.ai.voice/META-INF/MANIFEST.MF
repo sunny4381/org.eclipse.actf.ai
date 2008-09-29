@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Eclipse ACTF Voice Toolkit (Incubation)
 Bundle-SymbolicName: org.eclipse.actf.ai.voice;singleton:=true
 Bundle-Version: 0.0.1.qualifier
-Bundle-Activator: org.eclipse.actf.ai.voice.VoicePlugin
+Bundle-Activator: org.eclipse.actf.ai.voice.internal.VoicePlugin
 Bundle-Vendor: Eclipse.org
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,

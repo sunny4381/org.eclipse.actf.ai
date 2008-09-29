@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 IBM Corporation and Others
+ * Copyright (c) 2007 2008 IBM Corporation and Others
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -18,9 +18,9 @@ import org.eclipse.actf.ai.audio.description.impl.MetadataManager;
 import org.eclipse.actf.ai.audio.description.impl.MetadataProviderImpl;
 import org.eclipse.actf.ai.audio.description.views.DescriptionView;
 import org.eclipse.actf.ai.navigator.IMediaControl;
+import org.eclipse.actf.ai.tts.AbstractUIPluginForTTS;
 import org.eclipse.actf.ai.tts.ITTSEngine;
 import org.eclipse.actf.ai.tts.TTSRegistry;
-import org.eclipse.actf.ai.voice.preferences.util.AbstractPreferenceUIPlugin;
 import org.eclipse.actf.ai.xmlstore.IXMLInfo;
 import org.eclipse.actf.ai.xmlstore.IXMLSelector;
 import org.eclipse.actf.ai.xmlstore.IXMLStore;
@@ -35,7 +35,7 @@ import org.osgi.framework.BundleContext;
  * The activator class controls the plug-in life cycle. And this provides
  * information of audio description and TTS function to speak the description.
  */
-public class DescriptionPlugin extends AbstractPreferenceUIPlugin implements
+public class DescriptionPlugin extends AbstractUIPluginForTTS implements
 		IPropertyChangeListener {
 
 	/**

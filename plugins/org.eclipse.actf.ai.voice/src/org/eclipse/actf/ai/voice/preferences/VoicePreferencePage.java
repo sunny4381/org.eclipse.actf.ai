@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 IBM Corporation and Others
+ * Copyright (c) 2007, 2008 IBM Corporation and Others
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,9 +12,10 @@ package org.eclipse.actf.ai.voice.preferences;
 
 import org.eclipse.actf.ai.tts.TTSRegistry;
 import org.eclipse.actf.ai.voice.IVoice;
-import org.eclipse.actf.ai.voice.Messages;
-import org.eclipse.actf.ai.voice.VoicePlugin;
+import org.eclipse.actf.ai.voice.VoiceUtil;
+import org.eclipse.actf.ai.voice.internal.Messages;
 import org.eclipse.actf.ai.voice.internal.Voice;
+import org.eclipse.actf.ai.voice.internal.VoicePlugin;
 import org.eclipse.actf.ai.voice.preferences.util.GroupFieldEditorVoicePreferencePage;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
 import org.eclipse.jface.preference.ScaleFieldEditor;
@@ -34,7 +35,7 @@ public class VoicePreferencePage extends GroupFieldEditorVoicePreferencePage
 
     private static final String SAMPLE_TEXT = "Hello. This is test."; //$NON-NLS-1$
 
-    private static IVoice voice = VoicePlugin.getVoice();
+    private static IVoice voice = VoiceUtil.getVoice();
 	
 	public VoicePreferencePage() {
 		super();
