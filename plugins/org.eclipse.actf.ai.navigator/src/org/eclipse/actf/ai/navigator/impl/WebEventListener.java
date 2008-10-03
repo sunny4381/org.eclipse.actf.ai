@@ -257,7 +257,7 @@ public class WebEventListener implements IWebBrowserACTFEventListener {
 		}
 	}
 
-	public void focusChange(IWebBrowserACTF webBrowser) {
+	public void getFocus(IWebBrowserACTF webBrowser) {
 		if (EVENT_DEBUG)
 			System.out.println("focusChange " + webBrowser);
 		BrowserState bs = getBrowserState(webBrowser);
