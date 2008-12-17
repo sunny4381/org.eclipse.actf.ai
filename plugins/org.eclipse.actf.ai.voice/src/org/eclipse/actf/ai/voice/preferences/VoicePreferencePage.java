@@ -7,6 +7,7 @@
  *
  * Contributors:
  *    Takashi ITOH - initial API and implementation
+ *    Kentarou FUKUDA - initial API and implementation
  *******************************************************************************/
 package org.eclipse.actf.ai.voice.preferences;
 
@@ -29,14 +30,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-
 public class VoicePreferencePage extends GroupFieldEditorVoicePreferencePage
 		implements IWorkbenchPreferencePage {
 
-    private static final String SAMPLE_TEXT = "Hello. This is test."; //$NON-NLS-1$
+	private static final String SAMPLE_TEXT = "Hello. This is test."; //$NON-NLS-1$
 
-    private static IVoice voice = VoiceUtil.getVoice();
-	
+	private static IVoice voice = VoiceUtil.getVoice();
+
 	public VoicePreferencePage() {
 		super();
 		setPreferenceStore(VoicePlugin.getDefault().getPreferenceStore());
@@ -44,46 +44,54 @@ public class VoicePreferencePage extends GroupFieldEditorVoicePreferencePage
 	}
 
 	public void createFieldEditors() {
-        RadioGroupFieldEditor rgfe;
-        String[][] labelAndIds = TTSRegistry.getLabelAndIds();
-		addField(rgfe = new RadioGroupFieldEditor(IVoice.PREF_ENGINE,
-				Messages.getString("voice.engine"), 1, labelAndIds, //$NON-NLS-1$
+		
+		final RadioGroupFieldEditor rgfe;
+		String[][] labelAndIds = TTSRegistry.getLabelAndIds();
+		addField(rgfe = new RadioGroupFieldEditor(IVoice.PREF_ENGINE, Messages
+				.getString("voice.engine"), 1, labelAndIds, //$NON-NLS-1$
 				getFieldEditorParent()));
-        Composite c = rgfe.getRadioBoxControl(getFieldEditorParent());
-        for(int i=0; i<labelAndIds.length; i++){
-            if(labelAndIds[i][1].length() == 0){
-                c.getChildren()[i].setEnabled(false);
-            }
-        }
-        
-        final ScaleFieldEditor speedEditor;
-		addField(speedEditor = new ScaleFieldEditor(IVoice.PREF_SPEED, Messages.getString("voice.speed"), //$NON-NLS-1$
+		Composite c = rgfe.getRadioBoxControl(getFieldEditorParent());
+		for (int i = 0; i < labelAndIds.length; i++) {
+			if (labelAndIds[i][1].length() == 0) {
+				c.getChildren()[i].setEnabled(false);
+			}
+		}
+
+		final ScaleFieldEditor speedEditor;
+		addField(speedEditor = new ScaleFieldEditor(IVoice.PREF_SPEED,
+				Messages.getString("voice.speed"), //$NON-NLS-1$
 				getFieldEditorParent(), IVoice.SPEED_MIN, IVoice.SPEED_MAX, 5,
 				25));
-		
-        Composite comp = new Composite(getFieldEditorParent(),SWT.NONE);
-        GridLayout layout = new GridLayout();
-        layout.marginHeight = layout.marginWidth = 0;
-        comp.setLayout(layout);
-        GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_END);
-        gd.horizontalSpan = speedEditor.getNumberOfControls();
-        comp.setLayoutData(gd);
 
-        Button testButton = new Button(comp,SWT.NONE);
-        testButton.setText(Messages.getString("voice.test"));
-        testButton.addSelectionListener(new SelectionAdapter(){
-            public void widgetSelected(SelectionEvent e) {
-            	voice.setSpeed(speedEditor.getScaleControl().getSelection());
-            	voice.speak(SAMPLE_TEXT,true);
-            }
-        });
+		Composite comp = new Composite(getFieldEditorParent(), SWT.NONE);
+		GridLayout layout = new GridLayout();
+		layout.marginHeight = layout.marginWidth = 0;
+		comp.setLayout(layout);
+		GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_END);
+		gd.horizontalSpan = speedEditor.getNumberOfControls();
+		comp.setLayoutData(gd);
+
+		Button testButton = new Button(comp, SWT.NONE);
+		testButton.setText(Messages.getString("voice.test"));
+		testButton.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+
+				voice.setSpeed(speedEditor.getScaleControl().getSelection());
+				voice.speak(SAMPLE_TEXT, false);
+			}
+		});
 	}
 
+	@Override
+	public boolean performCancel() {
+		return super.performCancel();
+	}
+	
 	public void init(IWorkbench workbench) {
 	}
 
 	public void dispose() {
 		super.dispose();
-		((Voice)voice).setSpeed();
+		((Voice) voice).setSpeed();
 	}
 }

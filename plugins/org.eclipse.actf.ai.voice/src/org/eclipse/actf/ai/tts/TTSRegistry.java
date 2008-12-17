@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 IBM Corporation and Others
+ * Copyright (c) 2007, 2008 IBM Corporation and Others
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,6 +7,7 @@
  *
  * Contributors:
  *    Takashi ITOH - initial API and implementation
+ *    Kentarou FUKUDA - initial API and implementation
  *******************************************************************************/
 package org.eclipse.actf.ai.tts;
 
@@ -28,6 +29,8 @@ public class TTSRegistry {
 	private static IConfigurationElement[] ttsElements;
 
 	private static boolean[] availables;
+
+	private static ITTSEngine[] INSTANCES;
 
 	static {
 		initialize();
@@ -55,14 +58,18 @@ public class TTSRegistry {
 			}
 		});
 		availables = new boolean[ttsElements.length];
+		INSTANCES = new ITTSEngine[ttsElements.length];
 		for (int i = 0; i < ttsElements.length; i++) {
 			try {
-				if (((ITTSEngine) ttsElements[i]
-						.createExecutableExtension("class")).isAvailable()) {
+				ITTSEngine test = (ITTSEngine) ttsElements[i]
+						.createExecutableExtension("class");
+				if (test.isAvailable()) {
 					availables[i] = true;
+					INSTANCES[i] = test;
 				}
 			} catch (Exception e) {
 				availables[i] = false;
+				INSTANCES[i] = null;
 			}
 		}
 	}
@@ -126,8 +133,11 @@ public class TTSRegistry {
 		try {
 			for (int i = 0; i < ttsElements.length; i++) {
 				if (id.equals(ttsElements[i].getAttribute("id"))) { //$NON-NLS-1$
-					return (ITTSEngine) ttsElements[i]
-							.createExecutableExtension("class"); //$NON-NLS-1$
+				 if (INSTANCES[i] == null || INSTANCES[i].isDisposed()) {
+						INSTANCES[i] = (ITTSEngine) ttsElements[i]
+								.createExecutableExtension("class"); //$NON-NLS-1$
+					}
+					return INSTANCES[i];
 				}
 			}
 		} catch (Exception e) {

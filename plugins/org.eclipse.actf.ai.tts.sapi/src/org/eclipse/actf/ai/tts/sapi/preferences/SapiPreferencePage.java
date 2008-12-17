@@ -7,6 +7,7 @@
  *
  * Contributors:
  *    Takashi ITOH - initial API and implementation
+ *    Kentarou FUKUDA - initial API and implementation
  *******************************************************************************/
 package org.eclipse.actf.ai.tts.sapi.preferences;
 
@@ -26,9 +27,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-
 public class SapiPreferencePage extends GroupFieldEditorVoicePreferencePage
 		implements IWorkbenchPreferencePage {
+
+	private String orgVoice;
+	private String orgAudio;
 
 	public SapiPreferencePage() {
 		super();
@@ -37,38 +40,53 @@ public class SapiPreferencePage extends GroupFieldEditorVoicePreferencePage
 	}
 
 	public void createFieldEditors() {
-        if(!TTSRegistry.isAvailable(SapiVoice.ID)){
-            setMessage(Messages.getString("tts.sapi.notAvailable"));
-            return;
-        }
-        final ComboFieldEditor voiceEditor, audioEditor;
-        addField(voiceEditor = new SapiVoiceFieldEditor(Messages.getString("tts.sapi.voicename"), getFieldEditorParent())); //$NON-NLS-1$
-        addField(audioEditor = new SapiAudioOutputFieldEditor(Messages.getString("tts.sapi.audiooutput"), getFieldEditorParent())); //$NON-NLS-1$
-        
-        Composite comp = new Composite(getFieldEditorParent(),SWT.NONE);
-        GridLayout layout = new GridLayout();
-        layout.marginHeight = layout.marginWidth = 0;
-        comp.setLayout(layout);
-        GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_END);
-        gd.horizontalSpan = voiceEditor.getNumberOfControls();
-        comp.setLayoutData(gd);
-        
-        Button testButton = new Button(comp,SWT.NONE);
-        testButton.setText(Messages.getString("tts.sapi.test"));
-        testButton.addSelectionListener(new SelectionAdapter(){
-            public void widgetSelected(SelectionEvent e) {
-                int voiceIndex = voiceEditor.getComboControl().getSelectionIndex();
-                int audioIndex = audioEditor.getComboControl().getSelectionIndex();
-                SapiTestManager.getInstance().speakTest(voiceIndex,audioIndex);
-            }
-        });
+		if (!TTSRegistry.isAvailable(SapiVoice.ID)) {
+			setMessage(Messages.getString("tts.sapi.notAvailable"));
+			return;
+		}
+
+		orgVoice = getPreferenceStore().getString(SapiVoice.ID);
+		orgAudio = getPreferenceStore().getString(SapiVoice.AUDIO_OUTPUT);
+
+		final ComboFieldEditor voiceEditor, audioEditor;
+		addField(voiceEditor = new SapiVoiceFieldEditor(Messages
+				.getString("tts.sapi.voicename"), getFieldEditorParent())); //$NON-NLS-1$
+		addField(audioEditor = new SapiAudioOutputFieldEditor(Messages
+				.getString("tts.sapi.audiooutput"), getFieldEditorParent())); //$NON-NLS-1$
+
+		Composite comp = new Composite(getFieldEditorParent(), SWT.NONE);
+		GridLayout layout = new GridLayout();
+		layout.marginHeight = layout.marginWidth = 0;
+		comp.setLayout(layout);
+		GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_END);
+		gd.horizontalSpan = voiceEditor.getNumberOfControls();
+		comp.setLayoutData(gd);
+
+		Button testButton = new Button(comp, SWT.NONE);
+		testButton.setText(Messages.getString("tts.sapi.test"));
+		testButton.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				SapiTestManager.getInstance().speakTest();
+			}
+		});
 	}
 
-    public void init(IWorkbench workbench) {
+	public void init(IWorkbench workbench) {
 	}
 
-    public void dispose() {
-        super.dispose();
-        SapiTestManager.freeInstance();
-    }
+	@Override
+	public boolean performCancel() {
+		getPreferenceStore().setValue(SapiVoice.ID, orgVoice);
+		getPreferenceStore().setValue(SapiVoice.AUDIO_OUTPUT, orgAudio);
+		return super.performCancel();
+	}
+	
+	@Override
+	protected void performApply() {
+		super.performApply();
+		
+		orgVoice = getPreferenceStore().getString(SapiVoice.ID);
+		orgAudio = getPreferenceStore().getString(SapiVoice.AUDIO_OUTPUT);
+	}
+
 }

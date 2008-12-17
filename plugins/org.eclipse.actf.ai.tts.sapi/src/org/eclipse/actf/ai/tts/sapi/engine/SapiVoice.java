@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 IBM Corporation and Others
+ * Copyright (c) 2007, 2008 IBM Corporation and Others
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,10 +7,11 @@
  *
  * Contributors:
  *    Takashi ITOH - initial API and implementation
+ *    Kentarou FUKUDA - initial API and implementation
  *******************************************************************************/
 package org.eclipse.actf.ai.tts.sapi.engine;
 
-import org.eclipse.actf.ai.tts.ITTSEngine;
+import org.eclipse.actf.ai.tts.ISAPIEngine;
 import org.eclipse.actf.ai.tts.sapi.SAPIPlugin;
 import org.eclipse.actf.ai.voice.IVoiceEventListener;
 import org.eclipse.actf.util.win32.COMUtil;
@@ -26,16 +27,12 @@ import org.eclipse.swt.ole.win32.Variant;
 /**
  * The implementation of ITTSEngine to use Microsoft Speech API.
  */
-public class SapiVoice implements ITTSEngine, IPropertyChangeListener {
+public class SapiVoice implements ISAPIEngine, IPropertyChangeListener {
 
 	public static final String ID = "org.eclipse.actf.ai.tts.sapi.engine.SapiVoice"; //$NON-NLS-1$
 	public static final String AUDIO_OUTPUT = "org.eclipse.actf.ai.tts.SapiVoice.audioOutput"; //$NON-NLS-1$
 
-	public static final int SVSFDefault = 0, SVSFlagsAsync = 1,
-			SVSFPurgeBeforeSpeak = 2, SVSFIsFilename = 4, SVSFIsXML = 8,
-			SVSFIsNotXML = 16, SVSFPersistXML = 32;
-
-	private ISpVoice dispSpVoice;
+	public ISpVoice dispSpVoice;
 	private Variant varSapiVoice;
 	private OleAutomation automation;
 	private int idGetVoices;
@@ -43,6 +40,7 @@ public class SapiVoice implements ITTSEngine, IPropertyChangeListener {
 	private ISpNotifySource spNotifySource = null;
 	private static IPreferenceStore preferenceStore = SAPIPlugin.getDefault()
 			.getPreferenceStore();
+	private boolean isDisposed = false;
 
 	public SapiVoice() {
 		int pv = COMUtil.createDispatch(ISpVoice.IID);
@@ -55,8 +53,16 @@ public class SapiVoice implements ITTSEngine, IPropertyChangeListener {
 		idGetVoices = getIDsOfNames("GetVoices"); //$NON-NLS-1$
 		idGetAudioOutputs = getIDsOfNames("GetAudioOutputs"); //$NON-NLS-1$
 
-		setVoiceName();
+		// init by using default engine to avoid init error of some TTS engines
+		String orgID = preferenceStore.getString(ID);
+		preferenceStore.setValue(ID, preferenceStore.getDefaultString(ID));
 		setAudioOutputName();
+		// switch to actual engine
+		preferenceStore.setValue(ID, orgID);
+		// setVoiceName();
+
+		// to avoid access violation error at application shutdown
+		stop();
 	}
 
 	/*
@@ -103,7 +109,7 @@ public class SapiVoice implements ITTSEngine, IPropertyChangeListener {
 		}
 	}
 
-	private void speak(String text, int sapiFlags) {
+	public void speak(String text, int sapiFlags) {
 		char[] data = (text + "\0").toCharArray(); //$NON-NLS-1$
 		int bstrText = MemoryUtil.SysAllocString(data);
 		try {
@@ -188,6 +194,30 @@ public class SapiVoice implements ITTSEngine, IPropertyChangeListener {
 				Variant varVoice = tokens.getItem(0);
 				if (null != varVoice) {
 					success = setVoice(varVoice);
+				}
+			}
+			varVoices.dispose();
+		}
+		if (!success) {
+			int index = voiceName.indexOf("name=");
+			varVoices = getVoices(null, null);
+			if (null != varVoices && index > -1) {
+				String name = voiceName.substring(index + 5);
+				SpeechObjectTokens voiceTokens = SpeechObjectTokens
+						.getTokens(varVoices);
+				if (null != voiceTokens) {
+					int count = voiceTokens.getCount();
+					for (int i = 0; i < count; i++) {
+						Variant varVoice = voiceTokens.getItem(i);
+						if (null != varVoice) {
+							SpObjectToken token = SpObjectToken
+									.getToken(varVoice);
+							if (null != token
+									&& name.equals(token.getDescription(0))) {
+								success = setVoice(varVoice);
+							}
+						}
+					}
 				}
 			}
 			varVoices.dispose();
@@ -282,7 +312,15 @@ public class SapiVoice implements ITTSEngine, IPropertyChangeListener {
 	 * @see org.eclipse.actf.ai.tts.ITTSEngine#dispose()
 	 */
 	public void dispose() {
-		varSapiVoice.dispose();
+		if (!isDisposed) {
+			isDisposed = true;
+
+			varSapiVoice.dispose();
+
+			if (SAPIPlugin.getDefault() != null) {
+				SAPIPlugin.getDefault().removePropertyChangeListener(this);
+			}
+		}
 	}
 
 	/*
@@ -337,5 +375,9 @@ public class SapiVoice implements ITTSEngine, IPropertyChangeListener {
 	 */
 	public boolean isAvailable() {
 		return automation != null;
+	}
+
+	public boolean isDisposed() {
+		return isDisposed;
 	}
 }

@@ -134,6 +134,7 @@ public class Voice implements IVoice, IPropertyChangeListener {
 	 */
 	public void dispose() {
 		if( null != ttsEngine ) {
+			stop();
 			ttsEngine.dispose();
 			ttsEngine = null;
 		}

@@ -7,23 +7,39 @@
  *
  * Contributors:
  *    Takashi ITOH - initial API and implementation
+ *    Kentarou FUKUDA - initial API and implementation
  *******************************************************************************/
 
 package org.eclipse.actf.ai.tts.sapi.preferences;
 
+import org.eclipse.actf.ai.tts.sapi.SAPIPlugin;
 import org.eclipse.actf.ai.tts.sapi.engine.SapiVoice;
 import org.eclipse.actf.ai.voice.preferences.util.ComboFieldEditor;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Composite;
 
-
-
 public class SapiVoiceFieldEditor extends ComboFieldEditor {
+
+	private static IPreferenceStore preferenceStore = SAPIPlugin.getDefault()
+			.getPreferenceStore();
 
 	public SapiVoiceFieldEditor(String labelText, Composite parent) {
 		super(SapiVoice.ID, labelText, null, parent);
 	}
 
 	protected void initLabelsAndValues(String[][] labelsAndValues) {
-		super.initLabelsAndValues(SapiTestManager.getInstance().getVoiceNames());
+		super
+				.initLabelsAndValues(SapiTestManager.getInstance()
+						.getVoiceNames());
 	}
+
+	@Override
+	protected void fireValueChanged(String property, Object oldValue,
+			Object newValue) {
+
+		preferenceStore.setValue(SapiVoice.ID, newValue.toString());
+
+		super.fireValueChanged(property, oldValue, newValue);
+	}
+
 }

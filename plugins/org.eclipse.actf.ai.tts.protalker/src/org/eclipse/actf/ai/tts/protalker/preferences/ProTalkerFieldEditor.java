@@ -7,6 +7,7 @@
  *
  * Contributors:
  *    Daisuke SATO - initial API and implementation
+ *    Kentarou FUKUDA - initial API and implementation
  *******************************************************************************/
 package org.eclipse.actf.ai.tts.protalker.preferences;
 
@@ -61,6 +62,12 @@ public class ProTalkerFieldEditor extends ComboButtonFieldEditor {
 			proTalker.dispose();
 			proTalker = null;
 		}
+	}
+	
+	@Override
+	public void dispose() {
+		proTalker.dispose();
+		super.dispose();
 	}
 
 }

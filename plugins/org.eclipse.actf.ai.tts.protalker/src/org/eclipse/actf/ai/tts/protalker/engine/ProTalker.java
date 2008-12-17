@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 IBM Corporation and Others
+ * Copyright (c) 2007, 2008 IBM Corporation and Others
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,6 +7,7 @@
  *
  * Contributors:
  *    Daisuke SATO - initial API and implementation
+ *    Kentarou FUKUDA - initial API and implementation
  *******************************************************************************/
 package org.eclipse.actf.ai.tts.protalker.engine;
 
@@ -26,6 +27,8 @@ public class ProTalker implements ITTSEngine, IPropertyChangeListener {
 	public static final String ID = "org.eclipse.actf.ai.tts.protalker.engine.ProTalker"; //$NON-NLS-1$
 
 	private ProTalkerBridge engine;
+
+	private boolean isDisposed = false;
 
 	public ProTalker() {
 		engine = new ProTalkerBridge(Display.getDefault());
@@ -145,6 +148,16 @@ public class ProTalker implements ITTSEngine, IPropertyChangeListener {
 	 * @see org.eclipse.actf.ai.tts.ITTSEngine#dispose()
 	 */
 	public void dispose() {
+		if (!isDisposed) {
+			isDisposed = true;
+			engine.dispose();
+			if (ProTalkerPlugin.getDefault() != null) {
+				ProTalkerPlugin.getDefault().removePropertyChangeListener(this);
+			}
+		}
+	}
 
+	public boolean isDisposed() {
+		return isDisposed;
 	}
 }

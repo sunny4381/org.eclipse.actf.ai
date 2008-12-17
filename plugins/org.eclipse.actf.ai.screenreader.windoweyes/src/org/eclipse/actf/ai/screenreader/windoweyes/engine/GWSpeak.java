@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 IBM Corporation and Others
+ * Copyright (c) 2007, 2008 IBM Corporation and Others
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,6 +7,7 @@
  *
  * Contributors:
  *    Takashi ITOH - initial API and implementation
+ *    Kentarou FUKUDA - initial API and implementation
  *******************************************************************************/
 
 package org.eclipse.actf.ai.screenreader.windoweyes.engine;
@@ -27,18 +28,20 @@ public class GWSpeak implements ITTSEngine {
 	private IGWSpeak dispGWSpeak = null; // Instanceof GWSpeak.Speak ActiveX
 	private IVoiceEventListener eventListener = null;
 	private boolean notifyEndOfSpeech = false; // Invoke indexReceived() if
-												// true
+	// true
 	private long lastNotificationTime = 0; // Last time of indexReceived()
 
 	// Constants
 	private static final int DELAY_FIRST = 500; // Delay on the first
-												// indexReceived()
+	// indexReceived()
 	private static final int DELAY_NEXT = 1000; // Delay on the subsequent
-												// indexReceived()
+	// indexReceived()
 	private static final TCHAR GWM_WINDOW_CLASS = new TCHAR(0,
 			"GWMExternalControl", true); //$NON-NLS-1$
 	private static final TCHAR GWM_WINDOW_NAME = new TCHAR(0,
 			"External Control", true); //$NON-NLS-1$
+
+	private boolean isDisposed = false;
 
 	/**
 	 * Constructor
@@ -65,6 +68,7 @@ public class GWSpeak implements ITTSEngine {
 	 * @see org.eclipse.actf.ai.tts.ITTSEngine#dispose()
 	 */
 	public void dispose() {
+		isDisposed = true;
 		if (null != dispGWSpeak) {
 			eventListener = null;
 			stop();
@@ -193,6 +197,10 @@ public class GWSpeak implements ITTSEngine {
 	 * @see org.eclipse.actf.ai.tts.ITTSEngine#setSpeed(int)
 	 */
 	public void setSpeed(int speed) {
+	}
+
+	public boolean isDisposed() {
+		return isDisposed;
 	}
 
 }

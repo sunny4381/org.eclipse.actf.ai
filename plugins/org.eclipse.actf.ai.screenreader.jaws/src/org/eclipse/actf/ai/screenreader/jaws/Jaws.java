@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 IBM Corporation and Others
+ * Copyright (c) 2007, 2008 IBM Corporation and Others
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,6 +7,7 @@
  *
  * Contributors:
  *    Daisuke SATO - initial API and implementation
+ *    Kentarou FUKUDA - initial API and implementation
  *******************************************************************************/
 
 package org.eclipse.actf.ai.screenreader.jaws;
@@ -39,6 +40,11 @@ public class Jaws implements ITTSEngine, IScreenReaderControl {
 	public void dispose() {
 		// not supported
 	}
+	
+	public boolean isDisposed() {
+		return false;
+	}
+
 
 	/*
 	 * (non-Javadoc)
@@ -161,4 +167,5 @@ public class Jaws implements ITTSEngine, IScreenReaderControl {
 			return false;
 		return jaws.isAvailable();
 	}
+	
 }
