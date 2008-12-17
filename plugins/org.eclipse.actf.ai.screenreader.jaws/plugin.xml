@@ -5,7 +5,6 @@
          point="org.eclipse.actf.ai.voice.TTSEngine">
       <engine
             class="org.eclipse.actf.ai.screenreader.jaws.Jaws"
-            description="JAWS"
             id="org.eclipse.actf.ai.screenreader.jaws.Jaws"
             name="JAWS"
             priority="1000"/>
