@@ -16,8 +16,7 @@ import org.eclipse.actf.ai.tts.ITTSEngine;
 import org.eclipse.actf.ai.voice.IVoiceEventListener;
 import org.eclipse.actf.util.win32.COMUtil;
 import org.eclipse.actf.util.win32.MemoryUtil;
-import org.eclipse.swt.internal.win32.OS;
-import org.eclipse.swt.internal.win32.TCHAR;
+import org.eclipse.actf.util.win32.WindowUtil;
 import org.eclipse.swt.widgets.Display;
 
 /**
@@ -36,10 +35,8 @@ public class GWSpeak implements ITTSEngine {
 	// indexReceived()
 	private static final int DELAY_NEXT = 1000; // Delay on the subsequent
 	// indexReceived()
-	private static final TCHAR GWM_WINDOW_CLASS = new TCHAR(0,
-			"GWMExternalControl", true); //$NON-NLS-1$
-	private static final TCHAR GWM_WINDOW_NAME = new TCHAR(0,
-			"External Control", true); //$NON-NLS-1$
+	private static final String GWM_WINDOW_CLASS = "GWMExternalControl"; //$NON-NLS-1$
+	private static final String GWM_WINDOW_NAME = "External Control"; //$NON-NLS-1$
 
 	private boolean isDisposed = false;
 
@@ -48,7 +45,7 @@ public class GWSpeak implements ITTSEngine {
 	 */
 	public GWSpeak() {
 		// check to see if Window-Eyes is running
-		if (0 != OS.FindWindow(GWM_WINDOW_CLASS, GWM_WINDOW_NAME)) {
+		if (0 != WindowUtil.FindWindow(GWM_WINDOW_CLASS, GWM_WINDOW_NAME)) {
 			int pv = COMUtil.createDispatch(IGWSpeak.IID);
 			if (0 != pv) {
 				dispGWSpeak = new IGWSpeak(pv);
