@@ -40,15 +40,14 @@ public class VoicePreferencePage extends GroupFieldEditorVoicePreferencePage
 	public VoicePreferencePage() {
 		super();
 		setPreferenceStore(VoicePlugin.getDefault().getPreferenceStore());
-		setDescription(Messages.getString("voice.description")); //$NON-NLS-1$
+		setDescription(Messages.voice_description); 
 	}
 
 	public void createFieldEditors() {
 		
 		final RadioGroupFieldEditor rgfe;
 		String[][] labelAndIds = TTSRegistry.getLabelAndIds();
-		addField(rgfe = new RadioGroupFieldEditor(IVoice.PREF_ENGINE, Messages
-				.getString("voice.engine"), 1, labelAndIds, //$NON-NLS-1$
+		addField(rgfe = new RadioGroupFieldEditor(IVoice.PREF_ENGINE, Messages.voice_engine, 1, labelAndIds, //$NON-NLS-1$
 				getFieldEditorParent()));
 		Composite c = rgfe.getRadioBoxControl(getFieldEditorParent());
 		for (int i = 0; i < labelAndIds.length; i++) {
@@ -59,7 +58,7 @@ public class VoicePreferencePage extends GroupFieldEditorVoicePreferencePage
 
 		final ScaleFieldEditor speedEditor;
 		addField(speedEditor = new ScaleFieldEditor(IVoice.PREF_SPEED,
-				Messages.getString("voice.speed"), //$NON-NLS-1$
+				Messages.voice_speed, 
 				getFieldEditorParent(), IVoice.SPEED_MIN, IVoice.SPEED_MAX, 5,
 				25));
 
@@ -72,7 +71,7 @@ public class VoicePreferencePage extends GroupFieldEditorVoicePreferencePage
 		comp.setLayoutData(gd);
 
 		Button testButton = new Button(comp, SWT.NONE);
-		testButton.setText(Messages.getString("voice.test"));
+		testButton.setText(Messages.voice_test);
 		testButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 

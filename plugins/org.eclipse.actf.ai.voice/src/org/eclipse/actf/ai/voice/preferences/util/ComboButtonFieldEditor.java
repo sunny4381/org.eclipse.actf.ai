@@ -67,7 +67,7 @@ public class ComboButtonFieldEditor extends ComboFieldEditor {
 		if (testButton == null) {
 			testButton = new Button(parent, SWT.PUSH);
 			if (testButtonText == null)
-				testButtonText = Messages.getString("voice.test"); //$NON-NLS-1$
+				testButtonText = Messages.voice_test; 
 			testButton.setText(testButtonText);
 			testButton.setFont(parent.getFont());
 			testButton.addSelectionListener(new SelectionAdapter() {

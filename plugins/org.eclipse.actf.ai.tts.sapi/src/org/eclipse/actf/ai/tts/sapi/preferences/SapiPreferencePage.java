@@ -35,13 +35,13 @@ public class SapiPreferencePage extends GroupFieldEditorVoicePreferencePage
 
 	public SapiPreferencePage() {
 		super();
-		setDescription(Messages.getString("tts.sapi.description")); //$NON-NLS-1$
+		setDescription(Messages.tts_sapi_description); 
 		setPreferenceStore(SAPIPlugin.getDefault().getPreferenceStore());
 	}
 
 	public void createFieldEditors() {
 		if (!TTSRegistry.isAvailable(SapiVoice.ID)) {
-			setMessage(Messages.getString("tts.sapi.notAvailable"));
+			setMessage(Messages.tts_sapi_notAvailable);
 			return;
 		}
 
@@ -49,10 +49,8 @@ public class SapiPreferencePage extends GroupFieldEditorVoicePreferencePage
 		orgAudio = getPreferenceStore().getString(SapiVoice.AUDIO_OUTPUT);
 
 		final ComboFieldEditor voiceEditor, audioEditor;
-		addField(voiceEditor = new SapiVoiceFieldEditor(Messages
-				.getString("tts.sapi.voicename"), getFieldEditorParent())); //$NON-NLS-1$
-		addField(audioEditor = new SapiAudioOutputFieldEditor(Messages
-				.getString("tts.sapi.audiooutput"), getFieldEditorParent())); //$NON-NLS-1$
+		addField(voiceEditor = new SapiVoiceFieldEditor(Messages.tts_sapi_voicename, getFieldEditorParent())); //$NON-NLS-1$
+		addField(audioEditor = new SapiAudioOutputFieldEditor(Messages.tts_sapi_audiooutput, getFieldEditorParent())); //$NON-NLS-1$
 
 		Composite comp = new Composite(getFieldEditorParent(), SWT.NONE);
 		GridLayout layout = new GridLayout();
@@ -63,7 +61,7 @@ public class SapiPreferencePage extends GroupFieldEditorVoicePreferencePage
 		comp.setLayoutData(gd);
 
 		Button testButton = new Button(comp, SWT.NONE);
-		testButton.setText(Messages.getString("tts.sapi.test"));
+		testButton.setText(Messages.tts_sapi_test);
 		testButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				SapiTestManager.getInstance().speakTest();
