@@ -45,9 +45,9 @@ public class FormSelectDialog extends Dialog {
         super.configureShell(newShell);
 
         if (multiple) 
-            newShell.setText(Messages.getString("FormSelectDialog.Multiple")); //$NON-NLS-1$
+            newShell.setText(Messages.FormSelectDialog_Multiple); 
         else
-            newShell.setText(Messages.getString("FormSelectDialog.Single")); //$NON-NLS-1$
+            newShell.setText(Messages.FormSelectDialog_Single); 
     }
 
     @Override

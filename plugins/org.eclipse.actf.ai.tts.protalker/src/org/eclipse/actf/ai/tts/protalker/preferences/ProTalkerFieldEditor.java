@@ -25,7 +25,7 @@ public class ProTalkerFieldEditor extends ComboButtonFieldEditor {
 	private static final String SAMPLE_TEXT = "Hello. This is test."; //$NON-NLS-1$
 
 	private static final String[][] VOICE_SELECTION = new String[][] {
-			{ Messages.getString("tts.protalker.male"), "male" }, { Messages.getString("tts.protalker.female"), "female" } }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			{ Messages.tts_protalker_male, "male" }, { Messages.tts_protalker_female, "female" } }; 
 
 	private ProTalker proTalker;
 

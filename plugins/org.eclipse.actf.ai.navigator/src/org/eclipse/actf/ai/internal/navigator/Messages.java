@@ -8,34 +8,40 @@
  * Contributors:
  *    Daisuke SATO - initial API and implementation
  *******************************************************************************/
-
 package org.eclipse.actf.ai.internal.navigator;
 
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
+import org.eclipse.osgi.util.NLS;
 
+public final class Messages extends NLS {
 
-/**
- * This provides the resource string.
- */
-public class Messages {
-    private static final String BUNDLE_NAME = "messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "messages";//$NON-NLS-1$
 
-    private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
+	private Messages() {
+		// Do not instantiate
+	}
 
-    private Messages() {
-    }
+	public static String NavigatorTreeView_property;
+	public static String NavigatorTreeView_value;
+	public static String DialogOpenURL_Open_URL_2;
+	public static String IManipulator_TreeNavigaion;
+	public static String IManipulator_FormInput;
+	public static String IManipulator_Input;
+	public static String FormInputDialog_Textarea;
+	public static String FormInputDialog_Password;
+	public static String FormInputDialog_Text;
+	public static String FormInputDialog_Search;
+	public static String FormInputDialog_Forward;
+	public static String FormInputDialog_Backward;
+	public static String FormInputDialog_Exact;
+	public static String FormSelectDialog_Single;
+	public static String FormSelectDialog_Multiple;
+	public static String AccessKeyListDialog_Title;
+	public static String AltInputDialog_Text;
+	public static String UserInfo_PREFERENCES_NAME;
+	public static String UserInfo_SAVE_ANNOTATION;
+	public static String UserInfo_REFRESH_TREEVIEW;
 
-    /**
-     * @param key The name of the resource string.
-     * @return The string specified the key.
-     */
-    public static String getString(String key) {
-        // TODO Auto-generated method stub
-        try {
-            return RESOURCE_BUNDLE.getString(key);
-        } catch (MissingResourceException e) {
-            return '!' + key + '!';
-        }
-    }
+	static {
+		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
+	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 IBM Corporation and Others
+ * Copyright (c) 2007, 2008 IBM Corporation and Others
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,35 +8,25 @@
  * Contributors:
  *    Takashi ITOH - initial API and implementation
  *******************************************************************************/
-
 package org.eclipse.actf.ai.tts.protalker;
 
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
+import org.eclipse.osgi.util.NLS;
 
-/**
- * This provides the resource string.
- */
-public class Messages {
-	private static final String BUNDLE_NAME = "messages"; //$NON-NLS-1$
+public final class Messages extends NLS {
 
-	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle
-			.getBundle(BUNDLE_NAME);
+	private static final String BUNDLE_NAME = "org.eclipse.actf.ai.tts.protalker.messages";//$NON-NLS-1$
 
 	private Messages() {
+		// Do not instantiate
 	}
 
-	/**
-	 * @param key
-	 *            the name of the resource string.
-	 * @return the string specified the key.
-	 */
-	public static String getString(String key) {
-		// TODO Auto-generated method stub
-		try {
-			return RESOURCE_BUNDLE.getString(key);
-		} catch (MissingResourceException e) {
-			return '!' + key + '!';
-		}
+	public static String tts_protalker_description;
+	public static String tts_protalker_voice;
+	public static String tts_protalker_male;
+	public static String tts_protalker_female;
+	public static String tts_protalker_notAvailable;
+
+	static {
+		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
 	}
 }

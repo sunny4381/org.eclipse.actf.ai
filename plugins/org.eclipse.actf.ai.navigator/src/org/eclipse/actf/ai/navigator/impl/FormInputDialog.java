@@ -42,11 +42,11 @@ public class FormInputDialog extends Dialog {
         super.configureShell(newShell);
         
         if(multi)
-            newShell.setText(Messages.getString("FormInputDialog.Textarea")); //$NON-NLS-1$
+            newShell.setText(Messages.FormInputDialog_Textarea); 
         else if(pass)
-            newShell.setText(Messages.getString("FormInputDialog.Password")); //$NON-NLS-1$
+            newShell.setText(Messages.FormInputDialog_Password); 
         else
-            newShell.setText(Messages.getString("FormInputDialog.Text")); //$NON-NLS-1$
+            newShell.setText(Messages.FormInputDialog_Text); 
     }
 
     @Override

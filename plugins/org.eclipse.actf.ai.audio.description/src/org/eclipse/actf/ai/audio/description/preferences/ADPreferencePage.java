@@ -26,7 +26,7 @@ public class ADPreferencePage extends FieldEditorPreferencePage implements
 	public ADPreferencePage() {
 		super(GRID);
 		setPreferenceStore(DescriptionPlugin.getDefault().getPreferenceStore());
-		setDescription(Messages.getString("AudioDescription.preference.title")); //$NON-NLS-1$
+		setDescription(Messages.AudioDescription_preference_title); 
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class ADPreferencePage extends FieldEditorPreferencePage implements
 		String[][] labelAndIds = TTSRegistry.getLabelAndIds();
 		addField(rgfe = new RadioGroupFieldEditor(
 				DescriptionPlugin.PREF_ENGINE,
-				Messages.getString("AudioDescription.voice.engine"), 1, labelAndIds, //$NON-NLS-1$
+				Messages.AudioDescription_voice_engine, 1, labelAndIds, 
 				getFieldEditorParent()));
 		Composite c = rgfe.getRadioBoxControl(getFieldEditorParent());
 		for (int i = 0; i < labelAndIds.length; i++) {

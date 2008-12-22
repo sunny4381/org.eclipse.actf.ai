@@ -58,12 +58,10 @@ public class DescriptionView extends ViewPart {
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 		TableColumn tableColumnProperty = new TableColumn(table, SWT.LEFT);
-		tableColumnProperty.setText(Messages
-				.getString("AudioDescription.view.time"));
+		tableColumnProperty.setText(Messages.AudioDescription_view_time);
 		tableColumnProperty.setWidth(70);
 		TableColumn tableColumnValue = new TableColumn(table, SWT.LEFT);
-		tableColumnValue.setText(Messages
-				.getString("AudioDescription.view.desc"));
+		tableColumnValue.setText(Messages.AudioDescription_view_desc);
 		tableColumnValue.setWidth(130);
 
 		GridData data = new GridData(GridData.FILL_BOTH);

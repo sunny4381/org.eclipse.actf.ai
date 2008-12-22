@@ -126,7 +126,7 @@ public class URLOpenDialog {
 	 * @return 1 (OK button), 0 (Cancel button)
 	 */
 	public int open() {
-		this._shell.setText(Messages.getString("DialogOpenURL.Open_URL_2"));
+		this._shell.setText(Messages.DialogOpenURL_Open_URL_2);
 
 		createSettingControls();
 

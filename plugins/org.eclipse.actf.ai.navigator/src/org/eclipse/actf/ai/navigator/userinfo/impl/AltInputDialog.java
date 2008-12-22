@@ -34,7 +34,7 @@ public class AltInputDialog extends Dialog {
     protected void configureShell(Shell newShell) {
         super.configureShell(newShell);
 
-        newShell.setText(Messages.getString("AltInputDialog.Text"));
+        newShell.setText(Messages.AltInputDialog_Text);
     }
 
     @Override

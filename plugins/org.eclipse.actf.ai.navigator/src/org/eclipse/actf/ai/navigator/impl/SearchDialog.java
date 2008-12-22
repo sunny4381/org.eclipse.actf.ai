@@ -48,7 +48,7 @@ public class SearchDialog extends Dialog {
     protected void configureShell(Shell newShell) {
         super.configureShell(newShell);
 
-        newShell.setText(Messages.getString("FormInputDialog.Search"));
+        newShell.setText(Messages.FormInputDialog_Search);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class SearchDialog extends Dialog {
         
         backwardRadio = new Button(container, SWT.RADIO);
         backwardRadio.setSelection(!isForward);
-        backwardRadio.setText(Messages.getString("FormInputDialog.Backward"));
+        backwardRadio.setText(Messages.FormInputDialog_Backward);
         backwardRadio.addSelectionListener(new SelectionListener(){
             public void widgetDefaultSelected(SelectionEvent e) {
             }
@@ -79,7 +79,7 @@ public class SearchDialog extends Dialog {
         });
         
         forwardRadio = new Button(container, SWT.RADIO);
-        forwardRadio.setText(Messages.getString("FormInputDialog.Forward"));
+        forwardRadio.setText(Messages.FormInputDialog_Forward);
         forwardRadio.setSelection(isForward);
         forwardRadio.addSelectionListener(new SelectionListener(){
             public void widgetDefaultSelected(SelectionEvent e) {
@@ -91,7 +91,7 @@ public class SearchDialog extends Dialog {
 
         exactButton = new Button(container, SWT.CHECK);
         exactButton.setSelection(exact);
-        exactButton.setText(Messages.getString("FormInputDialog.Exact"));
+        exactButton.setText(Messages.FormInputDialog_Exact);
         exactButton.addSelectionListener(new SelectionListener(){
             public void widgetDefaultSelected(SelectionEvent e) {
             }

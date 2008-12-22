@@ -90,10 +90,10 @@ public class MediaControlImpl implements IMediaControl {
 			return;
 
 		if (plugin.getEnable()) {
-			handle.getVoice().speak(Messages.getString("AudioDescription.on"),
+			handle.getVoice().speak(Messages.AudioDescription_on,
 					flush);
 		} else {
-			handle.getVoice().speak(Messages.getString("AudioDescription.off"),
+			handle.getVoice().speak(Messages.AudioDescription_off,
 					flush);
 		}
 	}

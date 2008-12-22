@@ -49,11 +49,10 @@ public class VideoStatusViewer {
 		if (status.isDisposed())
 			return;
 		if (enable) {
-			status.setText(Messages.getString("AudioDescription.view.enable")
+			status.setText(Messages.AudioDescription_view_enable
 					+ " " + timeText);
 		} else {
-			status.setText(Messages
-					.getString("AudioDescription.view.notEnable")
+			status.setText(Messages.AudioDescription_view_notEnable
 					+ " " + timeText);
 		}
 	}

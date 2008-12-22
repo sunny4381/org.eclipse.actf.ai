@@ -8,35 +8,29 @@
  * Contributors:
  *    Takashi ITOH - initial API and implementation
  *******************************************************************************/
-
 package org.eclipse.actf.ai.internal.audio.description;
 
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
+import org.eclipse.osgi.util.NLS;
 
-/**
- * This provides the resource string.
- */
-public class Messages {
-	private static final String BUNDLE_NAME = "messages"; //$NON-NLS-1$
+public final class Messages extends NLS {
 
-	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle
-			.getBundle(BUNDLE_NAME);
+	private static final String BUNDLE_NAME = "messages";//$NON-NLS-1$
 
 	private Messages() {
+		// Do not instantiate
 	}
 
-	/**
-	 * @param key
-	 *            the name of the resource string.
-	 * @return the string specified the key.
-	 */
-	public static String getString(String key) {
-		// TODO Auto-generated method stub
-		try {
-			return RESOURCE_BUNDLE.getString(key);
-		} catch (MissingResourceException e) {
-			return '!' + key + '!';
-		}
+	public static String AudioDescription_view_time;
+	public static String AudioDescription_view_desc;
+	public static String AudioDescription_view_enable;
+	public static String AudioDescription_view_notEnable;
+	public static String AudioDescription_preference_title;
+	public static String AudioDescription_voice_engine;
+	public static String Metadata_available;
+	public static String AudioDescription_on;
+	public static String AudioDescription_off;
+
+	static {
+		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
 	}
 }

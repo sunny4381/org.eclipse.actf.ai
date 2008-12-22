@@ -24,17 +24,17 @@ public class ProTalkerPreferencePage extends GroupFieldEditorVoicePreferencePage
 
 	public ProTalkerPreferencePage() {
 		super();
-		setDescription(Messages.getString("tts.protalker.description")); //$NON-NLS-1$
+		setDescription(Messages.tts_protalker_description); 
 		setPreferenceStore(ProTalkerPlugin.getDefault().getPreferenceStore());
 	}
 
 	public void createFieldEditors() {
         if(!TTSRegistry.isAvailable(ProTalker.ID)){
-            setMessage(Messages.getString("tts.protalker.notAvailable"));
+            setMessage(Messages.tts_protalker_notAvailable);
             return;
         }
 
-		addField(new ProTalkerFieldEditor(Messages.getString("tts.protalker.voice"), getFieldEditorParent())); //$NON-NLS-1$
+		addField(new ProTalkerFieldEditor(Messages.tts_protalker_voice, getFieldEditorParent())); 
 	}
 
 	public void init(IWorkbench workbench) {

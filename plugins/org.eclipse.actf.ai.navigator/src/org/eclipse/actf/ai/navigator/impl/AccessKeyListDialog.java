@@ -40,7 +40,7 @@ public class AccessKeyListDialog extends Dialog {
     protected void configureShell(Shell newShell) {
         super.configureShell(newShell);
         
-        newShell.setText(Messages.getString("AccessKeyListDialog.Title")); //$NON-NLS-1$
+        newShell.setText(Messages.AccessKeyListDialog_Title); 
 
     }
 

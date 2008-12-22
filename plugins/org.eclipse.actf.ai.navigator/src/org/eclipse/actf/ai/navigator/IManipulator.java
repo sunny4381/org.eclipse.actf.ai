@@ -41,7 +41,7 @@ public interface IManipulator {
      * The instance of the Mode of the tree navigation mode.
      * This is the default mode of the application.
      */
-    Mode TREE_NAVIGATION_MODE = new Mode(Messages.getString("IManipulator.TreeNavigaion"), TREE_NAVIGATION_MODE_CODE); //$NON-NLS-1$
+    Mode TREE_NAVIGATION_MODE = new Mode(Messages.IManipulator_TreeNavigaion, TREE_NAVIGATION_MODE_CODE); 
     
     /**
      * The code of the form input mode.
@@ -52,7 +52,7 @@ public interface IManipulator {
      * The instance of the Mode of the form input mode.
      * This mode is used during the users input information into HTML forms.
      */
-    Mode FORM_INPUT_MODE = new Mode(Messages.getString("IManipulator.FormInput"), FORM_INPUT_MODE_CODE); //$NON-NLS-1$
+    Mode FORM_INPUT_MODE = new Mode(Messages.IManipulator_FormInput, FORM_INPUT_MODE_CODE); 
     
     /**
      * The code of the key hook disabled mode.
@@ -63,7 +63,7 @@ public interface IManipulator {
      * The instance of the Mode of the key hook disabled mode.
      * This mode is used during a dialog is shown.
      */
-    Mode KEYHOOK_DISABLED_MODE = new Mode(Messages.getString("IManipulator.Input"), KEYHOOK_DISABLED_MODE_CODE); //$NON-NLS-1$
+    Mode KEYHOOK_DISABLED_MODE = new Mode(Messages.IManipulator_Input, KEYHOOK_DISABLED_MODE_CODE); 
 
     /**
      * @param browserControl The instance of the IBrowserControl to be controlled by the manipulator.

@@ -210,10 +210,10 @@ public class NavigatorTreeView extends ViewPart {
         table.setHeaderVisible(true);
         table.setLinesVisible(true);
         TableColumn tableColumnProperty = new TableColumn(table, SWT.LEFT);
-        tableColumnProperty.setText(Messages.getString("NavigatorTreeView.property")); //$NON-NLS-1$
+        tableColumnProperty.setText(Messages.NavigatorTreeView_property); 
         tableColumnProperty.setWidth(70);
         TableColumn tableColumnValue = new TableColumn(table, SWT.LEFT);
-        tableColumnValue.setText(Messages.getString("NavigatorTreeView.value")); //$NON-NLS-1$
+        tableColumnValue.setText(Messages.NavigatorTreeView_value); 
         tableColumnValue.setWidth(100);
 
         tableViewer.setLabelProvider(new TreeItemDetailsLabelProvider());

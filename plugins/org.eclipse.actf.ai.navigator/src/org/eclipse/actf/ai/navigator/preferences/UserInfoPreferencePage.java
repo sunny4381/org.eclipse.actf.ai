@@ -39,7 +39,7 @@ public class UserInfoPreferencePage
 	public UserInfoPreferencePage() {
 		super(GRID);
 		setPreferenceStore(NavigatorPlugin.getDefault().getPreferenceStore());
-		setDescription(Messages.getString("UserInfo.PREFERENCES_NAME"));
+		setDescription(Messages.UserInfo_PREFERENCES_NAME);
 	}
 	
 	/**
@@ -53,7 +53,7 @@ public class UserInfoPreferencePage
         addField(
                 new BooleanFieldEditor(
                     UserInfoPreferenceConstants.AUTO_SAVE,
-                    Messages.getString("UserInfo.SAVE_ANNOTATION"), 
+                    Messages.UserInfo_SAVE_ANNOTATION, 
                     getFieldEditorParent()));
 
         /*
