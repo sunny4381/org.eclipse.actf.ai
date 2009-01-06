@@ -11,7 +11,6 @@
 
 package org.eclipse.actf.ai.xmlstore.nvdl.util;
 
-import java.text.MessageFormat;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -20,6 +19,8 @@ import org.eclipse.actf.ai.xmlstore.nvdl.dispatcher.NVDLDispatcherException;
 import org.eclipse.actf.ai.xmlstore.nvdl.model.Location;
 import org.eclipse.actf.ai.xmlstore.nvdl.model.NVDLModel;
 import org.xml.sax.SAXParseException;
+
+import com.ibm.icu.text.MessageFormat;
 
 
 /**

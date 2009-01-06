@@ -10,9 +10,10 @@
  *******************************************************************************/
 package org.eclipse.actf.ai.navigator.util;
 
-import java.text.MessageFormat;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+
+import com.ibm.icu.text.MessageFormat;
 
 public class MessageFormatter {
     private ResourceBundle resourceBundle = null;

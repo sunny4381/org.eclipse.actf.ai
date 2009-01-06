@@ -13,12 +13,13 @@ package org.eclipse.actf.ai.xmlstore.nvdl.util;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.text.MessageFormat;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+
+import com.ibm.icu.text.MessageFormat;
 
 /**
  * The <code>ContentPrintHandler</code> is a SAX content handler that dumps
