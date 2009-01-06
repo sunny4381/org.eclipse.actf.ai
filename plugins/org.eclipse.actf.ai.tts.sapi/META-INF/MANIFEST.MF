@@ -11,3 +11,4 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.actf.util.win32,
  org.eclipse.actf.ai.voice
 Eclipse-LazyStart: true
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

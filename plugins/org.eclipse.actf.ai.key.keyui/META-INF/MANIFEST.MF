@@ -11,3 +11,4 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.actf.ai.navigator,
  org.eclipse.actf.util.win32.comclutch
 Eclipse-LazyStart: true
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

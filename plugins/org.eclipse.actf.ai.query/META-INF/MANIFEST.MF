@@ -11,3 +11,4 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.actf.core
 Eclipse-LazyStart: true
 Export-Package: org.eclipse.actf.ai.query
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

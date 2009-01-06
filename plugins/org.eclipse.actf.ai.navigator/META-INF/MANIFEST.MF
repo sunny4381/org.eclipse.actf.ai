@@ -22,3 +22,4 @@ Eclipse-LazyStart: true
 Export-Package: org.eclipse.actf.ai.navigator,
  org.eclipse.actf.ai.navigator.impl,
  org.eclipse.actf.ai.navigator.ui
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
