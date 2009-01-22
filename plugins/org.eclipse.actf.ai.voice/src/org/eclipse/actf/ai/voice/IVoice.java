@@ -62,7 +62,7 @@ public interface IVoice {
 	 * Get current speaking speed
 	 * 
 	 * @return speaking speed in range between 0 and 100
-	 * @see setSpeed
+	 * @see #setSpeed(int)
 	 */
 	public int getSpeed();
 

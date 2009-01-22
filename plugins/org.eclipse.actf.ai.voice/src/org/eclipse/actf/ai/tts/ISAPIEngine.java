@@ -6,11 +6,16 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    kentarou - initial API and implementation
+ *    Kentarou FUKUDA - initial API and implementation
  *******************************************************************************/
 package org.eclipse.actf.ai.tts;
 
 
+/**
+ * ISAPIEngine interface defines text synthesis interface to be
+ * implemented by SAPI5 text-to-speech engine
+ * @see ITTSEngine
+ */
 public interface ISAPIEngine extends ITTSEngine {
 
 	public static final int SVSFDefault = 0, SVSFlagsAsync = 1,
