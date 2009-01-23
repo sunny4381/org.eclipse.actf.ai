@@ -35,7 +35,7 @@ public class SapiPreferencePage extends GroupFieldEditorVoicePreferencePage
 
 	public SapiPreferencePage() {
 		super();
-		setDescription(Messages.tts_sapi_description); 
+		setDescription(Messages.tts_sapi_description);
 		setPreferenceStore(SAPIPlugin.getDefault().getPreferenceStore());
 	}
 
@@ -48,9 +48,11 @@ public class SapiPreferencePage extends GroupFieldEditorVoicePreferencePage
 		orgVoice = getPreferenceStore().getString(SapiVoice.ID);
 		orgAudio = getPreferenceStore().getString(SapiVoice.AUDIO_OUTPUT);
 
-		final ComboFieldEditor voiceEditor, audioEditor;
-		addField(voiceEditor = new SapiVoiceFieldEditor(Messages.tts_sapi_voicename, getFieldEditorParent())); //$NON-NLS-1$
-		addField(audioEditor = new SapiAudioOutputFieldEditor(Messages.tts_sapi_audiooutput, getFieldEditorParent())); //$NON-NLS-1$
+		final ComboFieldEditor voiceEditor;
+		addField(voiceEditor = new SapiVoiceFieldEditor(
+				Messages.tts_sapi_voicename, getFieldEditorParent())); //$NON-NLS-1$
+		addField(new SapiAudioOutputFieldEditor(Messages.tts_sapi_audiooutput,
+				getFieldEditorParent())); //$NON-NLS-1$
 
 		Composite comp = new Composite(getFieldEditorParent(), SWT.NONE);
 		GridLayout layout = new GridLayout();
@@ -78,11 +80,11 @@ public class SapiPreferencePage extends GroupFieldEditorVoicePreferencePage
 		getPreferenceStore().setValue(SapiVoice.AUDIO_OUTPUT, orgAudio);
 		return super.performCancel();
 	}
-	
+
 	@Override
 	protected void performApply() {
 		super.performApply();
-		
+
 		orgVoice = getPreferenceStore().getString(SapiVoice.ID);
 		orgAudio = getPreferenceStore().getString(SapiVoice.AUDIO_OUTPUT);
 	}
