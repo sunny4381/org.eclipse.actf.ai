@@ -8,7 +8,7 @@ Bundle-Vendor: Eclipse.org
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime
-Eclipse-LazyStart: true
+Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.actf.ai.tts,
  org.eclipse.actf.ai.voice,
  org.eclipse.actf.ai.voice.preferences.util

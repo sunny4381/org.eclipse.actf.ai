@@ -47,7 +47,7 @@ public class VoicePreferencePage extends GroupFieldEditorVoicePreferencePage
 		
 		final RadioGroupFieldEditor rgfe;
 		String[][] labelAndIds = TTSRegistry.getLabelAndIds();
-		addField(rgfe = new RadioGroupFieldEditor(IVoice.PREF_ENGINE, Messages.voice_engine, 1, labelAndIds, //$NON-NLS-1$
+		addField(rgfe = new RadioGroupFieldEditor(IVoice.PREF_ENGINE, Messages.voice_engine, 1, labelAndIds,
 				getFieldEditorParent()));
 		Composite c = rgfe.getRadioBoxControl(getFieldEditorParent());
 		for (int i = 0; i < labelAndIds.length; i++) {

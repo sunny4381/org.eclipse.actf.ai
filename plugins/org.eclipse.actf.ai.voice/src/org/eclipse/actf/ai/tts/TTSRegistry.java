@@ -22,6 +22,8 @@ import org.eclipse.core.runtime.Platform;
  */
 public class TTSRegistry {
 
+	private static final String PRIORITY = "priority"; //$NON-NLS-1$
+
 	private static final String TTS_EXTENSION = "org.eclipse.actf.ai.voice.TTSEngine"; //$NON-NLS-1$
 
 	private static final String DEFAULT_TTS = "org.eclipse.actf.ai.tts.sapi.engine.SapiVoice"; //$NON-NLS-1$
@@ -42,8 +44,8 @@ public class TTSRegistry {
 		Arrays.sort(ttsElements, new Comparator<IConfigurationElement>() {
 			public int compare(IConfigurationElement c1,
 					IConfigurationElement c2) {
-				String s1 = c1.getAttribute("priority");
-				String s2 = c2.getAttribute("priority");
+				String s1 = c1.getAttribute(PRIORITY);
+				String s2 = c2.getAttribute(PRIORITY);
 				int i1 = 0;
 				int i2 = 0;
 				try {
@@ -62,7 +64,7 @@ public class TTSRegistry {
 		for (int i = 0; i < ttsElements.length; i++) {
 			try {
 				ITTSEngine test = (ITTSEngine) ttsElements[i]
-						.createExecutableExtension("class");
+						.createExecutableExtension("class"); //$NON-NLS-1$
 				if (test.isAvailable()) {
 					availables[i] = true;
 					INSTANCES[i] = test;
@@ -101,7 +103,7 @@ public class TTSRegistry {
 	public static String getDefaultEngine() {
 		for (int i = 0; i < ttsElements.length; i++) {
 			if (availables[i]) {
-				return ttsElements[i].getAttribute("id");
+				return ttsElements[i].getAttribute("id"); //$NON-NLS-1$
 			}
 		}
 		return DEFAULT_TTS;
@@ -119,7 +121,7 @@ public class TTSRegistry {
 			if (availables[i])
 				labelAndIds[i][1] = ttsElements[i].getAttribute("id"); //$NON-NLS-1$
 			else
-				labelAndIds[i][1] = "";
+				labelAndIds[i][1] = ""; //$NON-NLS-1$
 		}
 		return labelAndIds;
 	}
