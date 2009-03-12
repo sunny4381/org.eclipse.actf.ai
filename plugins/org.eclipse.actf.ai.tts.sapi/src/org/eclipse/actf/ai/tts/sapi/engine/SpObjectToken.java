@@ -30,7 +30,7 @@ public class SpObjectToken {
 	}
 
 	public static SpObjectToken getToken(Variant varToken) {
-		if (null == varToken && OLE.VT_DISPATCH != varToken.getType()) {
+		if (null == varToken || OLE.VT_DISPATCH != varToken.getType()) {
 			return null;
 		}
 		return new SpObjectToken(varToken);

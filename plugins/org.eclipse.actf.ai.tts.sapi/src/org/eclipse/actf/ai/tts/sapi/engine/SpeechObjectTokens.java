@@ -32,7 +32,7 @@ public class SpeechObjectTokens {
 	}
 
 	public static SpeechObjectTokens getTokens(Variant varTokens) {
-		if (null == varTokens && OLE.VT_DISPATCH != varTokens.getType()) {
+		if (null == varTokens || OLE.VT_DISPATCH != varTokens.getType()) {
 			return null;
 		}
 		return new SpeechObjectTokens(varTokens);

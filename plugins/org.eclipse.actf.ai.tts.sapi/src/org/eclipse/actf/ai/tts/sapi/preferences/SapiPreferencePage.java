@@ -50,9 +50,9 @@ public class SapiPreferencePage extends GroupFieldEditorVoicePreferencePage
 
 		final ComboFieldEditor voiceEditor;
 		addField(voiceEditor = new SapiVoiceFieldEditor(
-				Messages.tts_sapi_voicename, getFieldEditorParent())); //$NON-NLS-1$
+				Messages.tts_sapi_voicename, getFieldEditorParent()));
 		addField(new SapiAudioOutputFieldEditor(Messages.tts_sapi_audiooutput,
-				getFieldEditorParent())); //$NON-NLS-1$
+				getFieldEditorParent()));
 
 		Composite comp = new Composite(getFieldEditorParent(), SWT.NONE);
 		GridLayout layout = new GridLayout();

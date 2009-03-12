@@ -46,7 +46,7 @@ public class SpEvent {
 	public long getAudioStreamOffset() {
 		int[] audioStreamOffset = new int[2];
 		MemoryUtil.MoveMemory(audioStreamOffset, address + 8, 4 * 2);
-		return (long) audioStreamOffset[0]
+		return audioStreamOffset[0]
 				+ ((long) audioStreamOffset[1] << 32);
 	}
 

@@ -199,7 +199,7 @@ public class SapiVoice implements ISAPIEngine, IPropertyChangeListener {
 			varVoices.dispose();
 		}
 		if (!success) {
-			int index = voiceName.indexOf("name=");
+			int index = voiceName.indexOf("name="); //$NON-NLS-1$
 			varVoices = getVoices(null, null);
 			if (null != varVoices && index > -1) {
 				String name = voiceName.substring(index + 5);
@@ -228,7 +228,7 @@ public class SapiVoice implements ISAPIEngine, IPropertyChangeListener {
 	private void setAudioOutputName() {
 		String audioOutput = preferenceStore.getString(AUDIO_OUTPUT);
 		if (audioOutput.length() > 0) {
-			setAudioOutputName(audioOutput); //$NON-NLS-1$
+			setAudioOutputName(audioOutput);
 		} else {
 			setAudioOutput(null);
 		}
