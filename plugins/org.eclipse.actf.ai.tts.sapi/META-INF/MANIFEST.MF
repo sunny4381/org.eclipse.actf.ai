@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Eclipse ACTF SAPI Plug-in (Incubation)
+Bundle-Name: ACTF SAPI Plug-in (Incubation)
 Bundle-SymbolicName: org.eclipse.actf.ai.tts.sapi;singleton:=true
 Bundle-Version: 0.7.0.qualifier
 Bundle-Activator: org.eclipse.actf.ai.tts.sapi.SAPIPlugin
