@@ -366,6 +366,12 @@ public class SapiVoice implements ISAPIEngine, IPropertyChangeListener {
 	 * @see org.eclipse.actf.ai.tts.ITTSEngine#setGender(java.lang.String)
 	 */
 	public void setGender(String gender) {
+		//TODO
+		if(GENDER_MALE.equalsIgnoreCase(gender)){
+			setVoiceName("name=Microsoft Mike");
+		}else if(GENDER_FEMALE.equalsIgnoreCase(gender)){
+			setVoiceName("name=Microsoft Mary");			
+		}
 	}
 
 	/*

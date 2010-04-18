@@ -130,7 +130,11 @@ public class ProTalker implements ITTSEngine, IPropertyChangeListener {
 	 * @see org.eclipse.actf.ai.tts.ITTSEngine#setGender(java.lang.String)
 	 */
 	public void setGender(String gender) {
-		// Not available
+		if (gender.equals("male")) {
+			engine.setVoice(ProTalkerBridge.VOICE_MALE);
+		} else if (gender.equals("female")) {
+			engine.setVoice(ProTalkerBridge.VOICE_FEMALE);
+		}
 	}
 
 	/*
