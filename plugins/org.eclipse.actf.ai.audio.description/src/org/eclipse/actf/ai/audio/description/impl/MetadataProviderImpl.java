@@ -143,12 +143,18 @@ public class MetadataProviderImpl implements IMetadataProvider {
 						altFlag = true;
 					}
 				}
+				if ("volumeLevel".equals(localName)) {
+					// do nothing
+				}
 			}
 		}
 
 		@Override
 		public void endElement(String uri, String localName, String qName)
 				throws SAXException {
+			if ("alternative".equals(localName)) {
+				altFlag = false;
+			}
 			// super.endElement(uri, localName, qName);
 		}
 	}
@@ -160,15 +166,38 @@ public class MetadataProviderImpl implements IMetadataProvider {
 
 		private boolean durationFlag = false;
 
+		private boolean additionFlag = false;
+
+		private boolean waveFlag = false;
+
 		private StringBuffer buf = new StringBuffer();
 
 		private String start;
 
 		private String duration;
 
+		private ArrayList<String> speed = new ArrayList<String>();
+
+		private ArrayList<String> gender = new ArrayList<String>();
+
 		private ArrayList<String> desc = new ArrayList<String>();
 
 		private ArrayList<String> lang = new ArrayList<String>();
+
+		private ArrayList<String> extended = new ArrayList<String>();
+
+		/*
+		 * experimental private ArrayList<String> additions = new
+		 * ArrayList<String>();
+		 * 
+		 * private ArrayList<String> additionsLang = new ArrayList<String>();
+		 * 
+		 * private ArrayList<String> additionsSpeed = new ArrayList<String>();
+		 * 
+		 * private ArrayList<String> additionsGender = new ArrayList<String>();
+		 */
+
+		private ArrayList<String> waveLocal = new ArrayList<String>();
 
 		private String importance;
 
@@ -190,6 +219,17 @@ public class MetadataProviderImpl implements IMetadataProvider {
 				durationFlag = true;
 			} else if ("description".equals(localName)) {
 				descFlag = true;
+				speed.add(attributes.getValue("speed"));
+				gender.add(attributes.getValue("gender"));
+				extended.add(attributes.getValue("extended"));
+				/*
+				 * } else if ("addition".equals(localName)) { additionFlag =
+				 * true; additionsSpeed.add(attributes.getValue("speed"));
+				 * additionsGender.add(attributes.getValue("gender"));
+				 */
+			} else if ("wave".equals(localName)) {
+				waveFlag = true;
+				waveLocal.add(attributes.getValue("local"));
 			}
 
 		}
@@ -202,6 +242,10 @@ public class MetadataProviderImpl implements IMetadataProvider {
 			} else if (durationFlag) {
 				buf.append(ch, start, length);
 			} else if (descFlag) {
+				buf.append(ch, start, length);
+			} else if (additionFlag) {
+				buf.append(ch, start, length);
+			} else if (waveFlag) {
 				buf.append(ch, start, length);
 			}
 		}
@@ -222,11 +266,36 @@ public class MetadataProviderImpl implements IMetadataProvider {
 				desc.add(buf.toString());
 				lang.add(langStack.peek());
 				buf.delete(0, buf.length());
+				/*
+				 * } else if ("addition".equals(localName)) { additionFlag =
+				 * false; additions.add(buf.toString());
+				 * additionsLang.add(langStack.peek()); buf.delete(0,
+				 * buf.length());
+				 */
+			} else if ("wave".equals(localName)) {
+				waveFlag = false;
+				// waveLang.add(langStack.peek()); //TODO
+				buf.delete(0, buf.length());
 			} else if ("item".equals(localName)) {
 
 				for (int i = 0; i < desc.size(); i++) {
 					MetadataImpl mi = new MetadataImpl(start, duration, desc
-							.get(i), lang.get(i), importance);
+							.get(i), lang.get(i), importance, speed.get(i),
+							gender.get(i), extended.get(i));
+
+					/*
+					 * for (int j = 0; j < additions.size(); j++) { if
+					 * (additionsLang.get(j).equals(lang.get(i))) {
+					 * mi.setAddition(additions.get(j));
+					 * mi.setAdditionGender(additionsGender.get(j));
+					 * mi.setAdditionSpeed(additionsSpeed.get(j)); } }
+					 */
+
+					for (int j = 0; j < waveLocal.size(); j++) {
+						// TODO lang
+						mi.setWavLocal(waveLocal.get(j));
+					}
+
 					// System.out.println(start + ", " + duration + ", " +
 					// desc.get(i) + ", " + lang.get(i));
 
@@ -320,6 +389,8 @@ public class MetadataProviderImpl implements IMetadataProvider {
 	}
 
 	public boolean hasMetadata() {
+		if (metadata == null)
+			return false;
 		return metadata.size() > 0;
 	}
 }

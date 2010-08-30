@@ -94,4 +94,43 @@ public interface IMetadata {
 	 * @see #IMPORTANCE_HIGH
 	 */
 	int getImportance();
+
+	int getSpeed();
+
+	String getGender();
+
+	/*
+	 * public String getAddition();
+	 * 
+	 * public void setAddition(String addition);
+	 * 
+	 * public boolean hasAddition();
+	 * 
+	 * public void setAdditionSpeed(String speed);
+	 * 
+	 * public int getAdditionSpeed();
+	 * 
+	 * public void setAdditionGender(String gender);
+	 * 
+	 * public String getAdditionGender();
+	 */
+
+	public boolean hasValidWav();
+
+	public String getWavUri();
+
+	public String getWavLocal();
+
+	public int getWavSpeed();
+
+	public boolean getWavEnabled();
+
+	public void setWavUri(String wavUri);
+
+	public void setWavLocal(String wavLocal);
+
+	public void setWavSpeed(String wavSpeed);
+
+	public void setWavEnabled(String wavEnabled);
+
 }

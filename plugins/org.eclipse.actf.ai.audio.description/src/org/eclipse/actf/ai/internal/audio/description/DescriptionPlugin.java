@@ -22,6 +22,7 @@ import org.eclipse.actf.ai.navigator.IMediaControl;
 import org.eclipse.actf.ai.tts.AbstractUIPluginForTTS;
 import org.eclipse.actf.ai.tts.ITTSEngine;
 import org.eclipse.actf.ai.tts.TTSRegistry;
+import org.eclipse.actf.ai.voice.IVoiceEventListener;
 import org.eclipse.actf.ai.xmlstore.IXMLInfo;
 import org.eclipse.actf.ai.xmlstore.IXMLSelector;
 import org.eclipse.actf.ai.xmlstore.IXMLStore;
@@ -37,7 +38,7 @@ import org.osgi.framework.BundleContext;
  * information of audio description and TTS function to speak the description.
  */
 public class DescriptionPlugin extends AbstractUIPluginForTTS implements
-		IPropertyChangeListener {
+		IPropertyChangeListener, IVoiceEventListener {
 
 	/**
 	 * The plug-in ID.
@@ -57,7 +58,7 @@ public class DescriptionPlugin extends AbstractUIPluginForTTS implements
 	/*
 	 * The switch weather enable or disable audio description speaking.
 	 */
-	private boolean enable = false;
+	private boolean enable = true;
 
 	/*
 	 * The current active audio description manager. If the target page has no
@@ -77,6 +78,8 @@ public class DescriptionPlugin extends AbstractUIPluginForTTS implements
 		plugin = this;
 	}
 
+	private IVoiceEventListener listener;
+	
 	/**
 	 * @param url
 	 *            The URL string which determines audio description files in the
@@ -90,6 +93,7 @@ public class DescriptionPlugin extends AbstractUIPluginForTTS implements
 		IXMLStore store = service.getRootStore();
 		IXMLSelector selector1 = service.getSelectorWithDocElem("puits",
 				"urn:puits");
+		System.out.println(url);
 		IXMLSelector selector2 = service.getSelectorWithURI(url);
 		store = store.specify(selector1);
 		store = store.specify(selector2);
@@ -141,8 +145,10 @@ public class DescriptionPlugin extends AbstractUIPluginForTTS implements
 		if (e.equals("org.eclipse.actf.ai.screenreader.jaws"))
 			return null;
 		engine = TTSRegistry.createTTSEngine(e);
-		if (engine != null)
+		if (engine != null){
 			engine.setSpeed(50);
+			engine.setEventListener(this);
+		}
 		return engine;
 	}
 
@@ -254,11 +260,25 @@ public class DescriptionPlugin extends AbstractUIPluginForTTS implements
 	 * @param str
 	 *            The string to be spoken.
 	 */
-	public void speak(String str) {
-		if (engine != null)
+	public void speak(String str, int speed, String gender) {
+		if (engine != null){
+			engine.setEventListener(this);
+			engine.setGender(gender);
+			engine.setSpeed(speed);
 			engine.speak(str, ITTSEngine.TTSFLAG_FLUSH, -1);
+		}
 	}
 
+	public void addSpeakIndex(int index){
+		if(engine != null){
+			engine.speak("",ITTSEngine.TTSFLAG_DEFAULT,index);
+		}
+	}
+	
+	public void setVoiceEventListener(IVoiceEventListener listener){
+		this.listener = listener;
+	}
+	
 	/**
 	 * Toggle the enable and disable of the plug-in.
 	 * 
@@ -291,5 +311,11 @@ public class DescriptionPlugin extends AbstractUIPluginForTTS implements
 	 */
 	public static String getString(String key) {
 		return Platform.getResourceString(getDefault().getBundle(), key);
+	}
+
+	public void indexReceived(int index) {
+		if(listener!=null){
+			listener.indexReceived(index);
+		}
 	}
 }
