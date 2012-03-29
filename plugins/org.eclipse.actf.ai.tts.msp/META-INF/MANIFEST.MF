@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ACTF MSP Plug-in (Incubation)
+Bundle-SymbolicName: org.eclipse.actf.ai.tts.msp;singleton:=true
+Bundle-Version: 0.9.2.qualifier
+Bundle-Activator: org.eclipse.actf.ai.tts.msp.MspPlugin
+Bundle-Vendor: Eclipse.org
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.actf.util.win32,
+ org.eclipse.actf.ai.voice
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

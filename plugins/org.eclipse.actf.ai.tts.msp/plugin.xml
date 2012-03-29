@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <extension
+         point="org.eclipse.actf.ai.voice.TTSEngine">
+         <engine
+               class="org.eclipse.actf.ai.tts.msp.engine.MspVoice"
+               id="org.eclipse.actf.ai.tts.msp.engine.MspVoice"
+               name="MSP TTS"
+               priority="95"/>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.actf.ai.voice.preferences.VoicePreferencePage"
+            class="org.eclipse.actf.ai.tts.msp.preferences.MspPreferencePage"
+            id="org.eclipse.actf.ai.tts.sapi.preferences.SapiPreferencePage"
+            name="%PreferencePage.name"/>
+   </extension>
+   
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer class="org.eclipse.actf.ai.tts.msp.preferences.MspPreferenceInitializer"/>
+   </extension>
+   
+</plugin>
