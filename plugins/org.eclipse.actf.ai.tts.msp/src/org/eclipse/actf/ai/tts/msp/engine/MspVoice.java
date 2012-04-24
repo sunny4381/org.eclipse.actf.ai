@@ -397,12 +397,10 @@ public class MspVoice implements ISAPIEngine, IPropertyChangeListener {
 		return isDisposed;
 	}
 
-	@Override
 	public boolean canSpeakToFile() {
 		return true;
 	}
 
-	@Override
 	public boolean speakToFile(String text, File file) {
 		int pv = COMUtil.createDispatch(IID_SpFileStream);
 		OleAutomation autoSpFileStream = null;
