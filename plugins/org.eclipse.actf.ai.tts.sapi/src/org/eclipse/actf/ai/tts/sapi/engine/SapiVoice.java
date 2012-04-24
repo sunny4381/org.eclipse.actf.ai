@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.actf.ai.tts.sapi.engine;
 
+import java.io.File;
+
 import org.eclipse.actf.ai.tts.ISAPIEngine;
 import org.eclipse.actf.ai.tts.sapi.SAPIPlugin;
 import org.eclipse.actf.ai.voice.IVoiceEventListener;
@@ -20,6 +22,8 @@ import org.eclipse.actf.util.win32.NativeIntAccess;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.swt.internal.ole.win32.GUID;
+import org.eclipse.swt.internal.ole.win32.IDispatch;
 import org.eclipse.swt.ole.win32.OLE;
 import org.eclipse.swt.ole.win32.OleAutomation;
 import org.eclipse.swt.ole.win32.Variant;
@@ -31,6 +35,9 @@ public class SapiVoice implements ISAPIEngine, IPropertyChangeListener {
 
 	public static final String ID = "org.eclipse.actf.ai.tts.sapi.engine.SapiVoice"; //$NON-NLS-1$
 	public static final String AUDIO_OUTPUT = "org.eclipse.actf.ai.tts.SapiVoice.audioOutput"; //$NON-NLS-1$
+
+	public static final GUID IID_SpFileStream = COMUtil
+			.IIDFromString("{947812B3-2AE1-4644-BA86-9E90DED7EC91}"); //$NON-NLS-1$
 
 	public ISpVoice dispSpVoice;
 	private Variant varSapiVoice;
@@ -68,7 +75,9 @@ public class SapiVoice implements ISAPIEngine, IPropertyChangeListener {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+	 * @see
+	 * org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse
+	 * .jface.util.PropertyChangeEvent)
 	 */
 	public void propertyChange(PropertyChangeEvent event) {
 		if (ID.equals(event.getProperty())) {
@@ -83,7 +92,9 @@ public class SapiVoice implements ISAPIEngine, IPropertyChangeListener {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.actf.ai.tts.ITTSEngine#setEventListener(org.eclipse.actf.ai.voice.IVoiceEventListener)
+	 * @see
+	 * org.eclipse.actf.ai.tts.ITTSEngine#setEventListener(org.eclipse.actf.
+	 * ai.voice.IVoiceEventListener)
 	 */
 	public void setEventListener(IVoiceEventListener eventListener) {
 		spNotifySource.setEventListener(eventListener);
@@ -100,8 +111,7 @@ public class SapiVoice implements ISAPIEngine, IPropertyChangeListener {
 			firstFlag |= SVSFPurgeBeforeSpeak;
 		}
 		if (index >= 0) {
-			speak(
-					"<BOOKMARK mark=\"" + index + "\"/>", firstFlag | SVSFPersistXML); //$NON-NLS-1$ //$NON-NLS-2$
+			speak("<BOOKMARK mark=\"" + index + "\"/>", firstFlag | SVSFPersistXML); //$NON-NLS-1$ //$NON-NLS-2$
 			speak(text, SVSFlagsAsync);
 			speak("<BOOKMARK mark=\"-1\"/>", SVSFlagsAsync | SVSFPersistXML); //$NON-NLS-1$
 		} else {
@@ -366,11 +376,11 @@ public class SapiVoice implements ISAPIEngine, IPropertyChangeListener {
 	 * @see org.eclipse.actf.ai.tts.ITTSEngine#setGender(java.lang.String)
 	 */
 	public void setGender(String gender) {
-		//TODO
-		if(GENDER_MALE.equalsIgnoreCase(gender)){
+		// TODO
+		if (GENDER_MALE.equalsIgnoreCase(gender)) {
 			setVoiceName("name=Microsoft Mike");
-		}else if(GENDER_FEMALE.equalsIgnoreCase(gender)){
-			setVoiceName("name=Microsoft Mary");			
+		} else if (GENDER_FEMALE.equalsIgnoreCase(gender)) {
+			setVoiceName("name=Microsoft Mary");
 		}
 	}
 
@@ -385,5 +395,65 @@ public class SapiVoice implements ISAPIEngine, IPropertyChangeListener {
 
 	public boolean isDisposed() {
 		return isDisposed;
+	}
+
+	@Override
+	public boolean canSpeakToFile() {
+		return true;
+	}
+
+	@Override
+	public boolean speakToFile(String text, File file) {
+		int pv = COMUtil.createDispatch(IID_SpFileStream);
+		OleAutomation autoSpFileStream = null;
+		boolean speakToFileResult = false;
+
+		if (file == null || (file.exists() && !file.canWrite())) {
+			return false;
+		}
+
+		Variant varSpFileStream = new Variant(new IDispatch(pv));
+		try {
+			autoSpFileStream = varSpFileStream.getAutomation();
+
+			// AllowAudioOutputFormatChangesOnNextSet
+			// System.out.println(automation.getProperty(7).getBoolean());
+
+			// format
+			// System.out.println(autoSpFileStream.getProperty(1).getAutomation().setProperty(1,new
+			// Variant(6)));
+
+			// open 100 close 101
+			String tmpS = file.toURI().toString();
+			if (tmpS.startsWith("file:/")) {
+				tmpS = tmpS.substring(6);
+			}
+
+			autoSpFileStream.invoke(100, new Variant[] { new Variant(tmpS),
+					new Variant(3), new Variant(false) });
+
+			dispSpVoice.put_AudioOutputStream(pv);
+
+			char[] data = (text + "\0").toCharArray(); //$NON-NLS-1$
+			int bstrText = MemoryUtil.SysAllocString(data);
+
+			try {
+				dispSpVoice.Speak(bstrText, 0);
+			} finally {
+				MemoryUtil.SysFreeString(bstrText);
+			}
+			autoSpFileStream.invoke(101);
+			autoSpFileStream.dispose();
+			autoSpFileStream = null;
+			speakToFileResult = true;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (autoSpFileStream != null) {
+				autoSpFileStream.dispose();
+				autoSpFileStream = null;
+			}
+		}
+		return speakToFileResult;
 	}
 }

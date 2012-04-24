@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.actf.ai.tts.protalker.engine;
 
+import java.io.File;
+
 import org.eclipse.actf.ai.tts.ITTSEngine;
 import org.eclipse.actf.ai.tts.protalker.ProTalkerPlugin;
 import org.eclipse.actf.ai.voice.IVoiceEventListener;
@@ -39,7 +41,9 @@ public class ProTalker implements ITTSEngine, IPropertyChangeListener {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.actf.ai.tts.ITTSEngine#setEventListener(org.eclipse.actf.ai.voice.IVoiceEventListener)
+	 * @see
+	 * org.eclipse.actf.ai.tts.ITTSEngine#setEventListener(org.eclipse.actf.
+	 * ai.voice.IVoiceEventListener)
 	 */
 	public void setEventListener(IVoiceEventListener eventListener) {
 		engine.addIndexListener(eventListener);
@@ -48,7 +52,9 @@ public class ProTalker implements ITTSEngine, IPropertyChangeListener {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+	 * @see
+	 * org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse
+	 * .jface.util.PropertyChangeEvent)
 	 */
 	public void propertyChange(PropertyChangeEvent event) {
 		if (ID.equals(event.getProperty())) {
@@ -163,5 +169,13 @@ public class ProTalker implements ITTSEngine, IPropertyChangeListener {
 
 	public boolean isDisposed() {
 		return isDisposed;
+	}
+
+	public boolean canSpeakToFile() {
+		return false;
+	}
+
+	public boolean speakToFile(String text, File file) {
+		return false;
 	}
 }

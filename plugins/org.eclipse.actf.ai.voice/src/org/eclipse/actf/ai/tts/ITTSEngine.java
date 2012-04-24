@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.actf.ai.tts;
 
+import java.io.File;
+
 import org.eclipse.actf.ai.voice.IVoice;
 import org.eclipse.actf.ai.voice.IVoiceEventListener;
 
@@ -118,4 +120,26 @@ public interface ITTSEngine {
 	 *         available
 	 */
 	public boolean isAvailable();
+
+	/**
+	 * Returns <code>true</code> if TTS engine supports to speak text into WAV
+	 * file, and <code>false</code> otherwise.
+	 * 
+	 * @return <code>true</code> if TTS engine supports to speak text into WAV
+	 *         file, and <code>false</code> otherwise.
+	 */
+	public boolean canSpeakToFile();
+
+	/**
+	 * Speak the contents of a text string into WAV file
+	 * 
+	 * @param text
+	 *            text string to be spoken
+	 * @param file
+	 *            target File to write WAV data.
+	 * @return <code>true</code> if WAV file is successfully generated, and
+	 *         <code>false</code> otherwise.
+	 */
+	public boolean speakToFile(String text, File file);
+
 }

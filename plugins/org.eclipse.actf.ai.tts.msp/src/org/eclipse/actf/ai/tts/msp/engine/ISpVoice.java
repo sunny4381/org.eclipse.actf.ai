@@ -7,6 +7,7 @@
  *
  * Contributors:
  *    Takashi ITOH - initial API and implementation
+ *    Kentarou FUKUDA - initial API and implementation
  *******************************************************************************/
 
 package org.eclipse.actf.ai.tts.msp.engine;
@@ -40,6 +41,11 @@ public class ISpVoice extends IDispatch {
 		return COMUtil.VtblCall(11, address, pAudioOutputAddress);
 	}
 
+	public int put_AudioOutputStream(int pAudioOutputStreamAddress) {
+		return COMUtil.VtblCall(13, address, pAudioOutputStreamAddress);
+	}
+
+	
 	public int get_Rate(int pRateAddress) {
 		return COMUtil.VtblCall(14, address, pRateAddress);
 	}
