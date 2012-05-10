@@ -452,6 +452,7 @@ public class SapiVoice implements ISAPIEngine, IPropertyChangeListener {
 				autoSpFileStream = null;
 			}
 		}
+		setAudioOutputName();	//reset output
 		return speakToFileResult;
 	}
 }

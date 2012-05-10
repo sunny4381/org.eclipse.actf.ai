@@ -452,6 +452,7 @@ public class MspVoice implements ISAPIEngine, IPropertyChangeListener {
 				autoSpFileStream = null;
 			}
 		}
+		setAudioOutputName();	//reset output
 		return speakToFileResult;
 	}
 }
