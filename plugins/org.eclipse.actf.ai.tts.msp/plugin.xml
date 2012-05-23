@@ -15,7 +15,7 @@
       <page
             category="org.eclipse.actf.ai.voice.preferences.VoicePreferencePage"
             class="org.eclipse.actf.ai.tts.msp.preferences.MspPreferencePage"
-            id="org.eclipse.actf.ai.tts.sapi.preferences.SapiPreferencePage"
+            id="org.eclipse.actf.ai.tts.msp.preferences.MspPreferencePage"
             name="%PreferencePage.name"/>
    </extension>
    
