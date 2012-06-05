@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Eclipse ACTF XML store Plug-in (Incubation)
+Bundle-Name: Eclipse ACTF XML store Plug-in
 Bundle-SymbolicName: org.eclipse.actf.ai.xmlstore
 Bundle-Version: 0.5.0.qualifier
 Bundle-Activator: org.eclipse.actf.ai.internal.xmlstore.XMLStorePlugin

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.eclipse.actf.ai"
-      label="Accessibility Tools Framework (ACTF) Alternative Interface feature (Incubation)"
+      label="Accessibility Tools Framework (ACTF) Alternative Interface feature"
       version="0.5.0.qualifier"
       provider-name="Eclipse.org">
 
