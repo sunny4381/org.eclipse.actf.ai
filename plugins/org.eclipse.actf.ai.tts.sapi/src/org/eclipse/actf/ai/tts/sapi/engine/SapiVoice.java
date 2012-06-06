@@ -114,7 +114,6 @@ public class SapiVoice implements ISAPIEngine, IPropertyChangeListener {
 								if (set == null) {
 									set = new TreeSet<SapiVoice.EngineInfo>(
 											new Comparator<EngineInfo>() {
-												@Override
 												public int compare(
 														EngineInfo o1,
 														EngineInfo o2) {
