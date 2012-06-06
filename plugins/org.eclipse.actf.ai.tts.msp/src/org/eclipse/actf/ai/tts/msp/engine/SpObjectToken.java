@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 IBM Corporation and Others
+ * Copyright (c) 2007, 2012 IBM Corporation and Others
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -7,6 +7,7 @@
  *
  * Contributors:
  *    Takashi ITOH - initial API and implementation
+ *    Kentarou FUKUDA - initial API and implementation
  *******************************************************************************/
 package org.eclipse.actf.ai.tts.msp.engine;
 
@@ -23,10 +24,12 @@ public class SpObjectToken {
 
 	private OleAutomation automation;
 	private int idGetDescription;
+	private int idGetAttribute;
 
 	public SpObjectToken(Variant varToken) {
 		automation = varToken.getAutomation();
 		idGetDescription = getIDsOfNames("GetDescription"); //$NON-NLS-1$
+		idGetAttribute = getIDsOfNames("GetAttribute"); //$NON-NLS-1$
 	}
 
 	public static SpObjectToken getToken(Variant varToken) {
@@ -38,8 +41,19 @@ public class SpObjectToken {
 
 	public String getDescription(int locale) {
 		try {
-			return automation.invoke(idGetDescription,
-					new Variant[] { new Variant(locale) }).getString().trim();
+			return automation
+					.invoke(idGetDescription,
+							new Variant[] { new Variant(locale) }).getString()
+					.trim();
+		} catch (Exception e) {
+		}
+		return null;
+	}
+
+	public String getAttribute(String attr) {
+		try {
+			return automation.invoke(idGetAttribute,
+					new Variant[] { new Variant(attr) }).getString();
 		} catch (Exception e) {
 		}
 		return null;

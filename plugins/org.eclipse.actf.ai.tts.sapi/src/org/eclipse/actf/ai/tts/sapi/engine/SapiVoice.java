@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007, 2008 IBM Corporation and Others
+ * Copyright (c) 2007, 2012 IBM Corporation and Others
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,6 +12,10 @@
 package org.eclipse.actf.ai.tts.sapi.engine;
 
 import java.io.File;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeSet;
 
 import org.eclipse.actf.ai.tts.ISAPIEngine;
 import org.eclipse.actf.ai.tts.sapi.SAPIPlugin;
@@ -19,6 +23,7 @@ import org.eclipse.actf.ai.voice.IVoiceEventListener;
 import org.eclipse.actf.util.win32.COMUtil;
 import org.eclipse.actf.util.win32.MemoryUtil;
 import org.eclipse.actf.util.win32.NativeIntAccess;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
@@ -49,6 +54,22 @@ public class SapiVoice implements ISAPIEngine, IPropertyChangeListener {
 			.getPreferenceStore();
 	private boolean isDisposed = false;
 
+	private SpObjectToken curVoiceToken = null;
+
+	private class EngineInfo {
+		String name;
+		String langId;
+		String gender;
+
+		public EngineInfo(String name, String langId, String gender) {
+			this.name = name;
+			this.langId = langId;
+			this.gender = gender;
+		}
+	}
+
+	private Map<String, TreeSet<EngineInfo>> langId2EngineMap = new HashMap<String, TreeSet<EngineInfo>>();
+
 	public SapiVoice() {
 		int pv = COMUtil.createDispatch(ISpVoice.IID);
 		dispSpVoice = new ISpVoice(pv);
@@ -66,7 +87,53 @@ public class SapiVoice implements ISAPIEngine, IPropertyChangeListener {
 		setAudioOutputName();
 		// switch to actual engine
 		preferenceStore.setValue(ID, orgID);
-		// setVoiceName();
+		setVoiceName(); // for init curVoiceToken
+
+		Variant varVoices = getVoices(null, null);
+		if (null != varVoices) {
+			SpeechObjectTokens voiceTokens = SpeechObjectTokens
+					.getTokens(varVoices);
+			if (null != voiceTokens) {
+				String exclude = Platform.getResourceString(SAPIPlugin
+						.getDefault().getBundle(), "%voice.exclude"); //$NON-NLS-1$
+				int count = voiceTokens.getCount();
+				for (int i = 0; i < count; i++) {
+					Variant varVoice = voiceTokens.getItem(i);
+					if (null != varVoice) {
+						SpObjectToken token = SpObjectToken.getToken(varVoice);
+						if (null != token) {
+							String voiceName = token.getDescription(0);
+							String langId = token.getAttribute("language"); //$NON-NLS-1$
+							if ("409;9".equals(langId)) {
+								langId = "409";
+							}
+							String gender = token.getAttribute("gender"); //$NON-NLS-1$
+							if (null == exclude || !exclude.equals(voiceName)) {
+								TreeSet<EngineInfo> set = langId2EngineMap
+										.get(langId);
+								if (set == null) {
+									set = new TreeSet<SapiVoice.EngineInfo>(
+											new Comparator<EngineInfo>() {
+												@Override
+												public int compare(
+														EngineInfo o1,
+														EngineInfo o2) {
+													// TODO priority
+													return -o1.name
+															.compareTo(o2.name);
+												}
+											});
+									langId2EngineMap.put(langId, set);
+								}
+								set.add(new EngineInfo(voiceName, langId,
+										gender));
+							}
+						}
+					}
+				}
+			}
+			varVoices.dispose();
+		}
 
 		// to avoid access violation error at application shutdown
 		stop();
@@ -168,8 +235,12 @@ public class SapiVoice implements ISAPIEngine, IPropertyChangeListener {
 	 * @return The invocation is succeeded then it returns true.
 	 */
 	public boolean setVoice(Variant varVoice) {
-		return OLE.S_OK == dispSpVoice.put_Voice(varVoice.getDispatch()
-				.getAddress());
+		boolean result = OLE.S_OK == dispSpVoice.put_Voice(varVoice
+				.getDispatch().getAddress());
+		if (result) {
+			curVoiceToken = SpObjectToken.getToken(varVoice);
+		}
+		return result;
 	}
 
 	/**
@@ -359,15 +430,43 @@ public class SapiVoice implements ISAPIEngine, IPropertyChangeListener {
 	 * @see org.eclipse.actf.ai.tts.ITTSEngine#setLanguage(java.lang.String)
 	 */
 	public void setLanguage(String language) {
-		String token;
-		if (LANG_JAPANESE.equals(language)) {
-			token = "language=411"; //$NON-NLS-1$
-		} else if (LANG_ENGLISH.equals(language)) {
-			token = "language=409;9"; //$NON-NLS-1$
-		} else {
+		String gender = null;
+		if (curVoiceToken != null) {
+			gender = curVoiceToken.getAttribute("gender");
+		}
+
+		String langId = LANGID_MAP.get(language);
+		if (langId == null) {
+			// for backward compatibility
+			if (LANG_JAPANESE.equals(language)) {
+				langId = "411"; //$NON-NLS-1$
+			} else if (LANG_ENGLISH.equals(language)) {
+				langId = "409"; //old value "409;9" //$NON-NLS-1$
+			}
+			// TODO other lang
+		}
+		if (langId == null) {
 			return;
 		}
-		setVoiceName(token);
+
+		// Workaround:
+		// In some cases, getVoices("language=***",null) doesn't work well.
+		// So, get all voices first. Then select lang and gender.
+
+		TreeSet<EngineInfo> set = langId2EngineMap.get(langId);
+		if (set != null && set.size() > 0) {
+			if (gender != null) {
+				for (EngineInfo i : set) {
+					if (gender.equalsIgnoreCase(i.gender)) {
+						setVoiceName("name=" + i.name);
+						// System.out.println(i.name);
+						return;
+					}
+				}
+			}
+			setVoiceName("name=" + set.first().name);
+			// System.out.println(set.first().name);
+		}
 	}
 
 	/*
@@ -376,12 +475,28 @@ public class SapiVoice implements ISAPIEngine, IPropertyChangeListener {
 	 * @see org.eclipse.actf.ai.tts.ITTSEngine#setGender(java.lang.String)
 	 */
 	public void setGender(String gender) {
-		// TODO
-		if (GENDER_MALE.equalsIgnoreCase(gender)) {
-			setVoiceName("name=Microsoft Mike");
-		} else if (GENDER_FEMALE.equalsIgnoreCase(gender)) {
-			setVoiceName("name=Microsoft Mary");
+		if (gender == null) {
+			return;
 		}
+		String langId = null;
+		if (curVoiceToken != null) {
+			langId = curVoiceToken.getAttribute("language");
+			if ("409;9".equals(langId)) {
+				langId = "409";
+			}
+		}
+
+		TreeSet<EngineInfo> set = langId2EngineMap.get(langId);
+		if (set != null && set.size() > 0) {
+			for (EngineInfo i : set) {
+				if (gender.equalsIgnoreCase(i.gender)) {
+					setVoiceName("name=" + i.name);
+					// System.out.println(i.name);
+					return;
+				}
+			}
+		}
+
 	}
 
 	/*
@@ -452,7 +567,8 @@ public class SapiVoice implements ISAPIEngine, IPropertyChangeListener {
 				autoSpFileStream = null;
 			}
 		}
-		setAudioOutputName();	//reset output
+		setAudioOutputName(); // reset output
 		return speakToFileResult;
 	}
+
 }

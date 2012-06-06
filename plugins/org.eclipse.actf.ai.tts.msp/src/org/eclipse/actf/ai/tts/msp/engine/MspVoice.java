@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007, 2008 IBM Corporation and Others
+ * Copyright (c) 2007, 2012 IBM Corporation and Others
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -49,6 +49,8 @@ public class MspVoice implements ISAPIEngine, IPropertyChangeListener {
 			.getPreferenceStore();
 	private boolean isDisposed = false;
 
+	private SpObjectToken curVoiceToken = null;
+
 	public MspVoice() {
 		int pv = COMUtil.createDispatch(ISpVoice.IID);
 		dispSpVoice = new ISpVoice(pv);
@@ -66,7 +68,7 @@ public class MspVoice implements ISAPIEngine, IPropertyChangeListener {
 		setAudioOutputName();
 		// switch to actual engine
 		preferenceStore.setValue(ID, orgID);
-		// setVoiceName();
+		setVoiceName(); //for init curVoiceToken
 
 		// to avoid access violation error at application shutdown
 		stop();
@@ -168,8 +170,12 @@ public class MspVoice implements ISAPIEngine, IPropertyChangeListener {
 	 * @return The invocation is succeeded then it returns true.
 	 */
 	public boolean setVoice(Variant varVoice) {
-		return OLE.S_OK == dispSpVoice.put_Voice(varVoice.getDispatch()
-				.getAddress());
+		boolean result = OLE.S_OK == dispSpVoice.put_Voice(varVoice
+				.getDispatch().getAddress());
+		if (result) {
+			curVoiceToken = SpObjectToken.getToken(varVoice);
+		}
+		return result;
 	}
 
 	/**
@@ -359,15 +365,48 @@ public class MspVoice implements ISAPIEngine, IPropertyChangeListener {
 	 * @see org.eclipse.actf.ai.tts.ITTSEngine#setLanguage(java.lang.String)
 	 */
 	public void setLanguage(String language) {
-		String token;
-		if (LANG_JAPANESE.equals(language)) {
-			token = "language=411"; //$NON-NLS-1$
-		} else if (LANG_ENGLISH.equals(language)) {
-			token = "language=409;9"; //$NON-NLS-1$
+		String gender = null;
+		if (curVoiceToken != null) {
+			gender = curVoiceToken.getAttribute("gender");
+		}
+
+		if (gender == null) {
+			gender = "";
 		} else {
+			gender = "gender=" + gender;
+		}
+
+		String langId = LANGID_MAP.get(language);
+		if (langId == null) {
+			// for backward compatibility
+			if (LANG_JAPANESE.equals(language)) {
+				langId = "411"; //$NON-NLS-1$
+			} else if (LANG_ENGLISH.equals(language)) {
+				langId = "409"; //old value "409;9" //$NON-NLS-1$
+			}
+			// TODO other lang
+		}
+		if (langId == null) {
 			return;
 		}
-		setVoiceName(token);
+		String lang = "language=" + langId + ";";
+		
+		// try to keep original gender
+		Variant varVoices = getVoices(lang + gender, null);
+		if (varVoices == null && gender.length() > 0) {
+			varVoices = getVoices(lang, null); // try all
+		}
+		if (varVoices != null) {
+			SpeechObjectTokens tokens = SpeechObjectTokens.getTokens(varVoices);
+			if (null != tokens && 0 < tokens.getCount()) {
+				// TODO priority
+				Variant varVoice = tokens.getItem(0);
+				if (null != varVoice) {
+					setVoice(varVoice);
+				}
+			}
+			varVoices.dispose();
+		}
 	}
 
 	/*
@@ -376,11 +415,33 @@ public class MspVoice implements ISAPIEngine, IPropertyChangeListener {
 	 * @see org.eclipse.actf.ai.tts.ITTSEngine#setGender(java.lang.String)
 	 */
 	public void setGender(String gender) {
-		// TODO
+		String langId = null;
+		if (curVoiceToken != null) {
+			langId = curVoiceToken.getAttribute("language");
+			if ("409;9".equals(langId)) {
+				langId = "409";
+			}
+		}
+		Variant varVoices = null;
+		String lang = "";
+		if (langId != null) {
+			lang = "language=" + langId + ";";
+		}
 		if (GENDER_MALE.equalsIgnoreCase(gender)) {
-			// setVoiceName("name=Microsoft Mike");
+			varVoices = getVoices(lang + "gender=Male", null);
 		} else if (GENDER_FEMALE.equalsIgnoreCase(gender)) {
-			// setVoiceName("name=Microsoft Mary");
+			varVoices = getVoices(lang + "gender=Female", null);
+		}
+		if (null != varVoices) {
+			SpeechObjectTokens tokens = SpeechObjectTokens.getTokens(varVoices);
+			if (null != tokens && 0 < tokens.getCount()) {
+				// TODO priority
+				Variant varVoice = tokens.getItem(0);
+				if (null != varVoice) {
+					setVoice(varVoice);
+				}
+			}
+			varVoices.dispose();
 		}
 	}
 
@@ -452,7 +513,7 @@ public class MspVoice implements ISAPIEngine, IPropertyChangeListener {
 				autoSpFileStream = null;
 			}
 		}
-		setAudioOutputName();	//reset output
+		setAudioOutputName(); // reset output
 		return speakToFileResult;
 	}
 }
