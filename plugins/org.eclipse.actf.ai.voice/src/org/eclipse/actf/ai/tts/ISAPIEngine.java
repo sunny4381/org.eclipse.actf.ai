@@ -16,7 +16,7 @@ import java.util.Map;
 
 /**
  * ISAPIEngine interface defines text synthesis interface to be
- * implemented by SAPI5 text-to-speech engine
+ * implemented by SAPI5 and MSP text-to-speech engine
  * @see ITTSEngine
  */
 public interface ISAPIEngine extends ITTSEngine {
