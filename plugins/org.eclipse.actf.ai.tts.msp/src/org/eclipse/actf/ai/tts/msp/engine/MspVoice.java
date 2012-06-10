@@ -485,7 +485,7 @@ public class MspVoice implements ISAPIEngine, IPropertyChangeListener {
 			// open 100 close 101
 			String tmpS = file.toURI().toString();
 			if (tmpS.startsWith("file:/")) {
-				tmpS = tmpS.substring(6);
+				tmpS = tmpS.substring(6).replaceAll("%20"," ");;
 			}
 
 			autoSpFileStream.invoke(100, new Variant[] { new Variant(tmpS),
