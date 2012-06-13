@@ -12,6 +12,8 @@
 package org.eclipse.actf.ai.tts;
 
 import java.io.File;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.eclipse.actf.ai.voice.IVoice;
 import org.eclipse.actf.ai.voice.IVoiceEventListener;
@@ -35,9 +37,61 @@ public interface ITTSEngine {
 	public static final int TTSFLAG_FLUSH = 1;
 
 	/* language constants */
+	@Deprecated
 	public static final String LANG_ENGLISH = "en"; //$NON-NLS-1$
 
+	@Deprecated
 	public static final String LANG_JAPANESE = "ja"; //$NON-NLS-1$
+
+	public static final Set<String> LANGSET = new TreeSet<String>() {
+		private static final long serialVersionUID = 1448725564546545708L;
+		{
+			add("ar-SA");
+			add("bg-BG");
+			add("ca-ES");
+			add("zh-TW");
+			add("cs-CZ");
+			add("da-DK");
+			add("de-DE");
+			add("el-GR");
+			add("en-US");
+			add("fi-FI");
+			add("fr-FR");
+			add("he-IL");
+			add("hu-HU");
+			add("it-IT");
+			add("ja-JP");
+			add("ko-KR");
+			add("nl-NL");
+			add("nb-NO");
+			add("pl-PL");
+			add("pt-BR");
+			add("ro-RO");
+			add("ru-RU");
+			add("hr-HR");
+			add("sk-SK");
+			add("sv-SE");
+			add("th-TH");
+			add("tr-TR");
+			add("uk-UA");
+			add("sl-SI");
+			add("et-EE");
+			add("lv-LV");
+			add("lt-LT");
+			add("vi-VN");
+			add("eu-ES");
+			add("zh-CN");
+			add("pt-PT");
+			add("sr-CS");
+			add("es-ES");
+			add("en-AU");
+			add("en-CA");
+			add("en-GB");
+			add("en-IN");
+			add("fr-CA");
+			add("zh-HK");
+		}
+	};
 
 	/* Gender constants */
 	public static final String GENDER_MALE = "male"; //$NON-NLS-1$
