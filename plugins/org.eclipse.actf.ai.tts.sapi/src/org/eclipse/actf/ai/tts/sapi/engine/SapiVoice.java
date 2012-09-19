@@ -104,8 +104,10 @@ public class SapiVoice implements ISAPIEngine, IPropertyChangeListener {
 						if (null != token) {
 							String voiceName = token.getDescription(0);
 							String langId = token.getAttribute("language"); //$NON-NLS-1$
-							if ("409;9".equals(langId)) {
-								langId = "409";
+							int index = langId.indexOf(";");
+							//use primary lang ID
+							if (index > 0){
+								langId = langId.substring(0, index);
 							}
 							String gender = token.getAttribute("gender"); //$NON-NLS-1$
 							if (null == exclude || !exclude.equals(voiceName)) {
