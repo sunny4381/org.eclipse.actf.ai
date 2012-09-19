@@ -12,11 +12,12 @@ package org.eclipse.actf.ai.tts;
 
 import java.util.HashMap;
 import java.util.Map;
-
+import java.util.Set;
 
 /**
- * ISAPIEngine interface defines text synthesis interface to be
- * implemented by SAPI5 and MSP text-to-speech engine
+ * ISAPIEngine interface defines text synthesis interface to be implemented by
+ * SAPI5 and MSP text-to-speech engine
+ * 
  * @see ITTSEngine
  */
 public interface ISAPIEngine extends ITTSEngine {
@@ -25,7 +26,6 @@ public interface ISAPIEngine extends ITTSEngine {
 			SVSFPurgeBeforeSpeak = 2, SVSFIsFilename = 4, SVSFIsXML = 8,
 			SVSFIsNotXML = 16, SVSFPersistXML = 32;
 
-	
 	/**
 	 * Map to get LangId from "Language"-"Country" code (e.g., en-US).
 	 */
@@ -78,60 +78,60 @@ public interface ISAPIEngine extends ITTSEngine {
 			put("zh-HK", "C04");
 		}
 	};
-	
+
 	/**
 	 * Map to get "Language"-"Country" code (e.g., en-US) from LangId.
 	 */
 	public static final Map<String, String> LANGID_REVERSE_MAP = new HashMap<String, String>() {
 		private static final long serialVersionUID = -4065510530588377900L;
 		{
-			put("401","ar-SA");
-			put("402","bg-BG");
-			put("403","ca-ES");
-			put("404","zh-TW");
-			put("405","cs-CZ");
-			put("406","da-DK");
-			put("407","de-DE");
-			put("408","el-GR");
-			put("409","en-US");
-			put("40B","fi-FI");
-			put("40C","fr-FR");
-			put("40D","he-IL");
-			put("40E","hu-HU");
-			put("410","it-IT");
-			put("411","ja-JP");
-			put("412","ko-KR");
-			put("413","nl-NL");
-			put("414","nb-NO");
-			put("415","pl-PL");
-			put("416","pt-BR");
-			put("418","ro-RO");
-			put("419","ru-RU");
-			put("41A","hr-HR");
-			put("41B","sk-SK");
-			put("41D","sv-SE");
-			put("41E","th-TH");
-			put("41F","tr-TR");
-			put("422","uk-UA");
-			put("424","sl-SI");
-			put("425","et-EE");
-			put("426","lv-LV");
-			put("427","lt-LT");
-			put("42A","vi-VN");
-			put("42D","eu-ES");
-			put("804","zh-CN");
-			put("816","pt-PT");
-			put("81A","sr-CS");
-			put("C0A","es-ES");
-			put("C09","en-AU");
-			put("1009","en-CA");
-			put("809","en-GB");
-			put("4009","en-IN");
-			put("C0C","fr-CA");
-			put("C04","zh-HK");
+			put("401", "ar-SA");
+			put("402", "bg-BG");
+			put("403", "ca-ES");
+			put("404", "zh-TW");
+			put("405", "cs-CZ");
+			put("406", "da-DK");
+			put("407", "de-DE");
+			put("408", "el-GR");
+			put("409", "en-US");
+			put("40B", "fi-FI");
+			put("40C", "fr-FR");
+			put("40D", "he-IL");
+			put("40E", "hu-HU");
+			put("410", "it-IT");
+			put("411", "ja-JP");
+			put("412", "ko-KR");
+			put("413", "nl-NL");
+			put("414", "nb-NO");
+			put("415", "pl-PL");
+			put("416", "pt-BR");
+			put("418", "ro-RO");
+			put("419", "ru-RU");
+			put("41A", "hr-HR");
+			put("41B", "sk-SK");
+			put("41D", "sv-SE");
+			put("41E", "th-TH");
+			put("41F", "tr-TR");
+			put("422", "uk-UA");
+			put("424", "sl-SI");
+			put("425", "et-EE");
+			put("426", "lv-LV");
+			put("427", "lt-LT");
+			put("42A", "vi-VN");
+			put("42D", "eu-ES");
+			put("804", "zh-CN");
+			put("816", "pt-PT");
+			put("81A", "sr-CS");
+			put("C0A", "es-ES");
+			put("C09", "en-AU");
+			put("1009", "en-CA");
+			put("809", "en-GB");
+			put("4009", "en-IN");
+			put("C0C", "fr-CA");
+			put("C04", "zh-HK");
 		}
 	};
-	
+
 	/**
 	 * @param rate
 	 *            The rate property to be set.
@@ -143,8 +143,20 @@ public interface ISAPIEngine extends ITTSEngine {
 	 * @return The rate property of the voice engine.
 	 */
 	public int getRate();
-	
-	public void speak(String text, int sapiFlags);
-	
 
+	/**
+	 * Speak text by using specified SAPI flag
+	 * 
+	 * @param text
+	 *            text string to be spoken
+	 * @param sapiFlags
+	 *            SAPI flags
+	 */
+	public void speak(String text, int sapiFlags);
+
+	
+	/**
+	 * @return set of TTS engine information that supported in the environment.
+	 */
+	public Set<ITTSEngineInfo> getTTSEngineInfoSet();
 }

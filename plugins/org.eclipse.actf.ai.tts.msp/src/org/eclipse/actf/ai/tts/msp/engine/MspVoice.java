@@ -12,13 +12,20 @@
 package org.eclipse.actf.ai.tts.msp.engine;
 
 import java.io.File;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.eclipse.actf.ai.tts.ISAPIEngine;
+import org.eclipse.actf.ai.tts.ITTSEngineInfo;
 import org.eclipse.actf.ai.tts.msp.MspPlugin;
 import org.eclipse.actf.ai.voice.IVoiceEventListener;
 import org.eclipse.actf.util.win32.COMUtil;
 import org.eclipse.actf.util.win32.MemoryUtil;
 import org.eclipse.actf.util.win32.NativeIntAccess;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
@@ -51,6 +58,42 @@ public class MspVoice implements ISAPIEngine, IPropertyChangeListener {
 
 	private SpObjectToken curVoiceToken = null;
 
+	private class EngineInfo implements ITTSEngineInfo {
+		String name;
+		String lang;
+		String langId;
+		String gender;
+
+		public EngineInfo(String name, String lang, String langId, String gender) {
+			this.name = name;
+			this.lang = lang;
+			this.langId = langId;
+			this.gender = gender;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public String getLanguage() {
+			return lang;
+		}
+
+		public String getGender() {
+			return gender;
+		}
+
+	}
+
+	private Map<String, TreeSet<EngineInfo>> langId2EngineMap = new HashMap<String, TreeSet<EngineInfo>>();
+	private Set<ITTSEngineInfo> ttsEngineInfoSet = new TreeSet<ITTSEngineInfo>(
+			new Comparator<ITTSEngineInfo>() {
+				public int compare(ITTSEngineInfo o1, ITTSEngineInfo o2) {
+					// TODO null, lang/gender check
+					return o1.getName().compareTo(o2.getName());
+				}
+			});
+	
 	public MspVoice() {
 		int pv = COMUtil.createDispatch(ISpVoice.IID);
 		dispSpVoice = new ISpVoice(pv);
@@ -68,7 +111,57 @@ public class MspVoice implements ISAPIEngine, IPropertyChangeListener {
 		setAudioOutputName();
 		// switch to actual engine
 		preferenceStore.setValue(ID, orgID);
-		setVoiceName(); //for init curVoiceToken
+		setVoiceName(); // for init curVoiceToken
+
+		Variant varVoices = getVoices(null, null);
+		if (null != varVoices) {
+			SpeechObjectTokens voiceTokens = SpeechObjectTokens
+					.getTokens(varVoices);
+			if (null != voiceTokens) {
+				String exclude = Platform.getResourceString(MspPlugin
+						.getDefault().getBundle(), "%voice.exclude"); //$NON-NLS-1$
+				int count = voiceTokens.getCount();
+				for (int i = 0; i < count; i++) {
+					Variant varVoice = voiceTokens.getItem(i);
+					if (null != varVoice) {
+						SpObjectToken token = SpObjectToken.getToken(varVoice);
+						if (null != token) {
+							String voiceName = token.getDescription(0);
+							String langId = token.getAttribute("language"); //$NON-NLS-1$
+							int index = langId.indexOf(";");
+							// use primary lang ID
+							if (index > 0) {
+								langId = langId.substring(0, index);
+							}
+							String gender = token.getAttribute("gender"); //$NON-NLS-1$
+							if (null == exclude || !exclude.equals(voiceName)) {
+								TreeSet<EngineInfo> set = langId2EngineMap
+										.get(langId);
+								if (set == null) {
+									set = new TreeSet<EngineInfo>(
+											new Comparator<EngineInfo>() {
+												public int compare(
+														EngineInfo o1,
+														EngineInfo o2) {
+													// TODO priority
+													return -o1.name
+															.compareTo(o2.name);
+												}
+											});
+									langId2EngineMap.put(langId, set);
+								}
+								String lang = LANGID_REVERSE_MAP.get(langId);
+								EngineInfo engineInfo = new EngineInfo(
+										voiceName, lang, langId, gender);
+								set.add(engineInfo);
+								ttsEngineInfoSet.add(engineInfo);
+							}
+						}
+					}
+				}
+			}
+			varVoices.dispose();
+		}
 
 		// to avoid access violation error at application shutdown
 		stop();
@@ -415,6 +508,9 @@ public class MspVoice implements ISAPIEngine, IPropertyChangeListener {
 	 * @see org.eclipse.actf.ai.tts.ITTSEngine#setGender(java.lang.String)
 	 */
 	public void setGender(String gender) {
+		if (gender == null) {
+			return;
+		}
 		String langId = null;
 		if (curVoiceToken != null) {
 			langId = curVoiceToken.getAttribute("language");
@@ -485,7 +581,7 @@ public class MspVoice implements ISAPIEngine, IPropertyChangeListener {
 			// open 100 close 101
 			String tmpS = file.toURI().toString();
 			if (tmpS.startsWith("file:/")) {
-				tmpS = tmpS.substring(6).replaceAll("%20"," ");;
+				tmpS = tmpS.substring(6).replaceAll("%20", " ");
 			}
 
 			autoSpFileStream.invoke(100, new Variant[] { new Variant(tmpS),
@@ -516,4 +612,9 @@ public class MspVoice implements ISAPIEngine, IPropertyChangeListener {
 		setAudioOutputName(); // reset output
 		return speakToFileResult;
 	}
+
+	public Set<ITTSEngineInfo> getTTSEngineInfoSet() {
+		return ttsEngineInfoSet;
+	}
+
 }

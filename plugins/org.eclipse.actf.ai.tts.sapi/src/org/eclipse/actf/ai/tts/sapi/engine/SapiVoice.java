@@ -15,9 +15,11 @@ import java.io.File;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 
 import org.eclipse.actf.ai.tts.ISAPIEngine;
+import org.eclipse.actf.ai.tts.ITTSEngineInfo;
 import org.eclipse.actf.ai.tts.sapi.SAPIPlugin;
 import org.eclipse.actf.ai.voice.IVoiceEventListener;
 import org.eclipse.actf.util.win32.COMUtil;
@@ -56,19 +58,41 @@ public class SapiVoice implements ISAPIEngine, IPropertyChangeListener {
 
 	private SpObjectToken curVoiceToken = null;
 
-	private class EngineInfo {
+	private class EngineInfo implements ITTSEngineInfo {
 		String name;
+		String lang;
 		String langId;
 		String gender;
 
-		public EngineInfo(String name, String langId, String gender) {
+		public EngineInfo(String name, String lang, String langId, String gender) {
 			this.name = name;
+			this.lang = lang;
 			this.langId = langId;
 			this.gender = gender;
 		}
+
+		public String getName() {
+			return name;
+		}
+
+		public String getLanguage() {
+			return lang;
+		}
+
+		public String getGender() {
+			return gender;
+		}
+
 	}
 
 	private Map<String, TreeSet<EngineInfo>> langId2EngineMap = new HashMap<String, TreeSet<EngineInfo>>();
+	private Set<ITTSEngineInfo> ttsEngineInfoSet = new TreeSet<ITTSEngineInfo>(
+			new Comparator<ITTSEngineInfo>() {
+				public int compare(ITTSEngineInfo o1, ITTSEngineInfo o2) {
+					// TODO null, lang/gender check
+					return o1.getName().compareTo(o2.getName());
+				}
+			});
 
 	public SapiVoice() {
 		int pv = COMUtil.createDispatch(ISpVoice.IID);
@@ -105,8 +129,8 @@ public class SapiVoice implements ISAPIEngine, IPropertyChangeListener {
 							String voiceName = token.getDescription(0);
 							String langId = token.getAttribute("language"); //$NON-NLS-1$
 							int index = langId.indexOf(";");
-							//use primary lang ID
-							if (index > 0){
+							// use primary lang ID
+							if (index > 0) {
 								langId = langId.substring(0, index);
 							}
 							String gender = token.getAttribute("gender"); //$NON-NLS-1$
@@ -126,8 +150,11 @@ public class SapiVoice implements ISAPIEngine, IPropertyChangeListener {
 											});
 									langId2EngineMap.put(langId, set);
 								}
-								set.add(new EngineInfo(voiceName, langId,
-										gender));
+								String lang = LANGID_REVERSE_MAP.get(langId);
+								EngineInfo engineInfo = new EngineInfo(
+										voiceName, lang, langId, gender);
+								set.add(engineInfo);
+								ttsEngineInfoSet.add(engineInfo);
 							}
 						}
 					}
@@ -497,7 +524,6 @@ public class SapiVoice implements ISAPIEngine, IPropertyChangeListener {
 				}
 			}
 		}
-
 	}
 
 	/*
@@ -540,7 +566,7 @@ public class SapiVoice implements ISAPIEngine, IPropertyChangeListener {
 			// open 100 close 101
 			String tmpS = file.toURI().toString();
 			if (tmpS.startsWith("file:/")) {
-				tmpS = tmpS.substring(6).replaceAll("%20"," ");
+				tmpS = tmpS.substring(6).replaceAll("%20", " ");
 			}
 
 			autoSpFileStream.invoke(100, new Variant[] { new Variant(tmpS),
@@ -570,6 +596,10 @@ public class SapiVoice implements ISAPIEngine, IPropertyChangeListener {
 		}
 		setAudioOutputName(); // reset output
 		return speakToFileResult;
+	}
+
+	public Set<ITTSEngineInfo> getTTSEngineInfoSet() {
+		return ttsEngineInfoSet;
 	}
 
 }
