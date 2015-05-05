@@ -4,7 +4,7 @@ Bundle-Name: Eclipse ACTF Audio IO Plug-in
 Bundle-SymbolicName: org.eclipse.actf.ai.audio.io
 Bundle-Version: 0.5.0.qualifier
 Bundle-Activator: org.eclipse.actf.ai.audio.io.impl.Activator
-Bundle-Vendor: Eclipse.org
+Bundle-Vendor: Eclipse ACTF Project
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime
 Eclipse-LazyStart: true

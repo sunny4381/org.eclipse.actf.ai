@@ -4,7 +4,7 @@ Bundle-Name: Eclipse ACTF Key UI Plug-in
 Bundle-SymbolicName: org.eclipse.actf.ai.key.keyui;singleton:=true
 Bundle-Version: 0.5.0.qualifier
 Bundle-Activator: org.eclipse.actf.ai.key.keyui.KeyUIPlugin
-Bundle-Vendor: Eclipse.org
+Bundle-Vendor: Eclipse ACTF Project
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.actf.ai.xmlstore,
  org.eclipse.ui,
