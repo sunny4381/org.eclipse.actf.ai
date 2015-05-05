@@ -12,13 +12,12 @@
 package org.eclipse.actf.ai.xmlstore.nvdl.rec;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 
 import org.eclipse.actf.ai.xmlstore.nvdl.dispatcher.NVDLAttributes;
 import org.eclipse.actf.ai.xmlstore.nvdl.fm.ActionList;
-import org.eclipse.actf.ai.xmlstore.nvdl.fm.PDA;
 import org.eclipse.actf.ai.xmlstore.nvdl.fm.ActionList.InvalidIdException;
+import org.eclipse.actf.ai.xmlstore.nvdl.fm.PDA;
 import org.eclipse.actf.ai.xmlstore.nvdl.model.NVDLConst;
 import org.eclipse.actf.ai.xmlstore.nvdl.model.NVDLElement;
 import org.eclipse.actf.ai.xmlstore.nvdl.model.NVDLRules;

@@ -18,7 +18,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.actf.ai.voice,
  org.eclipse.actf.ui,
  com.ibm.icu
-Eclipse-LazyStart: true
+Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.actf.ai.navigator,
  org.eclipse.actf.ai.navigator.impl,
  org.eclipse.actf.ai.navigator.ui

@@ -156,6 +156,7 @@ public class KeybindScriptGenerator {
                     }
                 }
             }
+            br.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

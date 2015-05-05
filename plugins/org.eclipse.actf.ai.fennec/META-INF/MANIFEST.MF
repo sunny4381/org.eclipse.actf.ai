@@ -14,7 +14,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.actf.ai.xmlstore,
  org.eclipse.swt,
  org.eclipse.actf.ui
-Eclipse-LazyStart: true
+Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.actf.ai.fennec,
  org.eclipse.actf.ai.fennec.treemanager
 Bundle-RequiredExecutionEnvironment: J2SE-1.5

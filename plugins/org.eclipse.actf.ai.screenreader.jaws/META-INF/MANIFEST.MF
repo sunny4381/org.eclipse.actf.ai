@@ -11,5 +11,5 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.actf.ai.navigator,
  org.eclipse.actf.ai.voice,
  org.eclipse.actf.model.ui
-Eclipse-LazyStart: true
+Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
