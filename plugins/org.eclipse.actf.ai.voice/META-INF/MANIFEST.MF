@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ACTF Voice Toolkit
 Bundle-SymbolicName: org.eclipse.actf.ai.voice;singleton:=true
-Bundle-Version: 1.3.0.qualifier
+Bundle-Version: 1.3.1.qualifier
 Bundle-Activator: org.eclipse.actf.ai.voice.internal.VoicePlugin
 Bundle-Vendor: Eclipse ACTF Project
 Bundle-Localization: plugin
