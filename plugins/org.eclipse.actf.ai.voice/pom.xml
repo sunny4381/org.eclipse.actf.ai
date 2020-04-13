@@ -12,4 +12,25 @@
 
   <artifactId>org.eclipse.actf.ai.voice</artifactId>
   <name>org.eclipse.actf.ai.voice</name>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>.</directory>
+        <includes>
+          <include>about.html</include>
+          <include>plugin.properties</include>
+          <include>plugin.xml</include>
+          <include>plugin_ja.properties</include>
+          <include>plugin_zh.properties</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>src</directory>
+        <includes>
+          <include>*.properties</include>
+        </includes>
+      </resource>
+    </resources>
+  </build>
 </project>
